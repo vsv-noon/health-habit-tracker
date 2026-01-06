@@ -29,7 +29,7 @@ export function EditTodoModal({ todo, onClose, onSave }: EditTodoModalProps) {
     setLoading(true);
 
     const updated = await apiFetch<Todo>(`/todos/${todo.id}`, {
-      method: "PUT",
+      method: "PATCH",
       body: JSON.stringify({
         title,
         description,

@@ -5,7 +5,7 @@ import { apiDelete, apiFetch } from "../../api";
 export function TodoList({ todos, onEdit, onUpdate, onDelete }: TodoListProps) {
   async function toggleCompleted(todo: Todo) {
     const updated = await apiFetch<Todo>(`/todos/${todo.id}`, {
-      method: "PUT",
+      method: "PATCH",
       body: JSON.stringify({
         title: todo.title,
         description: todo.description,
