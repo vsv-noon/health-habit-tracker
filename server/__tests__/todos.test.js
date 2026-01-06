@@ -1,10 +1,11 @@
 import request from "supertest";
 import app from "../src/app.js";
 import "./setupDb.js";
+import { createTodo } from "./helpers/createTodo.js";
 
 describe("Todos API", () => {
   it("creates todo", async () => {
-    const res = await request(app).post("/todos").send({
+    const res = await createTodo({
       title: "Vitest todo",
       due_date: "2026-01-10",
     });
@@ -22,7 +23,7 @@ describe("Todos API", () => {
   });
 
   it("updates todo", async () => {
-    const create = await request(app).post("/todos").send({ title: "Old" });
+    const create = await createTodo();
 
     const res = await request(app)
       .put(`/todos/${create.body.id}`)
@@ -33,12 +34,39 @@ describe("Todos API", () => {
   });
 
   it("deletes todo", async () => {
-    const create = await request(app)
-      .post("/todos")
-      .send({ title: "Delete me" });
+    const todo = await createTodo();
 
-    const del = await request(app).delete(`/todos/${create.body.id}`);
+    const del = await request(app).delete(`/todos/${todo.body.id}`);
 
     expect(del.status).toBe(204);
   });
+
+  it("does not return deleted todos", async () => {
+    const todo = await createTodo();
+
+    await request(app).delete(`/todos/${todo.body.id}`);
+
+    const res = await request(app).get("/todos");
+
+    expect(res.body.find((t) => t.id === todo.body.id)).toBeUndefined();
+  });
+
+  it("restores deleted todo", async () => {
+    const todo = await createTodo();
+
+    await request(app).delete(`/todos/${todo.body.id}`);
+
+    const res = await request(app)
+      .patch(`/todos/${todo.body.id}/restore`)
+      .expect(200);
+
+    expect(res.body.id).toBe(todo.body.id);
+    expect(res.body.deleted_at).toBeNull();
+  });
+
+  // it("cannot restore not deleted todo", async () => {
+  //   const todo = await createTodo();
+
+  //   await request(app).patch(`/todos/${todo.body.id}/restore`).expect(404);
+  // });
 });

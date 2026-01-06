@@ -11,7 +11,7 @@ export default defineConfig({
       exclude: [
         ...configDefaults.coverage.exclude, // Keep Vitest's default exclusions (like node_modules, dist)
       ],
-      enabled: true,
+      // enabled: true,
     },
   },
 });

@@ -1,33 +1,12 @@
 import { Router } from "express";
 // import { pool } from "../src/db.js";
 import { pool } from "../db.js";
+import { restoreTodo } from "../controllers/todos.controller.js";
 
 const router = Router();
 
-// Create a new todo
-router.post("/", async (req, res) => {
-  try {
-    const { title, description, due_date, remind_at } = req.body;
-
-    if (!title) {
-      return res.status(400).json({ error: "Title is required" });
-    }
-
-    const result = await pool.query(
-      `
-      INSERT INTO todos (title, description, due_date, remind_at) 
-      VALUES ($1, $2, $3, $4) 
-      RETURNING *
-      `,
-      [title, description, due_date, remind_at]
-    );
-
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ error: "Server Error" });
-  }
-});
+// Soft delete a todo
+router.patch("/:id/restore", restoreTodo);
 
 // Get all todos
 router.get("/", async (req, res) => {
@@ -61,6 +40,31 @@ router.get("/date/:date", async (req, res) => {
     );
 
     res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: "Server Error" });
+  }
+});
+
+// Create a new todo
+router.post("/", async (req, res) => {
+  try {
+    const { title, description, due_date, remind_at } = req.body;
+
+    if (!title) {
+      return res.status(400).json({ error: "Title is required" });
+    }
+
+    const result = await pool.query(
+      `
+      INSERT INTO todos (title, description, due_date, remind_at) 
+      VALUES ($1, $2, $3, $4) 
+      RETURNING *
+      `,
+      [title, description, due_date, remind_at]
+    );
+
+    res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: "Server Error" });
