@@ -54,96 +54,66 @@ export async function restoreTodo(req, res) {
   }
 }
 
-// export async function updateTodo(req, res) {
-//   try {
-//     const id = Number(req.params.id);
-
-//     if (Number.isNaN(id)) {
-//       return res.sendStatus(400);
-//     }
-
-//     const { title, description, completed, due_date, remind_at } = req.body;
-
-//     if (
-//       title === undefined &&
-//       description === undefined &&
-//       completed === undefined &&
-//       due_date === undefined &&
-//       remind_at === undefined
-//     ) {
-//       return res.status(400).json({ error: "Nothing to update" });
-//     }
-
-//     const result = await pool.query(
-//       `
-//       UPDATE todos 
-//       SET title = COALESCE($1, title), 
-//           description = COALESCE($2, description), 
-//           completed = COALESCE($3, completed),
-//           due_date = COALESCE($4, due_date),
-//           remind_at = COALESCE($5, remind_at)
-//       WHERE id = $6
-//         AND deleted_at IS NULL
-//       RETURNING *
-//       `,
-//       [title, description, completed, due_date, remind_at, id]
-//     );
-
-//     if (result.rowCount === 0) {
-//       return res.sendStatus(404);
-//     }
-
-//     res.status(200).json(result.rows[0]);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send({ error: "Server Error" });
-//   }
-// }
-
 export async function updateTodo(req, res) {
   try {
-    const id = Number(req.params.id);
+    const { title, description, completed, due_date, remind_at } = req.body;
+    const { id } = req.params;
 
-    if (Number.isNaN(id)) {
-      return res.sendStatus(400);
+    const fields = [];
+    const values = [];
+    let idx = 1;
+
+    if (title !== undefined) {
+      fields.push(`title = $${idx++}`);
+      values.push(title);
     }
 
-    const { title, description, completed, due_date, remind_at } = req.body;
+    if (description !== undefined) {
+      fields.push(`description = $${idx++}`);
+      values.push(description);
+    }
 
-    if (
-      title === undefined &&
-      description === undefined &&
-      completed === undefined &&
-      due_date === undefined &&
-      remind_at === undefined
-    ) {
+    if (completed !== undefined) {
+      fields.push(`completed = $${idx++}`);
+      values.push(completed);
+    }
+
+    if (due_date !== undefined) {
+      fields.push(`due_date = $${idx++}`);
+      values.push(due_date);
+    }
+
+    if (remind_at !== undefined) {
+      fields.push(`remind_at = $${idx++}`);
+      values.push(remind_at);
+    }
+
+    if (fields.length === 0) {
       return res.status(400).json({ error: "Nothing to update" });
     }
 
+    values.push(id);
+
     const result = await pool.query(
       `
-      UPDATE todos 
-      SET 
-        title = COALESCE($1, title), 
-        description = COALESCE($2, description), 
-        completed = COALESCE($3, completed),
-        due_date = COALESCE($4, due_date),
-        remind_at = COALESCE($5, remind_at)
-      WHERE id = $6
+      UPDATE todos
+      SET ${fields.join(", ")},
+          updated_at = NOW()
+      WHERE id = $${idx}
         AND deleted_at IS NULL
       RETURNING *
       `,
-      [title, description, completed, due_date, remind_at, id]
+      values
     );
 
-    if (result.rowCount === 0) {
-      return res.sendStatus(404);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Todo not found" });
     }
 
     res.status(200).json(result.rows[0]);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Server Error" });
+    res.status(500).json({ error: "Server error" });
   }
 }
 
