@@ -27,7 +27,7 @@ export function TodoList({ todos, onEdit, onUpdate, onDelete }: TodoListProps) {
 
   return (
     <ul>
-      {todos.map((todo) => (
+      {todos && todos.map((todo) => (
         <li key={todo.id} style={{ marginBottom: 8 }}>
           <input
             type="checkbox"
