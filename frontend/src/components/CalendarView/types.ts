@@ -1,6 +1,5 @@
-export interface CalendarViewProps {
-  onSelect: (date: Date) => void;
+export type CalendarProps = {
   selectedDate: string | null;
-  dateWithTodos: Set<string>;
-  todosCountByDate: Map<string, number>;
-}
+  onSelect: (date: Date) => void;
+  counts: Record<string, number>;
+};

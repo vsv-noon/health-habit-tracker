@@ -117,49 +117,75 @@ export async function updateTodo(req, res) {
   }
 }
 
-
-export async function getAllTodos(req, res) {
+export async function getCalendarCounts(req, res) {
   try {
-    const result = await pool.query(
-      `
-      SELECT * FROM todos 
+    const result = await pool.query(`
+      SELECT 
+        due_date::date AS date,
+        COUNT(*)::int AS count
+      FROM todos
       WHERE deleted_at IS NULL
-      ORDER BY due_date
-      `
-    );
+      GROUP BY due_date::date
+    `);
 
-    res.json(result.rows);
+    const map = {};
+
+    for (const row of result.rows) {
+      map[row.date] = row.count;
+    }
+
+    res.json(map);
   } catch (err) {
-    console.error(err);
-    res.status(500).send({ error: "Server Error" });
+    console.error("getCalendarCounts error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 }
 
-export async function getTodosByDate(req, res) {
+export async function getTodos(req, res) {
   try {
-    const { date } = req.params;
+    const { date, search = "", status = "all" } = req.query;
 
-    if (!date) {
-      return res.status(400).json({
-        error: "Query param 'date' is required (YYYY-MM-DD)"
-      })
+    const values = [];
+    const conditions = [];
 
+    if (date) {
+      values.push(date);
+      conditions.push(`due_date::date = $${values.length}::date`);
     }
 
-    const result = await pool.query(
-      `
-      SELECT * FROM todos 
-      WHERE
-        deleted_at IS NULL
-        AND due_date::date = $1::date
-      `,
-      [date]
-    );
+    if (search) {
+      values.push(`%${search}%`);
+      conditions.push(`
+        (title ILIKE $${values.length}
+         OR description ILIKE $${values.length})
+      `);
+    }
+
+    if (status === "completed") {
+      values.push(true);
+      conditions.push(`completed = $${values.length}`);
+    }
+
+    if (status === "active") {
+      values.push(false);
+      conditions.push(`completed = $${values.length}`);
+    }
+
+    conditions.push("deleted_at IS NULL");
+
+    const sql = `
+      SELECT *
+      FROM todos
+      WHERE ${conditions.join(" AND ")}
+      ORDER BY due_date ASC, created_at ASC
+    `;
+
+    const result = await pool.query(sql, values);
 
     res.json(result.rows);
   } catch (err) {
-    console.error("getTodosByDate:", err);
-    res.status(500).send({ error: "Server Error" });
+    console.error("getTodos error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 }
 

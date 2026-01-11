@@ -1,34 +1,24 @@
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import type { CalendarViewProps } from "./types";
+import type { CalendarProps } from "./types";
 import "./style.css";
+import { formatDate } from "../../utils/date";
 
 export function CalendarView({
   onSelect,
-  selectedDate,
-  dateWithTodos,
-  todosCountByDate,
-}: CalendarViewProps) {
+
+  // selectedDate,
+  counts,
+}: CalendarProps) {
   return (
     <Calendar
+      // value={new Date(selectedDate)}
       onClickDay={onSelect}
-      tileClassName={({ date, view }) => {
-        if (view !== "month") return null;
-
-        const d = date.toLocaleDateString("en-CA"); // YYYY-MM-DD
-
-        return [
-          dateWithTodos.has(d) && "has-todos",
-          selectedDate === d && "selected-date",
-        ]
-          .filter(Boolean)
-          .join(" ");
-      }}
       tileContent={({ date, view }) => {
         if (view !== "month") return null;
 
-        const d = date.toLocaleDateString("en-CA");
-        const count = todosCountByDate.get(d);
+        const key = formatDate(date);
+        const count = counts[key];
 
         if (!count) return null;
 

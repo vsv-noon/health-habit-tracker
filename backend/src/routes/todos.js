@@ -3,8 +3,8 @@ import { Router } from "express";
 import {
   createTodo,
   deleteTodo,
-  getAllTodos,
-  getTodosByDate,
+  getCalendarCounts,
+  getTodos,
   restoreTodo,
   updateTodo,
 } from "../controllers/todos.controller.js";
@@ -27,9 +27,8 @@ router.patch("/:id/restore", restoreTodo);
 router.patch("/:id", validate(updateTodoSchema), updateTodo);
 
 // Reade
-router.get("/", getAllTodos);
-
-router.get("/date/:date", getTodosByDate);
+router.get("/calendar-counts", getCalendarCounts);
+router.get("/", getTodos);
 
 // Delete
 router.delete("/:id", deleteTodo);
