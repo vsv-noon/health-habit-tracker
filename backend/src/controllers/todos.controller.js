@@ -135,21 +135,30 @@ export async function getAllTodos(req, res) {
   }
 }
 
-export async function getTodoByDate(req, res) {
+export async function getTodosByDate(req, res) {
   try {
     const { date } = req.params;
+
+    if (!date) {
+      return res.status(400).json({
+        error: "Query param 'date' is required (YYYY-MM-DD)"
+      })
+
+    }
 
     const result = await pool.query(
       `
       SELECT * FROM todos 
-      WHERE due_date = $1
+      WHERE
+        deleted_at IS NULL
+        AND due_date::date = $1::date
       `,
       [date]
     );
 
     res.json(result.rows);
   } catch (err) {
-    console.error(err);
+    console.error("getTodosByDate:", err);
     res.status(500).send({ error: "Server Error" });
   }
 }

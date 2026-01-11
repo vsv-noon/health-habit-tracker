@@ -4,7 +4,7 @@ import {
   createTodo,
   deleteTodo,
   getAllTodos,
-  getTodoByDate,
+  getTodosByDate,
   restoreTodo,
   updateTodo,
 } from "../controllers/todos.controller.js";
@@ -29,7 +29,7 @@ router.patch("/:id", validate(updateTodoSchema), updateTodo);
 // Reade
 router.get("/", getAllTodos);
 
-router.get("date/:date", getTodoByDate);
+router.get("/date/:date", getTodosByDate);
 
 // Delete
 router.delete("/:id", deleteTodo);
