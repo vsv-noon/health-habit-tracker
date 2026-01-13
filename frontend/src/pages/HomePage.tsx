@@ -10,7 +10,7 @@ import { TodoList } from "../components/TodoList/TodoList";
 import { EditTodoModal } from "../components/EditTodoModal/EditTodoModal";
 import { Filters } from "../components/Filters/Filters";
 import { formatDate } from "../utils/date";
-import { ModalBase } from "../components/ModalBase/ModalBase";
+// import { ModalBase } from "../components/ModalBase/ModalBase";
 
 export default function HomePage() {
   const [params, setParams] = useSearchParams();

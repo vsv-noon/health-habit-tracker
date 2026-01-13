@@ -8,6 +8,7 @@ export const styles: Record<string, React.CSSProperties> = {
     alignItems: "center",
     zIndex: 1000,
   },
+
   modal: {
     background: "#fff",
     borderRadius: 8,
@@ -16,9 +17,11 @@ export const styles: Record<string, React.CSSProperties> = {
     display: "grid",
     gap: 10,
   },
+
   field: {
     position: "relative",
   },
+
   suggestions: {
     position: "absolute",
     top: "100%",
@@ -31,16 +34,23 @@ export const styles: Record<string, React.CSSProperties> = {
     margin: 0,
     zIndex: 10,
   },
+
   actions: {
     display: "flex",
     justifyContent: "flex-end",
     gap: 8,
   },
+
   error: {
     color: "crimson",
   },
+  
   hint: {
     fontSize: 12,
     opacity: 0.6,
   },
+
+  suggestionItem: {
+    cursor: "pointer",
+  }
 };

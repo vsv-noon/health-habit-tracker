@@ -22,29 +22,46 @@ export function AddTodoModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   if (!isOpen) return;
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [isSuggestionOpen, setIsSuggestionOpen] = useState(false);
 
-  //   function onKeyDown(e: KeyboardEvent) {
-  //     if (e.key === "Escape") {
-  //       onClose();
-  //     }
+  function selectSuggestion(value: string) {
+    updateField("title", value);
+    setActiveIndex(-1);
+    setIsSuggestionOpen(false);
+  }
 
-  //     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-  //       handleSubmit();
-  //     }
-  //   }
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (!isOpen) return;
 
-  //   window.addEventListener("keydown", onKeyDown);
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => Math.min(i + 1, suggestions.length - 1));
+    }
 
-  //   return () => window.removeEventListener("keydown", onKeyDown);
-  // }, [isOpen, form]);
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => Math.max(i - 1, 0));
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const value = suggestions[activeIndex];
+      if (value) {
+        selectSuggestion(value);
+      }
+    }
+
+    if (e.key === "Escape") {
+      setIsSuggestionOpen(false);
+    }
+  }
 
   useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) {
       setForm({
         ...emptyAddTodoModalForm,
-        due_date: defaultDate,
+        due_date: "",
       });
       setError(null);
     }
@@ -59,6 +76,15 @@ export function AddTodoModal({
       .filter((t) => t.toLowerCase().includes(q))
       .slice(0, 5);
   }, [form.title, existingTitles]);
+
+  useEffect(() => {
+    if (suggestions.length > 0 && suggestions[0] !== form.title) {
+      setIsSuggestionOpen(true);
+      setActiveIndex(0);
+    } else {
+      setIsSuggestionOpen(false);
+    }
+  }, [suggestions, form.title]);
 
   function updateField<K extends keyof AddTodoModalFormState>(
     key: K,
@@ -114,10 +140,13 @@ export function AddTodoModal({
       <div style={{ display: "grid", gap: 8 }}>
         <div style={styles.field}>
           <input
+            type="text"
             autoFocus
             value={form.title}
             onChange={(e) => updateField("title", e.target.value)}
             placeholder="Title"
+            onKeyDown={handleKeyDown}
+            onBlur={() => setTimeout(() => setIsSuggestionOpen(false), 150)}
             // list="title-suggestion"
           />
           {/* <datalist id="title-suggestion">
@@ -125,10 +154,18 @@ export function AddTodoModal({
               <option key={id} value={s} />
             ))}
           </datalist> */}
-          {suggestions.length > 0 && (
+          {isSuggestionOpen && suggestions.length > 0 && (
             <ul style={styles.suggestions}>
               {suggestions.map((s, id) => (
-                <li key={id} onClick={() => updateField("title", s)}>
+                <li
+                  key={id}
+                  onMouseDown={() => selectSuggestion(s)}
+                  onMouseEnter={() => setActiveIndex(id)}
+                  style={{
+                    ...styles.suggestionItem,
+                    background: id === activeIndex ? "#e3f2fd" : "white",
+                  }}
+                >
                   {s}
                 </li>
               ))}
