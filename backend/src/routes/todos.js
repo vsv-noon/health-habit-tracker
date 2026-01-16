@@ -4,6 +4,7 @@ import {
   createTodo,
   deleteTodo,
   getCalendarCounts,
+  getTitleSuggestions,
   getTodos,
   restoreTodo,
   updateTodo,
@@ -25,6 +26,7 @@ router.patch('/:id', validate(updateTodoSchema), updateTodo);
 
 // Reade
 router.get('/calendar-counts', getCalendarCounts);
+router.get('/suggestions', getTitleSuggestions);
 router.get('/', getTodos);
 
 // Delete

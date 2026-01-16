@@ -1,0 +1,158 @@
+import type { TodoFormProps } from './types';
+import type { Priority } from '../../types/todo';
+import { useEffect, useState } from 'react';
+import { fetchTitleSuggestions } from '../../api/api';
+
+import { styles } from './styles';
+import './styles.css';
+
+export function TodoForm({
+  todoFormTitle,
+  form,
+  update,
+  error,
+  submitLabel,
+  onSubmit,
+  onClose,
+  showCompleted,
+}: TodoFormProps) {
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const id = setTimeout(async () => {
+      const data = await fetchTitleSuggestions(form.title);
+
+      if (form.title.length < 2 || form.title === data[0]) {
+        setSuggestions([]);
+        return;
+      }
+
+      setSuggestions(data);
+      setOpen(true);
+    }, 300);
+
+    return () => clearTimeout(id);
+  }, [form.title]);
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (!open) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActiveIndex((i) => Math.min(i + 1, suggestions.length - 1));
+    }
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveIndex((i) => Math.max(i - 1, 0));
+    }
+
+    if (e.key === 'Enter' && activeIndex >= 0) {
+      e.preventDefault();
+      selectSuggestion(suggestions[activeIndex]);
+    }
+
+    if (e.key === 'Escape') {
+      setOpen(false);
+    }
+  }
+
+  function selectSuggestion(value: string) {
+    update('title', value);
+    setOpen(false);
+    setSuggestions([]);
+    setActiveIndex(-1);
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: 8 }}>
+      <div className="modal-header">
+        <h3>{todoFormTitle}</h3>
+      </div>
+      <div>
+        <div style={styles.field}>
+          <input
+            type="text"
+            autoFocus
+            placeholder="Title"
+            value={form.title}
+            onChange={(e) => {
+              update('title', e.target.value);
+            }}
+            onKeyDown={handleKeyDown}
+            onBlur={() => setTimeout(() => setOpen(false), 150)}
+          />
+          {open && suggestions.length > 0 && (
+            <ul className="autocomplete">
+              {suggestions.map((s, i) => (
+                <li
+                  key={i}
+                  className={i === activeIndex ? 'active' : ''}
+                  onMouseDown={() => selectSuggestion(s)}
+                >
+                  {s}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+      <textarea
+        placeholder="Description"
+        value={form.description}
+        onChange={(e) => update('description', e.target.value)}
+      />
+
+      <label>
+        Due date:
+        <input
+          type="date"
+          value={form.due_date}
+          onChange={(e) => update('due_date', e.target.value)}
+        />
+      </label>
+
+      <label>
+        Reminder:
+        <input
+          type="datetime-local"
+          value={form.remind_at}
+          onChange={(e) => update('remind_at', e.target.value)}
+        />
+      </label>
+
+      <label>
+        Priority:
+        <select
+          value={form.priority}
+          onChange={(e) => update('priority', e.target.value as Priority)}
+        >
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </label>
+
+      {showCompleted && (
+        <label>
+          <input
+            type="checkbox"
+            checked={!!form.completed}
+            onChange={(e) => update('completed', e.target.checked)}
+          />
+        </label>
+      )}
+
+      {error && <p style={styles.error}>{error}</p>}
+
+      <div style={styles.actions}>
+        <button onClick={onClose}>Cancel</button>
+        <button onClick={onSubmit}>{submitLabel}</button>
+      </div>
+
+      <p style={styles.hint}>💡 Ctrl + Enter — create • Esc — close</p>
+    </div>
+  );
+}

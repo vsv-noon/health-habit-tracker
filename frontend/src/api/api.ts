@@ -20,3 +20,7 @@ export async function apiDelete(url: string): Promise<void> {
 
   if (!res.ok) throw new Error(`API error: ${res.status}`);
 }
+
+export async function fetchTitleSuggestions(query: string) {
+  return await apiFetch<string[]>(`/todos/suggestions?query=${encodeURIComponent(query)}`);
+}

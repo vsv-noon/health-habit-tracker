@@ -17,7 +17,7 @@ export function CalendarView({
       tileContent={({ date, view }) => {
         if (view !== 'month') return null;
 
-        const key = formatDate(date);
+        const key = formatDate(date).slice(0, 10);
         const count = counts[key];
 
         if (!count) return null;

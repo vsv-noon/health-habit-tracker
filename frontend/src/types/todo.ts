@@ -6,7 +6,7 @@ export type Todo = {
   description: string | null;
   completed: boolean;
   due_date: string; // YYYY-MM-DD
-  remind_at: string | null; // ISO string
+  remind_at: Date | null; // ISO string
   priority: Priority;
 
   created_at: string; // ISO (UTC)

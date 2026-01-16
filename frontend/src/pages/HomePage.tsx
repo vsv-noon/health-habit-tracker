@@ -1,16 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { apiFetch } from '../api/api';
 import type { Todo } from '../types/todo';
 import { requestNotificationPermission } from '../hooks/useNotifications';
 import { useReminders } from '../hooks/useReminders';
 import { CalendarView } from '../components/CalendarView/CalendarView';
-import { AddTodo } from '../components/AddTodo/AddTodo';
 import { TodoList } from '../components/TodoList/TodoList';
-import { EditTodo } from '../components/EditTodo/EditTodo';
 import { Filters } from '../components/Filters/Filters';
 import { formatDate } from '../utils/date';
-// import { ModalBase } from "../components/ModalBase/ModalBase";
+import { AddTodoModal } from '../components/AddTodoModal/AddTodoModal';
+import { EditTodoModal } from '../components/EditTodoModal/EditTodoModal';
 
 export default function HomePage() {
   const [params, setParams] = useSearchParams();
@@ -66,12 +65,6 @@ export default function HomePage() {
     });
   }, [selectedDate, search, status, setParams]);
 
-  // useEffect(() => {
-  //   apiFetch<Todo[]>(
-  //     `/todos?date${selectedDate}&search=${search}&status=${status}`
-  //   ).then(setTodos);
-  // }, [selectedDate, search, status]);
-
   function handleDateSelect(date: Date) {
     setSelectedDate(formatDate(date));
   }
@@ -88,12 +81,6 @@ export default function HomePage() {
     setTodos((prev) => [...prev, todo]);
   }
 
-  // function handleEdit(todo: Todo) {
-  //   setEditingTodo(todo);
-  // }
-
-  const existingTitles = useMemo(() => todos.map((t) => t.title), [todos]);
-
   useEffect(() => {
     requestNotificationPermission();
   }, []);
@@ -109,15 +96,14 @@ export default function HomePage() {
         counts={calendarCounts}
       />
       <button onClick={() => setModalOpen(true)}>➕ Add task</button>
-      <AddTodo
+
+      <AddTodoModal
         isOpen={isModalOpen}
         defaultDate={selectedDate}
-        existingTitles={existingTitles}
         onClose={() => setModalOpen(false)}
         onCreated={handleCreated}
       />
-      <EditTodo
-        isOpen={Boolean(editingTodo)}
+      <EditTodoModal
         todo={editingTodo}
         onClose={() => setEditingTodo(null)}
         onUpdated={handleUpdateTodo}

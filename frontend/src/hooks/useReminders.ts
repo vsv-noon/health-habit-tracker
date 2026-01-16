@@ -26,6 +26,7 @@ export function useReminders(todos: Todo[]) {
       const id = window.setTimeout(() => {
         new Notification('Todo reminder', {
           body: todo.title,
+          requireInteraction: true,
         });
       }, diff);
 

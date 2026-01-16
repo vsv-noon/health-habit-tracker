@@ -141,6 +141,33 @@ export async function getCalendarCounts(req, res) {
   }
 }
 
+export async function getTitleSuggestions(req, res) {
+  try {
+    const { query = '' } = req.query;
+
+    if (query.length < 2) {
+      return res.json([]);
+    }
+
+    const result = await pool.query(
+      `
+      SELECT DISTINCT title
+      FROM todos
+      WHERE deleted_at IS NULL
+        AND title ILIKE $1
+      ORDER BY title
+      LIMIT 10
+        `,
+      [`%${query}%`],
+    );
+
+    res.json(result.rows.map((r) => r.title));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Suggestions failed' });
+  }
+}
+
 export async function getTodos(req, res) {
   try {
     const { date, search = '', status = 'all' } = req.query;
@@ -179,6 +206,13 @@ export async function getTodos(req, res) {
       WHERE ${conditions.join(' AND ')}
       ORDER BY due_date ASC, created_at ASC
     `;
+
+    // const sql = `
+    //   SELECT id, title, description, completed, due_date, remind_at::timestamp
+    //   FROM todos
+    //   WHERE ${conditions.join(' AND ')}
+    //   ORDER BY due_date ASC, created_at ASC
+    // `;
 
     const result = await pool.query(sql, values);
 
