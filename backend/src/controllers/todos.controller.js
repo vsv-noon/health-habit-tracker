@@ -123,7 +123,7 @@ export async function getCalendarCounts(req, res) {
         due_date::date AS date,
         COUNT(*)::int AS count
       FROM todos
-      WHERE deleted_at IS NULL
+      WHERE deleted_at IS NULL AND completed = FALSE
       GROUP BY due_date::date
     `);
 
@@ -224,17 +224,22 @@ export async function getTodos(req, res) {
 
 export async function getDeletedTodos(req, res) {
   try {
+    const { q = '' } = req.query;
+
     const result = await pool.query(
       `
       SELECT * 
       FROM todos
       WHERE deleted_at IS NOT NULL
+        AND ($1 = '' OR title ILIKE $1)
       ORDER BY deleted_at DESC
       `,
+      [q ? `%${q}%` : ''],
     );
 
     res.json(result.rows);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Failed to load deleted todos' });
   }
 }

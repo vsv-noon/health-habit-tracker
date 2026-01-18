@@ -7,7 +7,7 @@ import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';
 import './TodoList.css';
 
 export function TodoList({ todos, onEdit, onUpdate, onDelete }: TodoListProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<Todo | null>(null);
 
   async function toggleCompleted(todo: Todo) {
@@ -27,7 +27,7 @@ export function TodoList({ todos, onEdit, onUpdate, onDelete }: TodoListProps) {
 
   function handleDeleteClick(todo: Todo) {
     setItemToDelete(todo);
-    setIsModalOpen(true);
+    setModalOpen(true);
   }
 
   async function handleConfirmDelete(todo: Todo | null) {
@@ -40,7 +40,7 @@ export function TodoList({ todos, onEdit, onUpdate, onDelete }: TodoListProps) {
   }
 
   function handleCloseModal() {
-    setIsModalOpen(false);
+    setModalOpen(false);
     setItemToDelete(null);
   }
 

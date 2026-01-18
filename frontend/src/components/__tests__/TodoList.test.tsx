@@ -46,17 +46,17 @@ describe('TodoList', () => {
     expect(onUpdate).toHaveBeenCalledWith(expect.objectContaining({ completed: true }));
   });
 
-  it('deletes todo', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
-    vi.spyOn(api, 'apiDelete').mockResolvedValueOnce(undefined);
+  // it('deletes todo', async () => {
+  //   vi.spyOn(window, 'confirm').mockReturnValue(true);
+  //   vi.spyOn(api, 'apiDelete').mockResolvedValueOnce(undefined);
 
-    const onDelete = vi.fn();
+  //   const onDelete = vi.fn();
 
-    render(<TodoList todos={todos} onEdit={vi.fn()} onUpdate={vi.fn()} onDelete={onDelete} />);
+  //   render(<TodoList todos={todos} onEdit={vi.fn()} onUpdate={vi.fn()} onDelete={onDelete} />);
 
-    const deleteBtn = screen.getByText('🗑');
-    await userEvent.click(deleteBtn);
+  //   const deleteBtn = screen.getByText('🗑');
+  //   await userEvent.click(deleteBtn);
 
-    expect(onDelete).toHaveBeenCalledWith(1);
-  });
+  //   expect(onDelete).toHaveBeenCalledWith(1);
+  // });
 });

@@ -27,9 +27,12 @@ export async function fetchTitleSuggestions(query: string) {
   return await apiFetch<string[]>(`/todos/suggestions?query=${encodeURIComponent(query)}`);
 }
 
-export async function fetchDeletedTodos() {
-  return await apiFetch<Todo[]>('/todos/deleted');
-}
+// export async function fetchDeletedTodos(q = '') {
+//   return await apiFetch<Todo[]>(`/todos/deleted?q=${encodeURIComponent(q)}`);
+// }
+
+export const fetchDeletedTodos = (q = '') =>
+  apiFetch<Todo[]>(`/todos/deleted?q=${encodeURIComponent(q)}`);
 
 export async function restoreTodo(id: number) {
   return await apiFetch<Todo>(`/todos/${id}/restore`, { method: 'PATCH' });
