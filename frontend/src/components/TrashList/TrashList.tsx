@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { Todo } from '../../types/todo';
-import { fetchDeletedTodos, hardDeleteTodo, restoreTodo } from '../../api/api';
+import { bulkHardDelete, bulkRestore, fetchDeletedTodos } from '../../api/api';
 import './TrashList.css';
 import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';
 
@@ -9,42 +9,43 @@ export function TrashList() {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<Todo | null>(null);
+  const [selected, setSelected] = useState<number[]>([]);
 
-  async function handleRestore(id: number) {
-    await restoreTodo(id);
-    setTodos((t) => t.filter((x) => x.id !== id));
-  }
-
-  function handleDeleteClick(todo: Todo) {
-    setItemToDelete(todo);
-    setModalOpen(true);
-  }
-
-  function handleCloseModal() {
-    setItemToDelete(null);
-    setModalOpen(false);
-  }
-
-  async function handleHardDelete(todo: Todo | null) {
-    // if (!confirm('Delete permanently? This cannot be undone.')) return;
-
-    if (todo) {
-      await hardDeleteTodo(todo.id);
-      setTodos((t) => t.filter((x) => x.id !== todo.id));
-    }
-  }
+  const load = useCallback(
+    async function load() {
+      try {
+        setLoading(true);
+        const data = await fetchDeletedTodos(query);
+        setTodos(data);
+        setSelected([]);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [query],
+  );
 
   useEffect(() => {
-    async function load() {
-      setLoading(true);
-      const data = await fetchDeletedTodos(query);
-      setTodos(data);
-      setLoading(false);
-    }
-
     load();
-  }, [query]);
+  }, [load]);
+
+  function toggle(id: number) {
+    setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
+  }
+
+  async function restoreSelected() {
+    await bulkRestore(selected);
+    load();
+  }
+
+  async function deleteSelected(selectedTodo: number[]) {
+    // if (!confirm('Delete permanently selected tasks?')) return;
+
+    await bulkHardDelete(selectedTodo);
+    load();
+  }
 
   return (
     <div>
@@ -59,6 +60,13 @@ export function TrashList() {
         }}
       />
 
+      {/* BULK ACTIONS */}
+      {selected.length > 0 && (
+        <div>
+          <button onClick={restoreSelected}>♻ Restore ({selected.length})</button>
+          <button onClick={() => setModalOpen(true)}>❌ Delete forever ({selected.length})</button>
+        </div>
+      )}
       {todos.length === 0 && <p>No deleted tasks</p>}
 
       {loading && <p>Loading...</p>}
@@ -67,11 +75,14 @@ export function TrashList() {
         <ul>
           {todos.map((t) => (
             <li key={t.id} className="trashItem">
+              <input
+                type="checkbox"
+                title="select"
+                checked={selected.includes(t.id)}
+                onChange={() => toggle(t.id)}
+              />
               <span className="title">{t.title}</span>
-              <div className="actions">
-                <button onClick={() => handleRestore(t.id)}>♻ Restore</button>
-                <button onClick={() => handleDeleteClick(t)}>❌ Delete forever</button>
-              </div>
+
               <span>{t.due_date}</span>
             </li>
           ))}
@@ -79,10 +90,10 @@ export function TrashList() {
       )}
       <ConfirmationDialog
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={() => setModalOpen(false)}
         title="Are you sure?"
-        message={`Do you really want to delete task "${itemToDelete?.title}"`}
-        onConfirm={() => handleHardDelete(itemToDelete)}
+        message={`Do you really want to delete task selected`}
+        onConfirm={() => deleteSelected(selected)}
       />
     </div>
   );

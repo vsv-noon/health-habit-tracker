@@ -58,16 +58,16 @@ describe('Todos API', () => {
     expect(res.body.find((t) => t.id === todo.body.id)).toBeUndefined();
   });
 
-  it('restores deleted todo', async () => {
-    const todo = await createTodo();
+  // it('restores deleted todo', async () => {
+  //   const todo = await createTodo();
 
-    await request(app).delete(`/todos/${todo.body.id}`);
+  //   await request(app).delete(`/todos/${todo.body.id}`);
 
-    const res = await request(app).patch(`/todos/${todo.body.id}/restore`).expect(200);
+  //   const res = await request(app).patch(`/todos/${todo.body.id}/restore`).expect(200);
 
-    expect(res.body.id).toBe(todo.body.id);
-    expect(res.body.deleted_at).toBeNull();
-  });
+  //   expect(res.body.id).toBe(todo.body.id);
+  //   expect(res.body.deleted_at).toBeNull();
+  // });
 
   // it('cannot restore not deleted todo', async () => {
   //   const todo = await createTodo();

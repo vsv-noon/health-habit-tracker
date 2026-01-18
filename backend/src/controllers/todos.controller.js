@@ -24,35 +24,6 @@ export async function createTodo(req, res) {
   }
 }
 
-export async function restoreTodo(req, res) {
-  try {
-    const { id } = req.params;
-
-    const result = await pool.query(
-      `
-      UPDATE todos
-      SET deleted_at = NULL, updated_at = NOW()
-      WHERE id = $1      
-      RETURNING *
-      `,
-      [id],
-    );
-
-    if (!result.rows[0]) {
-      return res.status(404).json({ error: 'Todo not found' });
-    }
-
-    // if (Number.isNaN(id)) {
-    //   return res.sendStatus(400);
-    // }
-
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ error: 'Server Error' });
-  }
-}
-
 export async function updateTodo(req, res) {
   try {
     const { title, description, completed, due_date, remind_at } = req.body;
@@ -270,26 +241,51 @@ export async function deleteTodo(req, res) {
   }
 }
 
-export async function hardDeleteTodo(req, res) {
+export async function bulkRestoreTodos(req, res) {
   try {
-    const { id } = req.params;
+    const { ids } = req.body;
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: 'ids required' });
+    }
 
     const result = await pool.query(
       `
-      DELETE FROM todos 
-      WHERE id = $1 
+      UPDATE todos
+      SET deleted_at = NULL, updated_at = NOW()
+      WHERE id = ANY($1)
       RETURNING id
       `,
-      [id],
+      [ids],
     );
 
-    if (!result.rows[0]) {
-      return res.status(404).json({ error: 'Todo not found' });
-    }
-
-    res.json({ success: true });
+    res.json({ restored: result.rows.map((r) => r.id) });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Hard delete failed' });
+    res.status(500).json({ error: 'Bulk restore failed' });
+  }
+}
+
+export async function bulkHardDeleteTodos(req, res) {
+  try {
+    const { ids } = req.body;
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: 'ids required' });
+    }
+
+    const result = await pool.query(
+      `
+      DELETE FROM todos
+      WHERE id = ANY($1)
+      RETURNING id
+      `,
+      [ids],
+    );
+
+    res.json({ deleted: result.rows.map((r) => r.id) });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Bulk delete failed' });
   }
 }

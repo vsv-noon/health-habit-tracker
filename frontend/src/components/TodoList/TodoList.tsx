@@ -52,6 +52,7 @@ export function TodoList({ todos, onEdit, onUpdate, onDelete }: TodoListProps) {
             <li key={todo.id} className="todoItem">
               <input
                 type="checkbox"
+                title="select to complete"
                 checked={todo.completed}
                 onChange={() => toggleCompleted(todo)}
               />

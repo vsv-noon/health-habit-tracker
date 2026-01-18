@@ -6,10 +6,10 @@ import {
   getTitleSuggestions,
   getTodos,
   getDeletedTodos,
-  restoreTodo,
   updateTodo,
   deleteTodo,
-  hardDeleteTodo,
+  bulkRestoreTodos,
+  bulkHardDeleteTodos,
 } from '../controllers/todos.controller.js';
 
 import { validate } from '../middleware/validate.js';
@@ -19,9 +19,6 @@ const router = Router();
 
 // Create
 router.post('/', validate(createTodoSchema), createTodo);
-
-// Restore
-router.patch('/:id/restore', restoreTodo);
 
 // Update
 router.patch('/:id', validate(updateTodoSchema), updateTodo);
@@ -35,7 +32,8 @@ router.get('/deleted', getDeletedTodos);
 // Soft delete
 router.delete('/:id', deleteTodo);
 
-// Hard delete
-router.delete('/:id/hard', hardDeleteTodo);
+// bulk restore / delete
+router.patch('/restore/bulk', bulkRestoreTodos);
+router.delete('/hard/bulk', bulkHardDeleteTodos);
 
 export default router;

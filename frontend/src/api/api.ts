@@ -27,13 +27,9 @@ export async function fetchTitleSuggestions(query: string) {
   return await apiFetch<string[]>(`/todos/suggestions?query=${encodeURIComponent(query)}`);
 }
 
-// export async function fetchDeletedTodos(q = '') {
-//   return await apiFetch<Todo[]>(`/todos/deleted?q=${encodeURIComponent(q)}`);
-// }
-
-export const fetchDeletedTodos = (q = '') =>
-  apiFetch<Todo[]>(`/todos/deleted?q=${encodeURIComponent(q)}`);
-
+export async function fetchDeletedTodos(q = '') {
+  return apiFetch<Todo[]>(`/todos/deleted?q=${encodeURIComponent(q)}`);
+}
 export async function restoreTodo(id: number) {
   return await apiFetch<Todo>(`/todos/${id}/restore`, { method: 'PATCH' });
 }
@@ -42,11 +38,16 @@ export async function hardDeleteTodo(id: number) {
   return await apiDelete(`/todos/${id}/hard`);
 }
 
-// export const fetchDeletedTodos = () =>
-//   apiFetch<Todo[]>("/todos/deleted");
+export async function bulkRestore(ids: number[]) {
+  return await apiFetch(`/todos/restore/bulk`, {
+    method: 'PATCH',
+    body: JSON.stringify({ ids }),
+  });
+}
 
-// export const restoreTodo = (id: number) =>
-//   apiFetch<Todo>(`/todos/${id}/restore`, { method: "PATCH" });
-
-// export const hardDeleteTodo = (id: number) =>
-//   apiDelete(`/todos/${id}/hard`);
+export async function bulkHardDelete(ids: number[]) {
+  return await apiFetch(`/todos/hard/bulk`, {
+    method: 'DELETE',
+    body: JSON.stringify({ ids }),
+  });
+}
