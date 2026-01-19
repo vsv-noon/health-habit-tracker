@@ -1,7 +1,8 @@
 import request from 'supertest';
-import app from '../src/app.js';
-import './setupDb.js';
-import { createTodo } from './helpers/createTodo.js';
+import app from '../app.ts';
+import './setupDb.ts';
+import { createTodo } from './helpers/createTodo.ts';
+import { describe, it, expect } from 'vitest';
 
 describe('Todos API', () => {
   it('creates todo', async () => {
@@ -55,7 +56,7 @@ describe('Todos API', () => {
 
     const res = await request(app).get('/todos');
 
-    expect(res.body.find((t) => t.id === todo.body.id)).toBeUndefined();
+    expect(res.body.find((t: { id: any }) => t.id === todo.body.id)).toBeUndefined();
   });
 
   // it('restores deleted todo', async () => {

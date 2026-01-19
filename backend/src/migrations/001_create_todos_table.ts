@@ -1,7 +1,6 @@
-/**
- * @param {import('node-pg-migrate').MigrationBuilder} pgm
- */
-export async function up(pgm) {
+import { MigrationBuilder } from 'node-pg-migrate';
+
+export async function up(pgm: MigrationBuilder): Promise<void> {
   pgm.createTable('todos', {
     id: {
       type: 'serial',
@@ -46,9 +45,6 @@ export async function up(pgm) {
   pgm.createIndex('todos', 'due_date');
 }
 
-/**
- * @param {import('node-pg-migrate').MigrationBuilder} pgm
- */
-export async function down(pgm) {
+export async function down(pgm: MigrationBuilder): Promise<void> {
   pgm.dropTable('todos');
 }

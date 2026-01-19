@@ -1,4 +1,6 @@
-export async function up(pgm) {
+import { MigrationBuilder } from 'node-pg-migrate';
+
+export async function up(pgm: MigrationBuilder): Promise<void> {
   pgm.createFunction(
     'set_updated_at',
     [],
@@ -21,7 +23,7 @@ export async function up(pgm) {
   });
 }
 
-export async function down(pgm) {
+export async function down(pgm: MigrationBuilder): Promise<void> {
   pgm.dropTrigger('todos', 'set_updated_at_trigger');
-  pgm.dropFunction('set_updated_at');
+  pgm.dropFunction('set_updated_at', []);
 }
