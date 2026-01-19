@@ -43,5 +43,7 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "noImplicitAny": true
-  }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }

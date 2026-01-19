@@ -9,7 +9,7 @@ export function TrashList() {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [selected, setSelected] = useState<number[]>([]);
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
   const load = useCallback(
     async function load() {
@@ -17,7 +17,7 @@ export function TrashList() {
         setLoading(true);
         const data = await fetchDeletedTodos(query);
         setTodos(data);
-        setSelected([]);
+        setSelectedItems([]);
       } catch (err) {
         console.error(err);
       } finally {
@@ -31,21 +31,34 @@ export function TrashList() {
     load();
   }, [load]);
 
-  function toggle(id: number) {
-    setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
+  function handleSelectItem(id: number, event: React.ChangeEvent<HTMLInputElement>) {
+    if (event.target.checked) {
+      setSelectedItems((prev) => [...prev, id]);
+    } else {
+      setSelectedItems((prev) => prev.filter((itemId) => itemId !== id));
+    }
   }
 
   async function restoreSelected() {
-    await bulkRestore(selected);
+    await bulkRestore(selectedItems);
     load();
   }
 
   async function deleteSelected(selectedTodo: number[]) {
-    // if (!confirm('Delete permanently selected tasks?')) return;
-
     await bulkHardDelete(selectedTodo);
     load();
   }
+
+  function handleSelectAll(event: React.ChangeEvent<HTMLInputElement>) {
+    if (event.target.checked) {
+      const allIds = todos.map((item) => item.id);
+      setSelectedItems(allIds);
+    } else {
+      setSelectedItems([]);
+    }
+  }
+
+  const isAllSelected = selectedItems.length === todos.length && todos.length > 0;
 
   return (
     <div>
@@ -59,12 +72,15 @@ export function TrashList() {
           setQuery(e.target.value);
         }}
       />
-
+      <p>Messages that have been in Trash more than 30 days will be automatically deleted.</p>
+      <input type="checkbox" checked={isAllSelected} onChange={handleSelectAll} />
       {/* BULK ACTIONS */}
-      {selected.length > 0 && (
+      {selectedItems.length > 0 && (
         <div>
-          <button onClick={restoreSelected}>♻ Restore ({selected.length})</button>
-          <button onClick={() => setModalOpen(true)}>❌ Delete forever ({selected.length})</button>
+          <button onClick={restoreSelected}>♻ Restore ({selectedItems.length})</button>
+          <button onClick={() => setModalOpen(true)}>
+            ❌ Delete forever ({selectedItems.length})
+          </button>
         </div>
       )}
       {todos.length === 0 && <p>No deleted tasks</p>}
@@ -78,8 +94,8 @@ export function TrashList() {
               <input
                 type="checkbox"
                 title="select"
-                checked={selected.includes(t.id)}
-                onChange={() => toggle(t.id)}
+                checked={selectedItems.includes(t.id)}
+                onChange={(e) => handleSelectItem(t.id, e)}
               />
               <span className="title">{t.title}</span>
 
@@ -93,7 +109,7 @@ export function TrashList() {
         onClose={() => setModalOpen(false)}
         title="Are you sure?"
         message={`Do you really want to delete task selected`}
-        onConfirm={() => deleteSelected(selected)}
+        onConfirm={() => deleteSelected(selectedItems)}
       />
     </div>
   );
