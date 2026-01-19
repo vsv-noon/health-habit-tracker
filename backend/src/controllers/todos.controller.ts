@@ -1,6 +1,7 @@
-import { pool } from '../db.js';
+import { pool } from '../db.ts';
+import type { Request, Response } from 'express';
 
-export async function createTodo(req, res) {
+export async function createTodo(req: Request, res: Response) {
   try {
     const { title, description, due_date, remind_at } = req.body;
 
@@ -24,7 +25,7 @@ export async function createTodo(req, res) {
   }
 }
 
-export async function updateTodo(req, res) {
+export async function updateTodo(req: Request, res: Response) {
   try {
     const { title, description, completed, due_date, remind_at } = req.body;
     const { id } = req.params;
@@ -87,7 +88,7 @@ export async function updateTodo(req, res) {
   }
 }
 
-export async function getCalendarCounts(req, res) {
+export async function getCalendarCounts(req: Request, res: Response) {
   try {
     const result = await pool.query(`
       SELECT 
@@ -98,7 +99,7 @@ export async function getCalendarCounts(req, res) {
       GROUP BY due_date::date
     `);
 
-    const map = {};
+    const map: Record<string, number> = {};
 
     for (const row of result.rows) {
       map[row.date] = row.count;
@@ -111,11 +112,11 @@ export async function getCalendarCounts(req, res) {
   }
 }
 
-export async function getTitleSuggestions(req, res) {
+export async function getTitleSuggestions(req: Request, res: Response) {
   try {
     const { query = '' } = req.query;
 
-    if (query.length < 2) {
+    if (typeof query === 'string' && query.length < 2) {
       return res.json([]);
     }
 
@@ -138,7 +139,7 @@ export async function getTitleSuggestions(req, res) {
   }
 }
 
-export async function getTodos(req, res) {
+export async function getTodos(req: Request, res: Response) {
   try {
     const { date, search = '', status = 'all' } = req.query;
 
@@ -193,7 +194,7 @@ export async function getTodos(req, res) {
   }
 }
 
-export async function getDeletedTodos(req, res) {
+export async function getDeletedTodos(req: Request, res: Response) {
   try {
     const { q = '' } = req.query;
 
@@ -215,7 +216,7 @@ export async function getDeletedTodos(req, res) {
   }
 }
 
-export async function deleteTodo(req, res) {
+export async function deleteTodo(req: Request, res: Response) {
   try {
     const { id } = req.params;
 
@@ -241,7 +242,7 @@ export async function deleteTodo(req, res) {
   }
 }
 
-export async function bulkRestoreTodos(req, res) {
+export async function bulkRestoreTodos(req: Request, res: Response) {
   try {
     const { ids } = req.body;
 
@@ -266,7 +267,7 @@ export async function bulkRestoreTodos(req, res) {
   }
 }
 
-export async function bulkHardDeleteTodos(req, res) {
+export async function bulkHardDeleteTodos(req: Request, res: Response) {
   try {
     const { ids } = req.body;
 

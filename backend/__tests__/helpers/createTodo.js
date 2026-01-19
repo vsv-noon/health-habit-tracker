@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../../src/app';
+import app from '../../src/app.ts';
 
 export async function createTodo(overrides = {}) {
   const res = await request(app)

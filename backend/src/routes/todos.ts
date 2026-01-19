@@ -10,10 +10,10 @@ import {
   deleteTodo,
   bulkRestoreTodos,
   bulkHardDeleteTodos,
-} from '../controllers/todos.controller.js';
+} from '../controllers/todos.controller.ts';
 
-import { validate } from '../middleware/validate.js';
-import { createTodoSchema, updateTodoSchema } from '../validation/todo.schema.js';
+import { validate } from '../middleware/validate.ts';
+import { createTodoSchema, updateTodoSchema } from '../validation/todo.schema.ts';
 
 const router = Router();
 

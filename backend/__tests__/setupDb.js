@@ -1,4 +1,4 @@
-import { pool } from '../src/db.js';
+import { pool } from '../src/db.ts';
 
 if (process.env.NODE_ENV !== 'test') {
   throw new Error('❌ Tests are not running in test environment');
