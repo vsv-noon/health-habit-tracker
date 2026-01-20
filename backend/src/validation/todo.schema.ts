@@ -4,6 +4,7 @@ export const createTodoSchema = z.object({
   title: z.string().min(2, 'Title is too short'),
   description: z.string().max(500).optional(),
   due_date: z.string().refine((value) => !isNaN(Date.parse(value)), 'Invalid due date'),
+  remind_at: z.string().nullable().optional(),
 });
 
 export const updateTodoSchema = z

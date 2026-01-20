@@ -16,7 +16,8 @@ export function AddTodoModal({ isOpen, onClose, onCreated }: AddTodoModalProps) 
   async function submit() {
     if (!validate()) return;
 
-    const todo = await createTodo(form);
+    const todo = await createTodo({ ...form, remind_at: form.remind_at || null });
+    console.log(todo);
     onCreated(todo);
     onClose();
   }

@@ -3,6 +3,7 @@ import type { Todo } from '../../types/todo';
 import { bulkHardDelete, bulkRestore, fetchDeletedTodos } from '../../api/api';
 import './TrashList.css';
 import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';
+import Loader from '../Loader/Loader';
 
 export function TrashList() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -66,6 +67,7 @@ export function TrashList() {
 
       {/* 🔍 SEARCH */}
       <input
+        type="search"
         placeholder="Search deleted tasks..."
         value={query}
         onChange={(e) => {
@@ -73,7 +75,12 @@ export function TrashList() {
         }}
       />
       <p>Messages that have been in Trash more than 30 days will be automatically deleted.</p>
-      <input type="checkbox" checked={isAllSelected} onChange={handleSelectAll} />
+      <input
+        type="checkbox"
+        title="select all"
+        checked={isAllSelected}
+        onChange={handleSelectAll}
+      />
       {/* BULK ACTIONS */}
       {selectedItems.length > 0 && (
         <div>
@@ -85,7 +92,7 @@ export function TrashList() {
       )}
       {todos.length === 0 && <p>No deleted tasks</p>}
 
-      {loading && <p>Loading...</p>}
+      {loading && <Loader />}
 
       {!loading && (
         <ul>

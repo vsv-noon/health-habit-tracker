@@ -7,9 +7,11 @@ import { useReminders } from '../hooks/useReminders';
 import { CalendarView } from '../components/CalendarView/CalendarView';
 import { TodoList } from '../components/TodoList/TodoList';
 import { Filters } from '../components/Filters/Filters';
-import { formatDate } from '../utils/date';
+import { formattedDate } from '../utils/date';
 import { AddTodoModal } from '../components/AddTodoModal/AddTodoModal';
 import { EditTodoModal } from '../components/EditTodoModal/EditTodoModal';
+import Loader from '../components/Loader/Loader';
+import { LAST_INDEX } from './constants';
 
 export default function HomePage() {
   const [params, setParams] = useSearchParams();
@@ -18,9 +20,11 @@ export default function HomePage() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [search, setSearch] = useState(params.get('search') ?? '');
-  const [status, setStatus] = useState(params.get('status') ?? 'all');
+  const [status, setStatus] = useState(params.get('status') ?? 'active');
 
-  const [selectedDate, setSelectedDate] = useState(params.get('date') ?? formatDate(new Date()));
+  const [selectedDate, setSelectedDate] = useState(
+    params.get('date') ?? formattedDate(new Date(), LAST_INDEX),
+  );
 
   const [calendarCounts, setCalendarCounts] = useState<Record<string, number>>({});
 
@@ -66,7 +70,7 @@ export default function HomePage() {
   }, [selectedDate, search, status, setParams]);
 
   function handleDateSelect(date: Date) {
-    setSelectedDate(formatDate(date));
+    setSelectedDate(formattedDate(date, LAST_INDEX));
   }
 
   function handleUpdateTodo(updated: Todo) {
@@ -114,7 +118,7 @@ export default function HomePage() {
         onSearchChange={setSearch}
         onStatusChange={setStatus}
       />
-      {loading && <div>Loading...</div>}
+      {loading && <Loader />}
       {
         <div>
           {selectedDate && (

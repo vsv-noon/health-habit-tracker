@@ -4,6 +4,7 @@ export function Filters({ search, status, onSearchChange, onStatusChange }: Filt
   return (
     <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
       <input
+        type="search"
         placeholder="Search..."
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}

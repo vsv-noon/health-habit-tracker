@@ -18,7 +18,7 @@ export function TodoList({ todos, onEdit, onUpdate, onDelete }: TodoListProps) {
         description: todo.description,
         completed: !todo.completed,
         due_date: todo.due_date,
-        reminder_at: todo.remind_at,
+        remind_at: todo.remind_at,
       }),
     });
 
