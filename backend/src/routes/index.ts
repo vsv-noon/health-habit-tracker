@@ -1,10 +1,10 @@
 import { Router } from 'express';
+
 import authRoutes from './auth.routes.js';
 import userRoutes from './user.routes.js';
 import statsRoutes from './stats.routes.js';
 // import todosRoutes from './todos.routes.js';
 import todoRoutes from './todo.routes.js';
-
 
 const router = Router();
 

@@ -27,8 +27,8 @@ export async function saveDailyMetrics() {
         productivity = EXCLUDED.productivity
     `);
 
-    console.log('📊 Daily metrics saved');
-  } catch (e) {
-    console.error('Metrics cron failed', e);
+    console.log('📊 Daily metrics saved', result.rowCount);
+  } catch (err) {
+    console.error('Metrics cron failed', err);
   }
 }

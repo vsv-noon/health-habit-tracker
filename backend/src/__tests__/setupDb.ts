@@ -1,4 +1,5 @@
 import { afterAll, beforeEach } from 'vitest';
+
 import { pool } from '../config/db.js';
 
 if (process.env.NODE_ENV !== 'test') {

@@ -1,5 +1,6 @@
-import { pool } from '../config/db.js';
 import type { Request, Response } from 'express';
+
+import { pool } from '../config/db.js';
 
 export async function createTodo(req: Request, res: Response) {
   try {
@@ -15,7 +16,7 @@ export async function createTodo(req: Request, res: Response) {
       VALUES ($1, $2, $3, $4, $5) 
       RETURNING *
       `,
-      [title, description, due_date, remind_at, priority],
+      [title, description, due_date, remind_at, priority]
     );
 
     res.status(201).json(result.rows[0]);
@@ -79,7 +80,7 @@ export async function updateTodo(req: Request, res: Response) {
         AND deleted_at IS NULL
       RETURNING *
       `,
-      values,
+      values
     );
 
     if (result.rows.length === 0) {
@@ -134,7 +135,7 @@ export async function getTitleSuggestions(req: Request, res: Response) {
       ORDER BY title
       LIMIT 10
         `,
-      [`%${query}%`],
+      [`%${query}%`]
     );
 
     res.json(result.rows.map((r) => r.title));
@@ -204,7 +205,7 @@ export async function getDeletedTodos(req: Request, res: Response) {
         AND ($1 = '' OR title ILIKE $1)
       ORDER BY deleted_at DESC
       `,
-      [q ? `%${q}%` : ''],
+      [q ? `%${q}%` : '']
     );
 
     res.json(result.rows);
@@ -226,7 +227,7 @@ export async function deleteTodo(req: Request, res: Response) {
       AND deleted_at IS NULL
       RETURNING *
       `,
-      [id],
+      [id]
     );
 
     if (result.rowCount === 0) {
@@ -255,7 +256,7 @@ export async function bulkRestoreTodos(req: Request, res: Response) {
       WHERE id = ANY($1)
       RETURNING id
       `,
-      [ids],
+      [ids]
     );
 
     res.json({ restored: result.rows.map((r) => r.id) });
@@ -279,7 +280,7 @@ export async function bulkHardDeleteTodos(req: Request, res: Response) {
       WHERE id = ANY($1)
       RETURNING id
       `,
-      [ids],
+      [ids]
     );
 
     res.json({ deleted: result.rows.map((r) => r.id) });

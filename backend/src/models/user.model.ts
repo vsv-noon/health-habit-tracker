@@ -14,7 +14,7 @@ export async function findUserByEmail(email: string): Promise<UserRow | null> {
     FROM users
     WHERE email = $1
     `,
-    [email],
+    [email]
   );
 
   return res.rows[0] ?? null;
@@ -27,7 +27,7 @@ export async function findUserById(id: number): Promise<UserRow | null> {
     FROM users
     WHERE id = $1
     `,
-    [id],
+    [id]
   );
 
   return res.rows[0] ?? null;
@@ -43,7 +43,7 @@ export async function createUser(params: {
     VALUES ($1, $2)
     RETURNING id, email, password_hash, created_at
     `,
-    [params.email, params.passwordHash],
+    [params.email, params.passwordHash]
   );
 
   return res.rows[0];

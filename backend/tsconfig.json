@@ -7,7 +7,7 @@
     "moduleResolution": "nodenext",
     "target": "es2020",
     "lib": ["ES2020"],
-    "types": ["node"],
+    "types": ["node", "vitest/globals"],
 
     "sourceMap": true,
     "skipLibCheck": true,

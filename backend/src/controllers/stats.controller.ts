@@ -1,9 +1,10 @@
 import type { Request, Response } from 'express';
-import * as statsService from '../services/stats.service.js'
+
+import * as statsService from '../services/stats.service.js';
 
 export async function getStats(
   req: Request<unknown, unknown, unknown, { type?: string; from?: string; to?: string }>,
-  res: Response,
+  res: Response
 ) {
   // if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
 

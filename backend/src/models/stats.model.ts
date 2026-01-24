@@ -18,7 +18,7 @@ export async function getProductivity(from: string | null, to: string | null) {
       AND ($2::date IS NULL OR date <= $2)
     ORDER BY date
     `,
-    [from || null, to || null],
+    [from || null, to || null]
   );
 
   return result.rows;
@@ -35,7 +35,7 @@ export async function getStatus(from: string | null, to: string | null): Promise
       AND ($2::date IS NULL OR due_date <= $2)
     GROUP BY completed;
     `,
-    [from || null, to || null],
+    [from || null, to || null]
   );
 
   return result.rows;
@@ -61,7 +61,7 @@ export async function getStreak() {
       GROUP BY grp
       ORDER BY streak DESC
       LIMIT 1;
-    `,
+    `
   );
 
   return { streak: Number(result.rows[0]?.streak || 0) };
@@ -80,7 +80,7 @@ export async function getTodosByDate(from: string | null, to: string | null): Pr
     GROUP BY date
     ORDER BY date
     `,
-    [from, to],
+    [from, to]
   );
 
   return result.rows;

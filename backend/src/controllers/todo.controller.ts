@@ -1,7 +1,6 @@
 import type { Request, Response } from 'express';
+
 import * as todoService from '../services/todo.service.js';
-import { error } from 'node:console';
-import { id } from 'zod/locales';
 
 export async function createTodo(req: Request, res: Response) {
   // if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
@@ -22,6 +21,7 @@ export async function createTodo(req: Request, res: Response) {
     });
     return res.status(201).json(todo);
   } catch (err) {
+    console.error(err);
     return res.status(500).json({ error: 'Failed to create todo' });
   }
 }
@@ -39,6 +39,7 @@ export async function updateTodo(req: Request, res: Response) {
     }
     return res.json(todo);
   } catch (err) {
+    console.error(err);
     return res.status(500).json({ error: 'Failed to update todo' });
   }
 }
@@ -73,6 +74,7 @@ export async function getTodos(req: Request, res: Response) {
 
     return res.json(todos);
   } catch (err) {
+    console.error(err);
     return res.status(500).json({ error: 'Failed to fetch todos' });
   }
 }
@@ -84,6 +86,7 @@ export async function getCalendarCounts(req: Request, res: Response) {
     const counts = await todoService.getCalendarTodoCounts();
     return res.json(counts);
   } catch (err) {
+    console.error(err);
     return res.status(500).json({ error: 'Failed to fetch calendar counts' });
   }
 }
@@ -97,6 +100,7 @@ export async function getTitleSuggestions(req: Request, res: Response) {
     const suggestions = await todoService.getTodoSuggestions(query ?? '');
     return res.json(suggestions);
   } catch (err) {
+    console.error(err);
     return res.status(500).json({ error: 'Failed to fetch suggestions' });
   }
 }
@@ -110,6 +114,7 @@ export async function getDeletedTodos(req: Request, res: Response) {
     const todos = await todoService.getDeletedTodoList(query ?? undefined);
     return res.json(todos);
   } catch (err) {
+    console.error('Failed to fetch deleted todos', err);
     return res.status(500).json({ error: 'Failed to fetch deleted todos' });
   }
 }
@@ -126,6 +131,7 @@ export async function deleteTodo(req: Request, res: Response) {
     }
     return res.status(204).send();
   } catch (err) {
+    console.error('Failed to delete todo', err);
     return res.status(500).json({ error: 'Failed to delete todo' });
   }
 }
@@ -143,6 +149,7 @@ export async function bulkRestoreTodos(req: Request, res: Response) {
     const restored = await todoService.restoreDeletedTodos(ids);
     return res.json({ restored });
   } catch (err) {
+    console.error('Bulk restore failed', err);
     return res.status(500).json({ error: 'Bulk restore failed' });
   }
 }
@@ -160,6 +167,7 @@ export async function bulkHardRDeleteTodos(req: Request, res: Response) {
     const deleted = await todoService.hardDeleteTodos(ids);
     return res.json({ deleted });
   } catch (err) {
+    console.error('Bulk delete failed', err);
     return res.status(500).json({ error: 'Bulk delete failed' });
   }
 }

@@ -19,7 +19,7 @@ export async function createTodoItem(
     due_date: string;
     remind_at?: string;
     priority?: number;
-  },
+  }
 ): Promise<TodoRow> {
   // return createTodo(userId, data);
   return createTodo(data);
@@ -35,7 +35,7 @@ export async function updateTodoItem(
     due_date: string;
     remind_at: string;
     priority: number;
-  }>,
+  }>
 ): Promise<TodoRow | null> {
   return updateTodo(id, updates);
   // return updateTodo(userId, id, updates)
@@ -47,7 +47,7 @@ export async function getTodoList(
     date?: string;
     search?: string;
     status?: 'all' | 'completed' | 'active';
-  },
+  }
 ): Promise<TodoRow[]> {
   // return getTodos(userId, filters);
   return getTodos(filters);
@@ -76,13 +76,13 @@ export async function getDeletedTodoList(search?: string): Promise<TodoRow[]> {
 }
 
 export async function deleteTodoItem(id: number): Promise<boolean> {
-  return softDeleteTodo(id)
+  return softDeleteTodo(id);
 }
 
 export async function restoreDeletedTodos(ids: number[]): Promise<number[]> {
-  return bulkRestoreTodos(ids)
+  return bulkRestoreTodos(ids);
 }
 
 export async function hardDeleteTodos(ids: number[]): Promise<number[]> {
-  return bulkHardDeleteTodos(ids)
+  return bulkHardDeleteTodos(ids);
 }

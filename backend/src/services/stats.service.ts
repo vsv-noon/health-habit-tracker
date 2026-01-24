@@ -6,7 +6,7 @@ export async function getStats(
   // userId: number,
   type: StatsType,
   from: string | null,
-  to: string | null,
+  to: string | null
 ): Promise<unknown> {
   switch (type) {
     case 'productivity':

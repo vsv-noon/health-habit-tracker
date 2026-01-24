@@ -13,7 +13,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       NEW.updated_at = now();
       RETURN NEW;
     END;
-    `,
+    `
   );
 
   pgm.createTrigger('todos', 'set_updated_at_trigger', {
