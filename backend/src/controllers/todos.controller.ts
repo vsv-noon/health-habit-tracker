@@ -183,13 +183,6 @@ export async function getTodos(req: Request, res: Response) {
       ORDER BY due_date ASC, created_at ASC
     `;
 
-    // const sql = `
-    //   SELECT id, title, description, completed, due_date, remind_at::timestamp
-    //   FROM todos
-    //   WHERE ${conditions.join(' AND ')}
-    //   ORDER BY due_date ASC, created_at ASC
-    // `;
-
     const result = await pool.query(sql, values);
 
     res.json(result.rows);

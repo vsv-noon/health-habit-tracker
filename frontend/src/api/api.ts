@@ -39,15 +39,15 @@ export async function hardDeleteTodo(id: number) {
 }
 
 export async function bulkRestore(ids: number[]) {
-  return await apiFetch(`/todos/restore/bulk`, {
-    method: 'PATCH',
+  return await apiFetch(`/todos/bulk-restore`, {
+    method: 'POST',
     body: JSON.stringify({ ids }),
   });
 }
 
 export async function bulkHardDelete(ids: number[]) {
-  return await apiFetch(`/todos/hard/bulk`, {
-    method: 'DELETE',
+  return await apiFetch(`/todos/bulk-delete`, {
+    method: 'POST',
     body: JSON.stringify({ ids }),
   });
 }
