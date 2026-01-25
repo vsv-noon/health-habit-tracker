@@ -1,5 +1,4 @@
 import { pool } from '../config/db.js';
-// import type { Request, Response } from 'express';
 
 export type TodoRow = {
   id: number;
@@ -25,7 +24,7 @@ export type TitleSuggestionRow = {
 };
 
 export async function createTodo(
-  // userId: number,
+  userId: number,
   data: {
     title: string;
     description?: string;
@@ -36,39 +35,18 @@ export async function createTodo(
 ): Promise<TodoRow> {
   const result = await pool.query(
     `
-      INSERT INTO todos (title, description, due_date, remind_at, priority)
-      VALUES ($1, $2, $3::date, $4::timestamptz, $5)
+      INSERT INTO todos (user_id, title, description, due_date, remind_at, priority)
+      VALUES ($1, $2, $3, $4::date, $5::timestamptz, $6)
       RETURNING *
       `,
-    [data.title, data.description, data.due_date, data.remind_at, data.priority]
+    [userId, data.title, data.description, data.due_date, data.remind_at, data.priority]
   );
 
   return result.rows[0];
 }
-// export async function createTodo(
-//   userId: number,
-//   data: {
-//     title: string;
-//     description?: string;
-//     due_date: string;
-//     remind_at?: string;
-//     priority?: number;
-//   },
-// ): Promise<TodoRow> {
-//   const result = await pool.query(
-//     `
-//       INSERT INTO todos (user_id, title, description, due_date, remind_at, priority)
-//       VALUES ($1, $2, $3, $4::date, $5::timestamptz, $6)
-//       RETURNING *
-//       `,
-//     [userId, data.title, data.description, data.due_date, data.remind_at, data.priority],
-//   );
-
-//   return result.rows[0];
-// }
 
 export async function updateTodo(
-  // userId: number,
+  userId: number,
   id: number,
   updates: Partial<{
     title: string;
@@ -87,69 +65,43 @@ export async function updateTodo(
       UPDATE todos
       SET ${fields}, updated_at = NOW()
       WHERE id = $1
+        AND user_id = $${Object.keys(updates).length + 2}
         AND deleted_at IS NULL
       RETURNING *
       `,
-    [id, ...Object.values(updates)]
+    [id, ...Object.values(updates), userId]
   );
 
   return result.rows[0] || null;
 }
-// export async function updateTodo(
-//   userId: number,
-//   id: number,
-//   updates: Partial<{
-//     title: string;
-//     description?: string;
-//     due_date: string;
-//     remind_at?: string;
-//     priority?: number;
-//   }>,
-// ): Promise<TodoRow | null> {
-//   const fields = Object.entries(updates)
-//     .map(([key, value], idx) => `${key} = $${idx + 2}`)
-//     .join(', ');
 
-//   const result = await pool.query(
-//     `
-//       UPDATE todos
-//       SET ${fields}, updated_at = NOW()
-//       WHERE id = $1
-//         AND user_id = $${Object.keys(updates).length + 2}
-//         AND deleted_at IS NULL
-//       RETURNING *
-//       `,
-//     [id, ...Object.values(updates), userId],
-//   );
+export async function getTodoById(userId: number, id: number): Promise<TodoRow | null> {
+  const result = await pool.query<TodoRow>(
+    `
+    SELECT * FROM todos
+    WHERE id = $1
+      AND user_id = $2
+      AND deleted_at IS NULL
+    `,
+    [id, userId]
+  );
 
-//   return result.rows[0] || null;
-// }
-
-// export async function getTodoById(userId: number, id: number): Promise<TodoRow | null> {
-//   const result = await pool.query<TodoRow>(
-//     `
-//     SELECT * FROM todos
-//     WHERE id = $1
-//       AND user_id = $2
-//       AND deleted_at IS NULL
-//     `,
-//     [id, userId],
-//   );
-
-//   return result.rows[0] ?? null;
-// }
+  return result.rows[0] ?? null;
+}
 
 export async function getTodos(
-  // userId: number,
+  userId: number,
   filters: {
     date?: string;
     search?: string;
     status?: 'all' | 'completed' | 'active';
   }
 ): Promise<TodoRow[]> {
-  // const values: any[] = [userId];
-  const values: any[] = [];
+  const values = [];
   const conditions = ['deleted_at IS NULL'];
+
+  values.push(userId);
+  conditions.push(`user_id = $${values.length}`);
 
   if (filters.date) {
     values.push(filters.date);
@@ -181,79 +133,52 @@ export async function getTodos(
   return result.rows;
 }
 
-export async function getCalendarCounts(): Promise<TodoCountByDateRow[]> {
+export async function getCalendarCounts(userId: number): Promise<TodoCountByDateRow[]> {
   const result = await pool.query<TodoCountByDateRow>(
     `
-      SELECT 
+      SELECT
         due_date::date AS date,
         COUNT(*)::int AS count
       FROM todos
-      WHERE deleted_at IS NULL 
+      WHERE user_id = $1
+        AND deleted_at IS NULL
         AND completed = FALSE
       GROUP BY due_date::date
-    `
+    `,
+    [userId]
   );
 
   return result.rows;
 }
-// export async function getCalendarCounts(userId: number): Promise<TodoCountByDateRow[]> {
-//   const result = await pool.query<TodoCountByDateRow>(
-//     `
-//       SELECT
-//         due_date::date AS date,
-//         COUNT(*)::int AS count
-//       FROM todos
-//       WHERE user_id = $1
-//         AND deleted_at IS NULL
-//         AND completed = FALSE
-//       GROUP BY due_date::date
-//     `,
-//     [userId],
-//   );
 
-//   return result.rows;
-// }
-
-export async function getTitleSuggestions(query: string): Promise<TitleSuggestionRow[]> {
+export async function getTitleSuggestions(
+  userId: number,
+  query: string
+): Promise<TitleSuggestionRow[]> {
   if (query.length < 2) return [];
 
   const result = await pool.query<TitleSuggestionRow>(
     `
       SELECT DISTINCT title
       FROM todos
-      WHERE deleted_at IS NULL
-        AND title ILIKE $1
+      WHERE user_id = $1
+        AND deleted_at IS NULL
+        AND title ILIKE $2
       ORDER BY title
       LIMIT 10
         `,
-    [`%${query}%`]
+    [userId, `%${query}%`]
   );
 
   return result.rows;
 }
-// export async function getTitleSuggestions(userId: number, query: string): Promise<TitleSuggestionRow[]> {
-//   if (query.length < 2) return []
 
-//     const result = await pool.query<TitleSuggestionRow>(
-//       `
-//       SELECT DISTINCT title
-//       FROM todos
-//       WHERE user_id = $1
-//         AND deleted_at IS NULL
-//         AND title ILIKE $2
-//       ORDER BY title
-//       LIMIT 10
-//         `,
-//       [userId, `%${query}%`],
-//     );
-
-//     return result.rows;
-
-// }
-
-export async function getDeletedTodos(search?: string): Promise<TodoRow[]> {
-  const values: any[] = [];
+export async function getDeletedTodos(userId: number, search?: string): Promise<TodoRow[]> {
+  const values = [];
   const conditions = ['deleted_at IS NOT NULL'];
+
+  values.push(userId);
+  conditions.push(`user_id = $${values.length}`);
 
   if (search) {
     values.push(`%${search}%`);
@@ -272,108 +197,48 @@ export async function getDeletedTodos(search?: string): Promise<TodoRow[]> {
 
   return result.rows;
 }
-// export async function getDeletedTodos(userId: number, search?: string): Promise<TodoRow[]> {
-//   const values: any[] = [userId];
-//   const conditions = ['deleted_at IS NOT NULL'];
 
-//   if (search) {
-//     values.push(`%${search}%`);
-//     conditions.push('title ILIKE $' + values.length);
-//   }
-
-//   const result = await pool.query<TodoRow>(
-//     `
-//       SELECT *
-//       FROM todos
-//       WHERE ${conditions.join(' AND ')}
-//       ORDER BY deleted_at DESC
-//       `,
-//     values,
-//   );
-
-//   return result.rows;
-// }
-
-export async function softDeleteTodo(id: number): Promise<boolean> {
+export async function softDeleteTodo(userId: number, id: number): Promise<boolean> {
   const result = await pool.query(
     `
       UPDATE todos
       SET deleted_at = now()
-      WHERE id = $1        
+      WHERE id = $1
+        AND user_id = $2
         AND deleted_at IS NULL
       RETURNING 1
       `,
-    [id]
+    [id, userId]
   );
 
-  return result.rowCount! > 0;
+  return result.rowCount > 0;
 }
-// export async function softDeleteTodo(userId: number, id: number): Promise<boolean> {
-//   const result = await pool.query(
-//     `
-//       UPDATE todos
-//       SET deleted_at = now()
-//       WHERE id = $1
-//         AND user_id = $2
-//         AND deleted_at IS NULL
-//       RETURNING 1
-//       `,
-//     [id, userId],
-//   );
 
-//   return result.rowCount > 0;
-// }
-
-export async function bulkRestoreTodos(ids: number[]): Promise<number[]> {
+export async function bulkRestoreTodos(userId: number, ids: number[]): Promise<number[]> {
   const result = await pool.query(
     `
       UPDATE todos
       SET deleted_at = NULL, updated_at = NOW()
-      WHERE id = ANY($1)        
+      WHERE id = ANY($1)
+        AND user_id = $2
       RETURNING id
       `,
-    [ids]
+    [ids, userId]
   );
 
   return result.rows.map((r) => r.id);
 }
-// export async function bulkRestoreTodos(userId: number, ids: number[]): Promise<number[]> {
-//   const result = await pool.query(
-//     `
-//       UPDATE todos
-//       SET deleted_at = NULL, updated_at = NOW()
-//       WHERE id = ANY($1)
-//         AND user_id = $2
-//       RETURNING id
-//       `,
-//     [ids, userId],
-//   );
 
-//   return result.rows.map((r) => r.id);
-// }
-
-export async function bulkHardDeleteTodos(ids: number[]): Promise<number[]> {
+export async function bulkHardDeleteTodos(userId: number, ids: number[]): Promise<number[]> {
   const result = await pool.query(
     `
       DELETE FROM todos
       WHERE id = ANY($1)
+        AND user_id = $2
       RETURNING id
       `,
-    [ids]
+    [ids, userId]
   );
 
   return result.rows.map((r) => r.id);
 }
-// export async function bulkHardDeleteTodos(userId: number, ids: number[]): Promise<number[]> {
-//   const result = await pool.query(
-//     `
-//       DELETE FROM todos
-//       WHERE id = ANY($1)
-//         AND user_id = $2
-//       RETURNING id
-//       `,
-//     [ids, userId],
-//   );
-
-//   return result.rows.map((r) => r.id);
-// }

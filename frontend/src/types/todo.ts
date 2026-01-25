@@ -12,3 +12,19 @@ export type Todo = {
   created_at: string; // ISO (UTC)
   updated_at: string; // ISO (UTC)
 };
+
+export type User = {
+  id: number;
+  email: string;
+};
+
+export type AuthResponse = {
+  user: User;
+  accessToken: string;
+};
+
+export type TodoCounts = {
+  [date: string]: number;
+};
+
+export type StatsType = 'todosByDate' | 'productivity' | 'status' | 'streak';

@@ -1,7 +1,8 @@
 import type { TodoFormProps } from './types';
 import type { Priority } from '../../types/todo';
 import { useEffect, useState } from 'react';
-import { fetchTitleSuggestions } from '../../api/api';
+import { fetchTitleSuggestions } from '../../api/todos.api';
+// import { fetchTitleSuggestions } from '../../api/api';
 
 import { styles } from './styles';
 import './styles.css';

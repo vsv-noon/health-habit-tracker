@@ -1,7 +1,8 @@
 import { Modal } from '../Modal/Modal';
-import { useTodoForm } from '../../features/todos/useTodoForm';
-import { TodoForm } from '../../features/todos/TodoForm';
-import { createTodo } from '../../features/todos/services/todoService';
+import { useTodoForm } from '../../hooks/useTodoForm';
+import { TodoForm } from '../TodoForm/TodoForm';
+import { createTodo } from '../../api/todos.api';
+// import { createTodo } from '../../features/todos/services/todoService';
 import type { AddTodoModalProps } from './types';
 
 export function AddTodoModal({ isOpen, onClose, onCreated }: AddTodoModalProps) {

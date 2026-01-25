@@ -4,7 +4,7 @@ export type TodoFormData = {
   title: string;
   description: string;
   due_date: string;
-  remind_at: string | null;
+  remind_at: string;
   priority: Priority;
   completed?: boolean; // only for edit
 };

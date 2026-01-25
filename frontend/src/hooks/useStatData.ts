@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { fetchStats } from '../api/api';
+import { fetchStats } from '../api/stats.api';
 
 export function useStatData(endpoint: string, from: Date, to: Date) {
   const [data, setData] = useState<{ completed: boolean; count: string }[]>();
 
-  console.log(endpoint);
+  // console.log(endpoint);
   useEffect(() => {
     if (!from || endpoint === undefined) return;
 

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { Todo } from '../../types/todo';
-import { bulkHardDelete, bulkRestore, fetchDeletedTodos } from '../../api/api';
+// import { bulkHardDelete, bulkRestore, fetchDeletedTodos } from '../../api/api';
+import { bulkHardDelete, bulkRestore, fetchDeletedTodos } from '../../api/todos.api';
 import './TrashList.css';
 import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';
 import Loader from '../Loader/Loader';

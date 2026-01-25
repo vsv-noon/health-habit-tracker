@@ -7,7 +7,8 @@ export type JwtPayload = {
 };
 
 const signOptions: SignOptions = {
-  expiresIn: env.JWT_EXPIRES_IN,
+  // expiresIn: env.JWT_EXPIRES_IN,
+  expiresIn: '10m',
 };
 
 export function signToken(payload: JwtPayload): string {

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { apiFetch } from '../api/api';
+// import { apiFetch } from '../api/api';
+import { apiFetch } from '../api/client';
 import type { Todo } from '../types/todo';
 import { requestNotificationPermission } from '../hooks/useNotifications';
 import { useReminders } from '../hooks/useReminders';
@@ -13,9 +14,9 @@ import { EditTodoModal } from '../components/EditTodoModal/EditTodoModal';
 import Loader from '../components/Loader/Loader';
 import { LAST_INDEX } from './constants';
 import { TodoStatusChart } from '../Dashboard/StatusChart';
-import TodoByDateChart from '../Dashboard/TodoByDateChart';
+// import TodoByDateChart from '../Dashboard/TodoByDateChart';
 // import { TodoPriorityChart } from '../Dashboard/TodoPriorityChart';
-import { ProductivityChart } from '../Dashboard/ProductivityChart';
+// import { ProductivityChart } from '../Dashboard/ProductivityChart';
 
 type CalendarValue = Date | [Date, Date];
 
@@ -105,18 +106,18 @@ export default function HomePage() {
         // selectedDate={selectedDate}
         counts={calendarCounts}
       />
-      {Array.isArray(dateRange) && (
+      {/* {Array.isArray(dateRange) && (
         <ProductivityChart endpoint="productivity" from={dateRange[0]} to={dateRange[1]} />
-      )}
+      )} */}
       {/* <TodoPriorityChart /> */}
       <TodoStatusChart
         endpoint="status"
         from={Array.isArray(dateRange) ? dateRange[0] : dateRange}
         to={Array.isArray(dateRange) ? dateRange[1] : dateRange}
       />
-      {Array.isArray(dateRange) && (
+      {/* {Array.isArray(dateRange) && (
         <TodoByDateChart endpoint="todosByDate" from={dateRange[0]} to={dateRange[1]} />
-      )}
+      )} */}
       <button onClick={() => setModalOpen(true)}>➕ Add task</button>
 
       <AddTodoModal

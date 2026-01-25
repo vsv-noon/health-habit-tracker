@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { Modal } from '../Modal/Modal';
-import { useTodoForm } from '../../features/todos/useTodoForm';
-import { TodoForm } from '../../features/todos/TodoForm';
-import { updateTodo } from '../../features/todos/services/todoService';
+import { useTodoForm } from '../../hooks/useTodoForm';
+import { TodoForm } from '../TodoForm/TodoForm';
+import { updateTodo } from '../../api/todos.api';
+// import { updateTodo } from '../../features/todos/services/todoService';
 import type { EditTodoModalProps } from './types';
 import { formattedDate } from '../../utils/date';
 

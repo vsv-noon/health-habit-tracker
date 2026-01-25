@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { TodoList } from '../TodoList/TodoList';
 import type { Todo } from '../../types/todo';
-import * as api from '../../api/api';
+import * as api from '../../api/client';
 
 const todos: Todo[] = [
   {

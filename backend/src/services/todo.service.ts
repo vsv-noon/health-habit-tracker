@@ -12,7 +12,7 @@ import {
 } from '../models/todo.model.js';
 
 export async function createTodoItem(
-  // userId: number,
+  userId: number,
   data: {
     title: string;
     description?: string;
@@ -21,12 +21,11 @@ export async function createTodoItem(
     priority?: number;
   }
 ): Promise<TodoRow> {
-  // return createTodo(userId, data);
-  return createTodo(data);
+  return createTodo(userId, data);
 }
 
 export async function updateTodoItem(
-  // userId: number,
+  userId: number,
   id: number,
   updates: Partial<{
     title: string;
@@ -37,24 +36,23 @@ export async function updateTodoItem(
     priority: number;
   }>
 ): Promise<TodoRow | null> {
-  return updateTodo(id, updates);
-  // return updateTodo(userId, id, updates)
+  return updateTodo(userId, id, updates);
 }
 
 export async function getTodoList(
-  // userId: number,
+  userId: number,
   filters: {
     date?: string;
     search?: string;
     status?: 'all' | 'completed' | 'active';
   }
 ): Promise<TodoRow[]> {
-  // return getTodos(userId, filters);
-  return getTodos(filters);
+  return getTodos(userId, filters);
+  // return getTodos(filters);
 }
 
-export async function getCalendarTodoCounts(): Promise<Record<string, number>> {
-  const counts = await getCalendarCounts();
+export async function getCalendarTodoCounts(userId: number): Promise<Record<string, number>> {
+  const counts = await getCalendarCounts(userId);
 
   // return counts.reduce<Record<string, number>>((acc, row) => {
   //   if (row.date !== undefined && row.count !== undefined) {
@@ -66,23 +64,23 @@ export async function getCalendarTodoCounts(): Promise<Record<string, number>> {
   return Object.fromEntries(counts.map((c) => [c.date, c.count]));
 }
 
-export async function getTodoSuggestions(query: string): Promise<string[]> {
-  const suggestions = await getTitleSuggestions(query);
+export async function getTodoSuggestions(userId: number, query: string): Promise<string[]> {
+  const suggestions = await getTitleSuggestions(userId, query);
   return suggestions.map((s) => s.title);
 }
 
-export async function getDeletedTodoList(search?: string): Promise<TodoRow[]> {
-  return getDeletedTodos(search);
+export async function getDeletedTodoList(userId: number, search?: string): Promise<TodoRow[]> {
+  return getDeletedTodos(userId, search);
 }
 
-export async function deleteTodoItem(id: number): Promise<boolean> {
-  return softDeleteTodo(id);
+export async function deleteTodoItem(userId: number, id: number): Promise<boolean> {
+  return softDeleteTodo(userId, id);
 }
 
-export async function restoreDeletedTodos(ids: number[]): Promise<number[]> {
-  return bulkRestoreTodos(ids);
+export async function restoreDeletedTodos(userId: number, ids: number[]): Promise<number[]> {
+  return bulkRestoreTodos(userId, ids);
 }
 
-export async function hardDeleteTodos(ids: number[]): Promise<number[]> {
-  return bulkHardDeleteTodos(ids);
+export async function hardDeleteTodos(userId: number, ids: number[]): Promise<number[]> {
+  return bulkHardDeleteTodos(userId, ids);
 }

@@ -1,11 +1,11 @@
 import { Router } from 'express';
 
 import * as todoController from '../controllers/todo.controller.js';
-// import { authMiddleware } from "../middleware/auth.middleware.js";
+import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = Router();
 
-// router.use(authMiddleware);
+router.use(authMiddleware);
 
 router.get('/', todoController.getTodos);
 router.get('/calendar-counts', todoController.getCalendarCounts);

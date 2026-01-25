@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { TodoFormData } from './types';
+import type { TodoFormData } from '../../components/TodoForm/types';
 
 export function useTodoForm(initial: TodoFormData) {
   const [form, setForm] = useState<TodoFormData>(initial);

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { apiDelete, apiFetch } from '../../api/api';
+import { apiDelete, apiFetch } from '../../api/client';
+// import { apiDelete, apiFetch } from '../../api/api';
 import type { TodoListProps } from './types';
 import type { Todo } from '../../types/todo';
 import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';

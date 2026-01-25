@@ -3,7 +3,7 @@ import type { Request, Response } from 'express';
 import * as todoService from '../services/todo.service.js';
 
 export async function createTodo(req: Request, res: Response) {
-  // if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
+  if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
 
   const { title, description, due_date, remind_at, priority } = req.body;
 
@@ -12,7 +12,7 @@ export async function createTodo(req: Request, res: Response) {
   }
 
   try {
-    const todo = await todoService.createTodoItem({
+    const todo = await todoService.createTodoItem(req.user.userId, {
       title,
       description,
       due_date,
@@ -27,13 +27,13 @@ export async function createTodo(req: Request, res: Response) {
 }
 
 export async function updateTodo(req: Request, res: Response) {
-  // if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
+  if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
 
   const { id } = req.params;
   const updates = req.body;
 
   try {
-    const todo = await todoService.updateTodoItem(Number(id), updates);
+    const todo = await todoService.updateTodoItem(req.user.userId, Number(id), updates);
     if (!todo) {
       return res.status(404).json({ error: 'Todo not found' });
     }
@@ -45,7 +45,7 @@ export async function updateTodo(req: Request, res: Response) {
 }
 
 export async function getTodos(req: Request, res: Response) {
-  // if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
+  if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
 
   const { date, search, status } = req.query as {
     date?: string;
@@ -70,7 +70,7 @@ export async function getTodos(req: Request, res: Response) {
     //   status: status ?? 'all',
     // });
 
-    const todos = await todoService.getTodoList(filters);
+    const todos = await todoService.getTodoList(req.user.userId, filters);
 
     return res.json(todos);
   } catch (err) {
@@ -79,11 +79,29 @@ export async function getTodos(req: Request, res: Response) {
   }
 }
 
-export async function getCalendarCounts(req: Request, res: Response) {
-  // if (!req.user) return res.status(401).json({ error: 'Unauthorized'})
+// export async function getTodos(req: Request, res: Response) {
+//   if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
+//   const userId = req.user.id;
+//   // console.log(req.user);
 
+//   const { rows } = await pool.query(
+//     `
+//     SELECT *
+//     FROM todos
+//     WHERE
+//     user_id = $1 AND deleted_at IS NULL
+//     `,
+//     [userId]
+//   );
+
+//   res.json(rows);
+// }
+
+export async function getCalendarCounts(req: Request, res: Response) {
+  if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
+  console.log(req.user);
   try {
-    const counts = await todoService.getCalendarTodoCounts();
+    const counts = await todoService.getCalendarTodoCounts(req.user.userId);
     return res.json(counts);
   } catch (err) {
     console.error(err);
@@ -92,12 +110,12 @@ export async function getCalendarCounts(req: Request, res: Response) {
 }
 
 export async function getTitleSuggestions(req: Request, res: Response) {
-  // if (!req.user) return res.status(401).json({ error: 'Unauthorized'})
+  if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
 
   const { query } = req.query as { query?: string };
 
   try {
-    const suggestions = await todoService.getTodoSuggestions(query ?? '');
+    const suggestions = await todoService.getTodoSuggestions(req.user.userId, query ?? '');
     return res.json(suggestions);
   } catch (err) {
     console.error(err);
@@ -106,12 +124,12 @@ export async function getTitleSuggestions(req: Request, res: Response) {
 }
 
 export async function getDeletedTodos(req: Request, res: Response) {
-  // if (!req.user) return res.status(401).json({ error: 'Unauthorized'})
+  if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
 
   const { query } = req.query as { query?: string };
 
   try {
-    const todos = await todoService.getDeletedTodoList(query ?? undefined);
+    const todos = await todoService.getDeletedTodoList(req.user.userId, query ?? undefined);
     return res.json(todos);
   } catch (err) {
     console.error('Failed to fetch deleted todos', err);
@@ -120,12 +138,12 @@ export async function getDeletedTodos(req: Request, res: Response) {
 }
 
 export async function deleteTodo(req: Request, res: Response) {
-  // if (!req.user) return res.status(401).json({ error: 'Unauthorized'})
+  if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
 
   const { id } = req.params;
 
   try {
-    const deleted = await todoService.deleteTodoItem(Number(id));
+    const deleted = await todoService.deleteTodoItem(req.user.userId, Number(id));
     if (!deleted) {
       return res.status(404).json({ error: 'Todo not found' });
     }
@@ -137,7 +155,7 @@ export async function deleteTodo(req: Request, res: Response) {
 }
 
 export async function bulkRestoreTodos(req: Request, res: Response) {
-  // if (!req.user) return res.status(401).json({ error: 'Unauthorized'})
+  if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
 
   const { ids } = req.body as { ids: number[] };
 
@@ -146,7 +164,7 @@ export async function bulkRestoreTodos(req: Request, res: Response) {
   }
 
   try {
-    const restored = await todoService.restoreDeletedTodos(ids);
+    const restored = await todoService.restoreDeletedTodos(req.user.userId, ids);
     return res.json({ restored });
   } catch (err) {
     console.error('Bulk restore failed', err);
@@ -155,7 +173,7 @@ export async function bulkRestoreTodos(req: Request, res: Response) {
 }
 
 export async function bulkHardRDeleteTodos(req: Request, res: Response) {
-  // if (!req.user) return res.status(401).json({ error: 'Unauthorized'})
+  if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
 
   const { ids } = req.body as { ids: number[] };
 
@@ -164,7 +182,7 @@ export async function bulkHardRDeleteTodos(req: Request, res: Response) {
   }
 
   try {
-    const deleted = await todoService.hardDeleteTodos(ids);
+    const deleted = await todoService.hardDeleteTodos(req.user.userId, ids);
     return res.json({ deleted });
   } catch (err) {
     console.error('Bulk delete failed', err);
