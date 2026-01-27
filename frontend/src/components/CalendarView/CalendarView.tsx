@@ -18,15 +18,16 @@ export function CalendarView({
   const [selectRange, setSelectRange] = useState<boolean>(false);
 
   return (
-    <>
-      <label>
+    <div className="calendar">
+      <div className="select-range-checkbox">
+        <label htmlFor="range-checkbox">Select Range</label>
         <input
+          id="range-checkbox"
           type="checkbox"
           checked={selectRange}
           onChange={() => setSelectRange(!selectRange)}
         />
-        Select Range
-      </label>
+      </div>
       <Calendar
         // value={new Date(selectedDate)}
         selectRange={selectRange}
@@ -43,6 +44,6 @@ export function CalendarView({
           return <span className="todo-badge">{count}</span>;
         }}
       />
-    </>
+    </div>
   );
 }

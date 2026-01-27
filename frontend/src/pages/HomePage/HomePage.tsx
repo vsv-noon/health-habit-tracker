@@ -1,23 +1,25 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 // import { apiFetch } from '../services/api';
-import { apiFetch } from '../api/client';
+import { apiFetch } from '../../api/client';
 // import { getTodos } from '../services/api';
-import type { Todo } from '../types/todo';
-import { requestNotificationPermission } from '../hooks/useNotifications';
-import { useReminders } from '../hooks/useReminders';
-import { CalendarView } from '../components/CalendarView/CalendarView';
-import { TodoList } from '../components/TodoList/TodoList';
-import { Filters } from '../components/Filters/Filters';
-import { formattedDate, getFirstDayOfMonth, getLastDayOfMonth } from '../utils/date';
-import { AddTodoModal } from '../components/AddTodoModal/AddTodoModal';
-import { EditTodoModal } from '../components/EditTodoModal/EditTodoModal';
-import Loader from '../components/Loader/Loader';
-import { LAST_INDEX } from './constants';
-import { TodoStatusChart } from '../Dashboard/StatusChart';
+import type { Todo } from '../../types/todo';
+import { requestNotificationPermission } from '../../hooks/useNotifications';
+import { useReminders } from '../../hooks/useReminders';
+import { CalendarView } from '../../components/CalendarView/CalendarView';
+import { TodoList } from '../../components/TodoList/TodoList';
+import { Filters } from '../../components/Filters/Filters';
+import { formattedDate, getFirstDayOfMonth, getLastDayOfMonth } from '../../utils/date';
+import { AddTodoModal } from '../../components/AddTodoModal/AddTodoModal';
+import { EditTodoModal } from '../../components/EditTodoModal/EditTodoModal';
+import Loader from '../../components/Loader/Loader';
+import { LAST_INDEX } from '../constants';
+import { TodoStatusChart } from '../../Dashboard/StatusChart';
 // import TodoByDateChart from '../Dashboard/TodoByDateChart';
 // import { TodoPriorityChart } from '../Dashboard/TodoPriorityChart';
 // import { ProductivityChart } from '../Dashboard/ProductivityChart';
+
+import './style.css';
 
 type CalendarValue = Date | [Date, Date];
 
@@ -102,44 +104,47 @@ export default function HomePage() {
   return (
     <>
       <h1>PERN ToDo Calendar</h1>
-      <CalendarView
-        // dateRange={dateRange}
-        setDateRange={setDateRange}
-        onSelect={handleDateSelect}
-        // selectedDate={selectedDate}
-        counts={calendarCounts}
-      />
-      {/* {Array.isArray(dateRange) && (
+      <div className="control">
+        <button onClick={() => setModalOpen(true)}>➕ Add task</button>
+        <AddTodoModal
+          isOpen={isModalOpen}
+          defaultDate={selectedDate}
+          onClose={() => setModalOpen(false)}
+          onCreated={handleCreated}
+        />
+        <EditTodoModal
+          todo={editingTodo}
+          onClose={() => setEditingTodo(null)}
+          onUpdated={handleUpdateTodo}
+        />
+        <Filters
+          search={search}
+          status={status}
+          onSearchChange={setSearch}
+          onStatusChange={setStatus}
+        />
+      </div>
+      <div className="calendar-charts-block">
+        <CalendarView
+          // dateRange={dateRange}
+          setDateRange={setDateRange}
+          onSelect={handleDateSelect}
+          // selectedDate={selectedDate}
+          counts={calendarCounts}
+        />
+        {/* {Array.isArray(dateRange) && (
         <ProductivityChart endpoint="productivity" from={dateRange[0]} to={dateRange[1]} />
       )} */}
-      {/* <TodoPriorityChart /> */}
-      <TodoStatusChart
-        endpoint="status"
-        from={Array.isArray(dateRange) ? dateRange[0] : dateRange}
-        to={Array.isArray(dateRange) ? dateRange[1] : dateRange}
-      />
-      {/* {Array.isArray(dateRange) && (
+        {/* <TodoPriorityChart /> */}
+        <TodoStatusChart
+          endpoint="status"
+          from={Array.isArray(dateRange) ? dateRange[0] : dateRange}
+          to={Array.isArray(dateRange) ? dateRange[1] : dateRange}
+        />
+        {/* {Array.isArray(dateRange) && (
         <TodoByDateChart endpoint="todosByDate" from={dateRange[0]} to={dateRange[1]} />
       )} */}
-      <button onClick={() => setModalOpen(true)}>➕ Add task</button>
-
-      <AddTodoModal
-        isOpen={isModalOpen}
-        defaultDate={selectedDate}
-        onClose={() => setModalOpen(false)}
-        onCreated={handleCreated}
-      />
-      <EditTodoModal
-        todo={editingTodo}
-        onClose={() => setEditingTodo(null)}
-        onUpdated={handleUpdateTodo}
-      />
-      <Filters
-        search={search}
-        status={status}
-        onSearchChange={setSearch}
-        onStatusChange={setStatus}
-      />
+      </div>
 
       {loading && <Loader />}
       {

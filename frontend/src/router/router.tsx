@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import { RootLayout } from '../layouts/RootLayout';
-import HomePage from '../pages/HomePage';
+import HomePage from '../pages/HomePage/HomePage';
 import AboutPage from '../pages/AboutPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import { TrashList } from '../components/TrashList/TrashList';

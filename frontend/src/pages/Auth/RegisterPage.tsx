@@ -3,6 +3,8 @@ import { useAuth } from '../../auth/useAuth';
 // import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
+import './style.css';
+
 export function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,13 +33,13 @@ export function RegisterPage() {
     }
   };
   return (
-    <div>
+    <div className="register-page">
       <div>
         <h2>Create new account</h2>
       </div>
       {error && <div>{error}</div>}
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-inputs-group">
           <div>
             <label htmlFor="email">Email</label>
             <input

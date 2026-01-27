@@ -1,0 +1,50 @@
+.login-page,
+.register-page {
+  display: flex;
+  height: 80vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+a {
+  color: #000;
+}
+
+a:hover {
+  color: grey;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-inputs-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input {
+  display: flex;
+  border-radius: 5px;
+  border: 1px solid #000;
+  outline: none;
+  padding: 3px;
+}
+
+button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: grey;
+  color: #fff;
+}

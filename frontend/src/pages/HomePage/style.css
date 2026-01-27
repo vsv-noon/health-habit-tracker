@@ -1,0 +1,12 @@
+.calendar-charts-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
