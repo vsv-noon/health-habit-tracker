@@ -20,6 +20,7 @@ import { TodoStatusChart } from '../../Dashboard/StatusChart';
 // import { ProductivityChart } from '../Dashboard/ProductivityChart';
 
 import './style.css';
+import { useDebounce } from '../../hooks/useDebounce';
 
 type CalendarValue = Date | [Date, Date];
 
@@ -40,13 +41,15 @@ export default function HomePage() {
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
+  const debouncedValue = useDebounce(search, 300);
+
   const loadTodos = useCallback(
     async function () {
       try {
         setLoading(true);
 
         const data = await apiFetch<Todo[]>(
-          `/todos?date=${selectedDate}&search=${search}&status=${status}`,
+          `/todos?date=${selectedDate}&search=${debouncedValue}&status=${status}`,
         );
 
         // const data = await getTodos({date: selectedDate, search, status});
@@ -58,7 +61,7 @@ export default function HomePage() {
         setLoading(false);
       }
     },
-    [selectedDate, search, status],
+    [selectedDate, debouncedValue, status],
   );
 
   useEffect(() => {
@@ -95,6 +98,12 @@ export default function HomePage() {
     setTodos((prev) => [...prev, todo]);
   }
 
+  function searchTodos(value: string) {
+    setSearch(value);
+    setStatus('all');
+    setSelectedDate('');
+  }
+
   useEffect(() => {
     requestNotificationPermission();
   }, []);
@@ -102,7 +111,7 @@ export default function HomePage() {
   useReminders(todos);
 
   return (
-    <>
+    <div className="home-page-container">
       <h1>PERN ToDo Calendar</h1>
       <div className="control">
         <button onClick={() => setModalOpen(true)}>➕ Add task</button>
@@ -120,7 +129,8 @@ export default function HomePage() {
         <Filters
           search={search}
           status={status}
-          onSearchChange={setSearch}
+          // onSearchChange={setSearch}
+          onSearchChange={(e) => searchTodos(e)}
           onStatusChange={setStatus}
         />
       </div>
@@ -168,6 +178,6 @@ export default function HomePage() {
           />
         </div>
       }
-    </>
+    </div>
   );
 }

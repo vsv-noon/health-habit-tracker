@@ -2,13 +2,11 @@ import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth';
 // import { useAuth } from '../context/AuthContext';
 
-import './style.css';
-
 export function RootLayout() {
   const { user, logout } = useAuth();
   // console.log(user.email);
   return (
-    <>
+    <div className="container">
       <header className="header">
         <nav className="header-nav">
           <NavLink to="/">🏠 Home</NavLink>
@@ -30,12 +28,12 @@ export function RootLayout() {
         )}
       </header>
 
-      <main style={{ padding: 24 }}>
+      <main className="main">
         <Outlet />
       </main>
       <footer className="footer">
         <p>&copy; {new Date().getFullYear()}</p>
       </footer>
-    </>
+    </div>
   );
 }

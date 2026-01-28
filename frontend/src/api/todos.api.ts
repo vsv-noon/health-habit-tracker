@@ -21,7 +21,7 @@ export async function fetchTitleSuggestions(query: string) {
 }
 
 export async function fetchDeletedTodos(q = '') {
-  return apiFetch<Todo[]>(`/todos/deleted?q=${encodeURIComponent(q)}`);
+  return apiFetch<Todo[]>(`/todos/deleted?query=${encodeURIComponent(q)}`);
 }
 
 export async function bulkRestore(ids: number[]) {

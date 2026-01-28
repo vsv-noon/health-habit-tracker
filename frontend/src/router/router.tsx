@@ -1,21 +1,32 @@
+import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import { RootLayout } from '../layouts/RootLayout';
-import HomePage from '../pages/HomePage/HomePage';
-import AboutPage from '../pages/AboutPage';
-import NotFoundPage from '../pages/NotFoundPage';
-import { TrashList } from '../components/TrashList/TrashList';
+// import HomePage from '../pages/HomePage/HomePage';
+// import { TrashList } from '../components/TrashList/TrashList';
+// import AboutPage from '../pages/AboutPage';
+// import NotFoundPage from '../pages/NotFoundPage';
 // import { AppLayout } from '../layouts/AppLayout';
-import { ProtectedRoute } from '../auth/ProtectedRoute';
-import { LoginPage } from '../pages/Auth/LoginPage';
-import { RegisterPage } from '../pages/Auth/RegisterPage';
+// import { LoginPage } from '../pages/Auth/LoginPage';
+// import { RegisterPage } from '../pages/Auth/RegisterPage';
 import { PublicOnlyRoute } from '../auth/PublicOnlyRoute';
+import { ProtectedRoute } from '../auth/ProtectedRoute';
+import { ErrorPage } from '../pages/ErrorPage/ErrorPage';
 // import { ProtectedRoute } from '../routes/ProtectedRoute/ProtectedRoute';
+
+const LoginPage = lazy(() => import('../pages/Auth/LoginPage'));
+const RegisterPage = lazy(() => import('../pages/Auth/RegisterPage'));
+
+const HomePage = lazy(() => import('../pages/HomePage/HomePage'));
+const TrashList = lazy(() => import('../components/TrashList/TrashList'));
+const AboutPage = lazy(() => import('../pages/AboutPage'));
+const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 
 export const router = createBrowserRouter([
   {
-    // path: '/',
+    path: '/',
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         element: <PublicOnlyRoute />,
@@ -44,14 +55,14 @@ export const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: '/about',
+        element: <AboutPage />,
+      },
+      {
+        path: '*',
+        element: <NotFoundPage />,
+      },
     ],
-  },
-  {
-    path: '/about',
-    element: <AboutPage />,
-  },
-  {
-    path: '*',
-    element: <NotFoundPage />,
   },
 ]);

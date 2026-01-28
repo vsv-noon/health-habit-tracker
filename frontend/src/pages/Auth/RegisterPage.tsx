@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import './style.css';
 
-export function RegisterPage() {
+export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

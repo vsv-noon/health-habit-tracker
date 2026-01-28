@@ -1,23 +1,24 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { Todo } from '../../types/todo';
-// import { bulkHardDelete, bulkRestore, fetchDeletedTodos } from '../../api/api';
 import { bulkHardDelete, bulkRestore, fetchDeletedTodos } from '../../api/todos.api';
 import './TrashList.css';
 import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';
 import Loader from '../Loader/Loader';
+import { useDebounce } from '../../hooks/useDebounce';
 
-export function TrashList() {
+export default function TrashList() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const debouncedValue = useDebounce(query, 300);
 
   const load = useCallback(
     async function load() {
       try {
         setLoading(true);
-        const data = await fetchDeletedTodos(query);
+        const data = await fetchDeletedTodos(debouncedValue);
         setTodos(data);
         setSelectedItems([]);
       } catch (err) {
@@ -26,7 +27,7 @@ export function TrashList() {
         setLoading(false);
       }
     },
-    [query],
+    [debouncedValue],
   );
 
   useEffect(() => {
