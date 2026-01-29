@@ -3,19 +3,12 @@ import { Modal } from '../Modal/Modal';
 import { useTodoForm } from '../../hooks/useTodoForm';
 import { TodoForm } from '../TodoForm/TodoForm';
 import { updateTodo } from '../../api/todos.api';
-// import { updateTodo } from '../../features/todos/services/todoService';
 import type { EditTodoModalProps } from './types';
 import { formattedDate } from '../../utils/date';
+import { initialForm } from '../AddTodoModal/constants';
 
 export function EditTodoModal({ todo, onClose, onUpdated }: EditTodoModalProps) {
-  const { form, setForm, update, validate, error } = useTodoForm({
-    title: '',
-    description: '',
-    due_date: '',
-    remind_at: '',
-    priority: 'medium',
-    completed: false,
-  });
+  const { form, setForm, update, validate, error } = useTodoForm(initialForm);
 
   useEffect(() => {
     if (todo) {

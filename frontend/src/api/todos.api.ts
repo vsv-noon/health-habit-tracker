@@ -2,7 +2,15 @@ import type { TodoFormData } from '../components/TodoForm/types';
 import type { Todo } from '../types/todo';
 import { apiFetch } from './client';
 
-export async function createTodo(data: TodoFormData): Promise<Todo> {
+export type CreateTodoDto = {
+  title: string;
+  description: string;
+  due_date: string;
+  remind_at: string | null;
+  priority: string;
+};
+
+export async function createTodo(data: CreateTodoDto): Promise<Todo> {
   return apiFetch<Todo>('/todos', {
     method: 'POST',
     body: JSON.stringify(data),

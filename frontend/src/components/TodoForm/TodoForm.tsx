@@ -2,10 +2,10 @@ import type { TodoFormProps } from './types';
 import type { Priority } from '../../types/todo';
 import { useEffect, useState } from 'react';
 import { fetchTitleSuggestions } from '../../api/todos.api';
-// import { fetchTitleSuggestions } from '../../api/api';
 
 import { styles } from './styles';
 import './styles.css';
+import { useDebounce } from '../../hooks/useDebounce';
 
 export function TodoForm({
   todoFormTitle,
@@ -21,21 +21,39 @@ export function TodoForm({
   const [activeIndex, setActiveIndex] = useState(-1);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    const id = setTimeout(async () => {
-      const data = await fetchTitleSuggestions(form.title);
+  const debouncedValue = useDebounce(form.title, 300);
 
-      if (form.title.length < 2 || form.title === data[0]) {
+  // useEffect(() => {
+  //   const id = setTimeout(async () => {
+  //     const data = await fetchTitleSuggestions(form.title);
+
+  //     if (form.title.length < 2 || form.title === data[0]) {
+  //       setSuggestions([]);
+  //       return;
+  //     }
+
+  //     setSuggestions(data);
+  //     setOpen(true);
+  //   }, 300);
+
+  //   return () => clearTimeout(id);
+  // }, [form.title]);
+
+  useEffect(() => {
+    async function load() {
+      const data = await fetchTitleSuggestions(debouncedValue);
+
+      if (debouncedValue.length < 2 || debouncedValue === data[0]) {
         setSuggestions([]);
         return;
       }
 
       setSuggestions(data);
       setOpen(true);
-    }, 300);
+    }
 
-    return () => clearTimeout(id);
-  }, [form.title]);
+    load();
+  }, [debouncedValue]);
 
   function handleKeyDown(e: React.KeyboardEvent) {
     if (!open) return;

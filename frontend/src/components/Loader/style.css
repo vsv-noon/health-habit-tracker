@@ -1,9 +1,9 @@
 .loader {
   position: fixed;
-  top: 65px;
-  left: 50%;
+  top: 1%;
+  left: 47%;
   padding: 10px;
   border-radius: 8px;
-  background: rgb(0, 0, 0, 0.1);
+  background: rgb(224, 224, 224);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }

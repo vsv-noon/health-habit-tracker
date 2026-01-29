@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-// import { apiFetch } from '../services/api';
 import { apiFetch } from '../../api/client';
 // import { getTodos } from '../services/api';
 import type { Todo } from '../../types/todo';

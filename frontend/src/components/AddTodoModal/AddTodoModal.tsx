@@ -2,22 +2,28 @@ import { Modal } from '../Modal/Modal';
 import { useTodoForm } from '../../hooks/useTodoForm';
 import { TodoForm } from '../TodoForm/TodoForm';
 import { createTodo } from '../../api/todos.api';
-// import { createTodo } from '../../features/todos/services/todoService';
 import type { AddTodoModalProps } from './types';
+import { useEffect } from 'react';
+import { initialForm } from './constants';
 
 export function AddTodoModal({ isOpen, onClose, onCreated }: AddTodoModalProps) {
-  const { form, update, validate, error } = useTodoForm({
-    title: '',
-    description: '',
-    due_date: '',
-    remind_at: '',
-    priority: 'medium',
-  });
+  const { form, update, validate, error, reset } = useTodoForm(initialForm);
+
+  useEffect(() => {
+    if (!isOpen) {
+      reset();
+    }
+  }, [isOpen, reset]);
 
   async function submit() {
     if (!validate()) return;
 
-    const todo = await createTodo({ ...form, remind_at: form.remind_at || null });
+    const dto = {
+      ...form,
+      remind_at: form.remind_at || null,
+    };
+
+    const todo = await createTodo(dto);
     onCreated(todo);
     onClose();
   }

@@ -1,7 +1,16 @@
-import { useState } from 'react';
-import type { TodoFormData } from '../../components/TodoForm/types';
+import { useCallback, useState } from 'react';
+import type { TodoFormData } from '../components/TodoForm/types';
 
-export function useTodoForm(initial: TodoFormData) {
+type UseTodoFormResult = {
+  form: TodoFormData;
+  setForm: (data: TodoFormData) => void;
+  update: <K extends keyof TodoFormData>(field: K, value: TodoFormData[K]) => void;
+  validate: () => boolean;
+  error: string | null;
+  reset: (data?: Partial<TodoFormData>) => void;
+};
+
+export function useTodoForm(initial: TodoFormData): UseTodoFormResult {
   const [form, setForm] = useState<TodoFormData>(initial);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,11 +33,20 @@ export function useTodoForm(initial: TodoFormData) {
     return true;
   }
 
+  const reset = useCallback(
+    (data?: Partial<TodoFormData>) => {
+      setForm({ ...initial, ...data });
+      setError(null);
+    },
+    [initial],
+  );
+
   return {
     form,
     setForm,
     update,
     validate,
     error,
+    reset,
   };
 }
