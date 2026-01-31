@@ -66,13 +66,14 @@ export function TodoList({ todos, onEdit, onUpdate, onDelete }: TodoListProps) {
               >
                 {todo.title}
               </span>
-              <span>{todo.due_date}</span>
+              <span>{todo.description}</span>
 
               <div className="actions">
                 <button onClick={() => onEdit(todo)}>✏️</button>
 
                 <button onClick={() => handleDeleteClick(todo)}>🗑</button>
               </div>
+              <span>{todo.due_date}</span>
             </li>
           ))}
       </ul>

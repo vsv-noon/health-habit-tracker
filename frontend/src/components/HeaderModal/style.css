@@ -1,0 +1,23 @@
+.modal-backdrop {
+  background-color: transparent;
+}
+
+.close-button {
+  display: none;
+}
+
+.header-modal {
+  position: fixed;
+  right: 0;
+  top: 5%;
+  width: 150px;
+  height: 200px;
+}
+
+.header-modal-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+}

@@ -1,3 +1,39 @@
+.todo-form {
+  display: grid;
+  gap: 8px;
+}
+
+.field {
+  position: relative;
+  display: flex;
+}
+
+.input-title {
+  display: block;
+  flex: 1;
+  padding: 5px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.actions button {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.error {
+  color: crimson;
+}
+
+.hint {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
 .autocomplete {
   position: absolute;
   left: 0;

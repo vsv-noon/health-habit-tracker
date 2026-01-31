@@ -3,7 +3,7 @@ import type { Priority } from '../../types/todo';
 import { useEffect, useState } from 'react';
 import { fetchTitleSuggestions } from '../../api/todos.api';
 
-import { styles } from './styles';
+// import { styles } from './styles';
 import './styles.css';
 import { useDebounce } from '../../hooks/useDebounce';
 
@@ -86,13 +86,14 @@ export function TodoForm({
   }
 
   return (
-    <div style={{ display: 'grid', gap: 8 }}>
+    <div className="todo-form">
       <div className="modal-header">
         <h3>{todoFormTitle}</h3>
       </div>
       <div>
-        <div style={styles.field}>
+        <div className="field">
           <input
+            className="input-title"
             type="text"
             autoFocus
             placeholder="Title"
@@ -164,14 +165,14 @@ export function TodoForm({
         </label>
       )}
 
-      {error && <p style={styles.error}>{error}</p>}
+      {error && <p className="error">{error}</p>}
 
-      <div style={styles.actions}>
+      <div className="actions">
         <button onClick={onClose}>Cancel</button>
         <button onClick={onSubmit}>{submitLabel}</button>
       </div>
 
-      <p style={styles.hint}>💡 Ctrl + Enter — create • Esc — close</p>
+      <p className="hint">💡 Ctrl + Enter — create • Esc — close</p>
     </div>
   );
 }

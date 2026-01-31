@@ -6,7 +6,7 @@ import useCtrlEnterKey from '../../hooks/useCtrlEnterKey';
 import type { ModalProps } from './types';
 import { useEffect, useRef } from 'react';
 
-export function Modal({ isOpen, onClose, onConfirm, children }: ModalProps) {
+export function Modal({ isOpen, onClose, onConfirm, customClassName, children }: ModalProps) {
   const portalRoot = document.getElementById('modal-root');
 
   const overlayRef = useRef<HTMLDivElement | null>(null);
@@ -80,7 +80,11 @@ export function Modal({ isOpen, onClose, onConfirm, children }: ModalProps) {
       aria-modal="true"
       onMouseDown={onOverlayMouseDown}
     >
-      <div ref={contentRef} className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div
+        ref={contentRef}
+        className={`modal-content ${customClassName}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <button className="close-button" onClick={onClose}>
           &times;
         </button>
