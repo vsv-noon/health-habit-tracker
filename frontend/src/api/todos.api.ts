@@ -45,3 +45,10 @@ export async function bulkHardDelete(ids: number[]) {
     body: JSON.stringify({ ids }),
   });
 }
+
+export async function reorderTodos(items: { id: number; position: number }[]) {
+  return apiFetch('/todos/reorder', {
+    method: 'PATCH',
+    body: JSON.stringify({ items }),
+  });
+}

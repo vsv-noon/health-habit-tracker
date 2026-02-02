@@ -104,6 +104,10 @@ export default function HomePage() {
     setSelectedDate('');
   }
 
+  async function handleReorder(updated: Todo[]) {
+    setTodos(updated);
+  }
+
   useEffect(() => {
     requestNotificationPermission();
   }, []);
@@ -169,6 +173,7 @@ export default function HomePage() {
             onEdit={setEditingTodo}
             onUpdate={handleUpdateTodo}
             onDelete={handleDeleteTodo}
+            onReorder={handleReorder}
           />
         </div>
       }

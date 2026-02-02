@@ -44,6 +44,25 @@ export async function updateTodo(req: Request, res: Response) {
   }
 }
 
+export async function reorderTodos(req: Request, res: Response) {
+  const userId = req.user?.userId;
+  const { items } = req.body;
+
+  if (!Array.isArray(items)) {
+    return res.status(400).json({ error: 'Items must be array' });
+  }
+
+  if (!userId) return;
+
+  try {
+    await todoService.reorderTodosService(items, userId);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Reorder failed' });
+  }
+}
+
 export async function getTodos(req: Request, res: Response) {
   if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
 

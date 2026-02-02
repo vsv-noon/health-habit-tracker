@@ -5,4 +5,5 @@ export interface TodoListProps {
   onEdit: (todo: Todo) => void;
   onUpdate: (todo: Todo) => void;
   onDelete: (id: number) => void;
+  onReorder: (todo: Todo[]) => void;
 }

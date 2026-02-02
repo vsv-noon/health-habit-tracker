@@ -1,3 +1,4 @@
+import { pool } from '../config/db.js';
 import {
   bulkHardDeleteTodos,
   bulkRestoreTodos,
@@ -6,8 +7,10 @@ import {
   getDeletedTodos,
   getTitleSuggestions,
   getTodos,
+  ReorderItem,
   softDeleteTodo,
   updateTodo,
+  updateTodoPosition,
   type TodoRow,
 } from '../models/todo.model.js';
 
@@ -37,6 +40,25 @@ export async function updateTodoItem(
   }>
 ): Promise<TodoRow | null> {
   return updateTodo(userId, id, updates);
+}
+
+export async function reorderTodosService(items: ReorderItem[], userId: number) {
+  const client = await pool.connect();
+
+  try {
+    await client.query('BEGIN');
+
+    for (const item of items) {
+      await updateTodoPosition(client, item, userId);
+    }
+
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
 }
 
 export async function getTodoList(

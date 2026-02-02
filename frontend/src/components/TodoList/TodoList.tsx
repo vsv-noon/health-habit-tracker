@@ -5,11 +5,47 @@ import type { Todo } from '../../types/todo';
 import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';
 
 import './TodoList.css';
-import { SortableTodoItem } from '../SortableTodoItem/SortableTodoItem';
+import { reorderTodos } from '../../api/todos.api';
+import { TodoItem } from '../TodoItem/TodoItem';
 
-export function TodoList({ todos, onEdit, onUpdate, onDelete }: TodoListProps) {
+export function TodoList({ todos, onEdit, onUpdate, onDelete, onReorder }: TodoListProps) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<Todo | null>(null);
+
+  const [dragId, setDragId] = useState<number | null>(null);
+
+  function handleDragStart(id: number) {
+    setDragId(id);
+  }
+
+  function handleDragOver(e: React.DragEvent) {
+    e.preventDefault();
+  }
+
+  async function handleDrop(targetId: number) {
+    if (dragId === null || dragId === targetId) return;
+
+    const items = [...todos];
+    const fromIndex = items.findIndex((t) => t.id === dragId);
+    const toIndex = items.findIndex((t) => t.id === targetId);
+
+    const [moved] = items.splice(fromIndex, 1);
+    items.splice(toIndex, 0, moved);
+
+    const updated = items.map((t, i) => ({
+      ...t,
+      position: i,
+    }));
+
+    onReorder(updated);
+
+    await reorderTodos(
+      updated.map((t) => ({
+        id: t.id,
+        position: t.position,
+      })),
+    );
+  }
 
   async function toggleCompleted(todo: Todo) {
     const updated = await apiFetch<Todo>(`/todos/${todo.id}`, {
@@ -19,22 +55,6 @@ export function TodoList({ todos, onEdit, onUpdate, onDelete }: TodoListProps) {
 
     onUpdate(updated);
   }
-
-  // async function toggleCompleted(todo: Todo) {
-  //   const updated = await apiFetch<Todo>(`/todos/${todo.id}`, {
-  //     method: 'PATCH',
-  //     body: JSON.stringify({ completed: !todo.completed }),
-  //     body: JSON.stringify({
-  //       title: todo.title,
-  //       description: todo.description,
-  //       completed: !todo.completed,
-  //       due_date: todo.due_date,
-  //       remind_at: todo.remind_at,
-  //     }),
-  //   });
-
-  //   onUpdate(updated);
-  // }
 
   function handleDeleteClick(todo: Todo) {
     setItemToDelete(todo);
@@ -60,15 +80,19 @@ export function TodoList({ todos, onEdit, onUpdate, onDelete }: TodoListProps) {
       <ul>
         {todos &&
           todos.map((todo) => (
-            <SortableTodoItem
+            <TodoItem
               key={todo.id}
               todo={todo}
+              onDragStart={() => handleDragStart(todo.id)}
+              onDragOver={handleDragOver}
+              onDrop={() => handleDrop(todo.id)}
+              onComplete={() => toggleCompleted(todo)}
               onEdit={() => onEdit(todo)}
-              onUpdate={() => toggleCompleted(todo)}
               onDelete={() => handleDeleteClick(todo)}
             />
           ))}
       </ul>
+
       <ConfirmationDialog
         isOpen={isModalOpen}
         onClose={handleCloseModal}

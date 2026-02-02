@@ -1,3 +1,5 @@
+import { PoolClient } from 'pg';
+
 import { pool } from '../config/db.js';
 
 export type TodoRow = {
@@ -22,6 +24,11 @@ export type TodoCountByDateRow = {
 export type TitleSuggestionRow = {
   title: string;
 };
+
+export interface ReorderItem {
+  id: number;
+  position: number;
+}
 
 export async function createTodo(
   userId: number,
@@ -75,6 +82,21 @@ export async function updateTodo(
   return result.rows[0] || null;
 }
 
+export async function updateTodoPosition(client: PoolClient, item: ReorderItem, userId: number) {
+  const result = await client.query(
+    `
+    UPDATE todos
+    SET position = $1
+    WHERE id = $2
+      AND user_id = $3
+      AND deleted_at IS NULL
+    `,
+    [item.position, item.id, userId]
+  );
+
+  return result.rows[0];
+}
+
 export async function getTodoById(userId: number, id: number): Promise<TodoRow | null> {
   const result = await pool.query<TodoRow>(
     `
@@ -125,7 +147,7 @@ export async function getTodos(
     `
       SELECT * FROM todos
       WHERE ${conditions.join(' AND ')}
-      ORDER BY due_date ASC, created_at ASC
+      ORDER BY position ASC, due_date ASC, created_at ASC
     `,
     values
   );
@@ -211,7 +233,7 @@ export async function softDeleteTodo(userId: number, id: number): Promise<boolea
     [id, userId]
   );
 
-  return result.rowCount > 0;
+  return result.rowCount! > 0;
 }
 
 export async function bulkRestoreTodos(userId: number, ids: number[]): Promise<number[]> {

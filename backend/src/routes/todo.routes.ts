@@ -12,6 +12,8 @@ router.get('/calendar-counts', todoController.getCalendarCounts);
 router.get('/suggestions', todoController.getTitleSuggestions);
 router.get('/deleted', todoController.getDeletedTodos);
 
+router.patch('/reorder', todoController.reorderTodos);
+
 router.post('/', todoController.createTodo);
 router.patch('/:id', todoController.updateTodo);
 router.delete('/:id', todoController.deleteTodo);
