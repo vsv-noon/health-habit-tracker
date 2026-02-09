@@ -11,8 +11,13 @@ export function Header() {
     <header className="header">
       <nav className="header-nav">
         <NavLink to="/">🏠 Home</NavLink>
-        <NavLink to="/dashboard">Dashboard</NavLink>
-        {user && <NavLink to="/trash">🗑 Trash</NavLink>}
+        {user && (
+          <>
+            <NavLink to="/dashboard">Dashboard</NavLink>
+            <NavLink to="/goals">Goals</NavLink>
+            <NavLink to="/trash">🗑 Trash</NavLink>
+          </>
+        )}
         <NavLink to="/about">ℹ️ About</NavLink>
       </nav>
       {!user && (

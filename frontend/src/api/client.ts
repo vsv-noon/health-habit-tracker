@@ -43,7 +43,7 @@ export async function apiDelete(url: string): Promise<void> {
   if (!res.ok) throw new Error(`API error: ${res.status}`);
 }
 
-async function refreshAccessToken() {
+export async function refreshAccessToken() {
   if (!refreshPromise) {
     refreshPromise = (async () => {
       const refreshToken = localStorage.getItem('refreshToken');

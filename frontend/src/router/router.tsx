@@ -18,6 +18,7 @@ const TrashList = lazy(() => import('../components/TrashList/TrashList'));
 const AboutPage = lazy(() => import('../pages/AboutPage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 const ErrorPage = lazy(() => import('../pages/ErrorPage/ErrorPage'));
+const GoalsPage = lazy(() => import('../pages/GoalsPage/GoalsPage'));
 
 export const router = createBrowserRouter([
   {
@@ -39,7 +40,7 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        // path: '/',
+        path: '/',
         element: <ProtectedRoute />,
         children: [
           {
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
           {
             path: '/dashboard',
             element: <DashboardPage />,
+          },
+          {
+            path: '/goals',
+            element: <GoalsPage />,
           },
           {
             path: '/trash',

@@ -124,7 +124,6 @@ export function TodoForm({
         value={form.description}
         onChange={(e) => update('description', e.target.value)}
       />
-
       <label>
         Due date:
         <input
@@ -133,7 +132,6 @@ export function TodoForm({
           onChange={(e) => update('due_date', e.target.value)}
         />
       </label>
-
       <label>
         Reminder:
         <input
@@ -142,7 +140,6 @@ export function TodoForm({
           onChange={(e) => update('remind_at', e.target.value)}
         />
       </label>
-
       <label>
         Priority:
         <select
@@ -154,9 +151,9 @@ export function TodoForm({
           <option value="high">High</option>
         </select>
       </label>
-
       {showCompleted && (
         <label>
+          Complete:
           <input
             type="checkbox"
             checked={!!form.completed}
@@ -164,14 +161,11 @@ export function TodoForm({
           />
         </label>
       )}
-
       {error && <p className="error">{error}</p>}
-
       <div className="actions">
         <button onClick={onClose}>Cancel</button>
         <button onClick={onSubmit}>{submitLabel}</button>
       </div>
-
       <p className="hint">💡 Ctrl + Enter — create • Esc — close</p>
     </div>
   );
