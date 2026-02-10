@@ -1,23 +1,59 @@
+import React, { useState } from 'react';
 import { apiDelete } from '../../api/client';
 import type { Goal } from '../../api/goals.api';
+import GoalCard from '../GoalCard/GoalCard';
 
-export function GoalsList({ goals }: { goals: Goal[] }) {
-  async function handleGoalDelete(goal: Goal) {
-    if (goals) {
+import './style.css';
+import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';
+
+export function GoalsList({
+  goals,
+  setGoals,
+}: {
+  goals: Goal[];
+  setGoals: React.Dispatch<React.SetStateAction<Goal[]>>;
+}) {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<Goal | null>(null);
+
+  async function handleConfirmDelete(goal: Goal | null) {
+    if (!goal) return;
+    setGoals((prev) => prev.filter((item) => item.id != goal.id));
+    try {
       await apiDelete(`/goals/${goal.id}`);
+      setItemToDelete(null);
+    } catch (error) {
+      console.error(error);
     }
   }
 
+  function handleDeleteClick(goal: Goal) {
+    setItemToDelete(goal);
+    setModalOpen(true);
+  }
+
+  function handleCloseModal() {
+    setModalOpen(false);
+    setItemToDelete(null);
+  }
+
   return (
-    <div>
-      <h1>GoalList</h1>
-      {goals &&
-        goals.map((goal, i) => (
-          <div key={i}>
-            <h3>{goal.title}</h3>
-            <button onClick={() => handleGoalDelete(goal)}>Delete (CASCADE)</button>
-          </div>
-        ))}
-    </div>
+    <>
+      <ul className="goals-list">
+        <h1>GoalList</h1>
+        {goals &&
+          goals.map((goal, i) => (
+            <GoalCard key={i} goal={goal} deleteGoal={() => handleDeleteClick(goal)} />
+          ))}
+      </ul>
+
+      <ConfirmationDialog
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title="Are you sure?"
+        message={`Do you really want to delete task "${itemToDelete?.title}"`}
+        onConfirm={() => handleConfirmDelete(itemToDelete)}
+      />
+    </>
   );
 }

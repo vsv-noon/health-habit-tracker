@@ -13,23 +13,6 @@
   min-height: 100vh;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  padding: 16px;
-  border-bottom: 1px solid #ddd;
-}
-
-.header-nav {
-  display: flex;
-  gap: 15px;
-}
-
-.header-user-info {
-  display: flex;
-  gap: 30px;
-}
-
 .main {
   flex: 1;
   padding: 24px;

@@ -3,6 +3,8 @@ import { useAuth } from '../../auth/useAuth';
 import { useState } from 'react';
 import { HeaderModal } from '../HeaderModal/HeaderModal';
 
+import './style.css';
+
 export function Header() {
   const { user, logout } = useAuth();
   const [isModalOpen, setModalOpen] = useState(false);
