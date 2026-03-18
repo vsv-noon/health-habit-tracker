@@ -2,7 +2,10 @@ import { MigrationBuilder } from 'node-pg-migrate';
 
 export async function up(pgm: MigrationBuilder): Promise<void> {
   pgm.createTable('goals', {
-    id: 'id',
+    id: {
+      type: 'serial',
+      primaryKey: true,
+    },
     user_id: {
       type: 'integer',
       notNull: true,
@@ -13,25 +16,38 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       type: 'text',
       notNull: true,
     },
+    goal_type: {
+      type: 'text',
+      notNull: true,
+    },
     description: {
       type: 'text',
     },
+    unit: {
+      type: 'text',
+    },
+    start_value: {
+      type: 'double precision',
+    },
     current_value: {
-      type: 'integer',
+      type: 'double precision',
       default: 0,
     },
     target_value: {
-      type: 'integer',
+      type: 'double precision',
       notNull: true,
     },
     target_type: {
       type: 'text',
     },
-    tasks_count: {
-      type: 'integer',
+    start_date: {
+      type: 'date',
     },
     until_date: {
       type: 'date',
+    },
+    tasks_count: {
+      type: 'integer',
     },
     frequency: {
       type: 'text',
