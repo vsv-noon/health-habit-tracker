@@ -1,4 +1,5 @@
 // import { apiDelete } from '../../api/client';
+import { Link } from 'react-router-dom';
 import type { Goal } from '../../api/goals.api';
 
 import './style.css';
@@ -11,8 +12,10 @@ export default function GoalCard({ goal, deleteGoal }: { goal: Goal; deleteGoal:
   //   }
   // }
   return (
-    <li className="goal-card">
-      <h3 className="goal-card-h3">{goal.title}</h3>
+    <div className="goal-card">
+      <Link to={`/goals/${goal.id}`} className="goal-card-h3">
+        <h3 className="goal-card-h3">{goal.title}</h3>
+      </Link>
       <div>{goal.current_value === goal.target_value && <span>Completed 🎉 </span>}</div>
 
       <div className="goal-card-progress-bar">
@@ -23,7 +26,9 @@ export default function GoalCard({ goal, deleteGoal }: { goal: Goal; deleteGoal:
         </div>
         <p className="goal-card-bar-value">{goal.target_value}</p>
       </div>
-      <button onClick={deleteGoal}>Delete (CASCADE)</button>
-    </li>
+      <div onPointerDown={(e) => e.stopPropagation()}>
+        <button onClick={deleteGoal}>Delete (CASCADE)</button>
+      </div>
+    </div>
   );
 }

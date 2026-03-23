@@ -27,6 +27,26 @@ export async function getGoals(req: Request, res: Response) {
   }
 }
 
+export async function getGoalById(req: Request, res: Response) {
+  if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
+
+  const { id } = req.params;
+  // const withMeasurements = req.query.withMeasurements === 'true';
+
+  try {
+    const result = await goalService.getGoal(req.user.userId, Number(id));
+
+    if (!result) {
+      return res.status(404).json({ error: 'Goal not found' });
+    }
+
+    return res.status(200).json(result);
+  } catch (err) {
+    console.error('Failed to get goal', err);
+    return res.status(500).json({ error: 'Failed to get goal' });
+  }
+}
+
 export async function deleteGoal(req: Request, res: Response) {
   if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
 

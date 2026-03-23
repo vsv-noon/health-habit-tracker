@@ -61,6 +61,32 @@ export async function getGoals(userId: number) {
   return result.rows;
 }
 
+export async function getGoalById(userId: number, id: number) {
+  const result = await pool.query(
+    `
+    SELECT g.*,
+    CASE
+      WHEN g.goal_type = 'metric' THEN json_build_object(
+      'type', 'metric',
+      'measurements', COALESCE(
+        (SELECT json_agg(row_to_json(gm))
+        FROM (SELECT goal_id, measured_value, measured_at FROM goal_measurements) gm WHERE gm.goal_id = g.id),
+        '[]'::json        
+        ),
+        'target_value', g.target_value
+      )
+      END as progress_data
+    FROM goals g
+    WHERE g.user_id = $1
+      AND g.id = $2
+
+    `,
+    [userId, id]
+  );
+
+  return result.rows[0];
+}
+
 export async function deleteGoal(userId: number, id: number) {
   const result = await pool.query(
     `

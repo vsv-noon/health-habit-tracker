@@ -75,6 +75,10 @@ export async function getGoalsList(userId: number) {
   return model.getGoals(userId);
 }
 
+export async function getGoal(userId: number, id: number) {
+  return model.getGoalById(userId, id);
+}
+
 export async function deleteGoalById(userId: number, id: number) {
   return model.deleteGoal(userId, id);
 }

@@ -8,7 +8,7 @@ export type Todo = {
   due_date: string; // YYYY-MM-DD
   remind_at: Date | null; // ISO string
   priority: Priority;
-
+  goal_id: number;
   created_at: string; // ISO (UTC)
   updated_at: string; // ISO (UTC)
 };

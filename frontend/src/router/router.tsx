@@ -6,6 +6,7 @@ import { RootLayout } from '../layouts/RootLayout';
 
 import { PublicOnlyRoute } from '../auth/PublicOnlyRoute';
 import { ProtectedRoute } from '../auth/ProtectedRoute';
+import GoalDetailPage from '../pages/GoalDetailPage/GoalDetailPage';
 
 // import { ProtectedRoute } from '../routes/ProtectedRoute/ProtectedRoute';
 
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
           {
             path: '/goals',
             element: <GoalsPage />,
+          },
+          {
+            path: '/goals/:id',
+            element: <GoalDetailPage />,
           },
           {
             path: '/trash',

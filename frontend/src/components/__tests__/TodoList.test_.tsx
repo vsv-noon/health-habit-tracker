@@ -14,6 +14,7 @@ const todos: Todo[] = [
     due_date: '2026-01-10',
     remind_at: null,
     priority: 'medium',
+    goal_id: 1,
     created_at: '',
     updated_at: '',
   },

@@ -91,7 +91,9 @@ export function GoalForm({ onCreate }: GoalFormProps) {
       start_date: startDate,
       until_date: untilDate,
       start_value: startValue,
+      current_value: goalType === 'metric' ? startValue : 0,
       target_value: targetValue,
+      unit: unit,
       target_type: targetType,
       frequency: frequency,
       tasks_count: tasksCount,
@@ -173,6 +175,7 @@ export function GoalForm({ onCreate }: GoalFormProps) {
               Start value:
               <input
                 type="number"
+                step="0.1"
                 value={startValue}
                 onChange={(e) => setStartValue(+e.target.value)}
                 placeholder="Start value"
@@ -183,6 +186,7 @@ export function GoalForm({ onCreate }: GoalFormProps) {
               Target value:
               <input
                 type="number"
+                step="0.1"
                 value={targetValue}
                 onChange={handleTargetValue}
                 placeholder="Target value"

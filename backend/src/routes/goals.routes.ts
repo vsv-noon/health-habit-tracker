@@ -6,8 +6,11 @@ import { authMiddleware } from '../middleware/auth.middleware.js';
 const router = Router();
 router.use(authMiddleware);
 
+router.get('/:id', goalsController.getGoalById);
 router.get('/', goalsController.getGoals);
+
 router.post('/', goalsController.createGoal);
+
 router.delete('/:id', goalsController.deleteGoal);
 // router.patch('/:id/progress', goalsController.updateProgress);
 

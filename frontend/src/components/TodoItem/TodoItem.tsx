@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import { fetchGoalById } from '../../api/goals.api';
+import { MeasurementInput } from '../MeasurementInput/MeasurementInput';
 import type { TodoItemProps } from './types';
 
 export function TodoItem({
@@ -9,6 +12,19 @@ export function TodoItem({
   onEdit,
   onDelete,
 }: TodoItemProps) {
+  const [goalType, setGoalType] = useState<'metric' | 'counter'>();
+  const currentDate = new Date().toLocaleDateString('en-CA');
+
+  useEffect(() => {
+    if (!todo.goal_id) return;
+    async function getGoalTypeById(id: number) {
+      const data = await fetchGoalById(id);
+      setGoalType(data.goal_type);
+    }
+
+    getGoalTypeById(todo.goal_id);
+  }, [todo.goal_id]);
+
   return (
     <li
       className="todoItem"
@@ -21,6 +37,10 @@ export function TodoItem({
         type="checkbox"
         title="select to complete"
         checked={todo.completed}
+        disabled={
+          currentDate !== todo.due_date ||
+          (currentDate === todo.due_date && todo.completed === true)
+        }
         onChange={onComplete}
         onPointerDown={(e) => e.stopPropagation()}
       />
@@ -34,6 +54,9 @@ export function TodoItem({
         {todo.title}
       </span>
       <span>{todo.description}</span>
+      {currentDate === todo.due_date && goalType === 'metric' && todo.completed === false && (
+        <MeasurementInput goalId={todo.goal_id} onMeasurement={() => onComplete()} />
+      )}
 
       <div className="actions" onPointerDown={(e) => e.stopPropagation()}>
         <button onClick={onEdit}>✏️</button>

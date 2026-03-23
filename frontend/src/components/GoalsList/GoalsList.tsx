@@ -43,7 +43,9 @@ export function GoalsList({
         <h1>GoalList</h1>
         {goals &&
           goals.map((goal, i) => (
-            <GoalCard key={i} goal={goal} deleteGoal={() => handleDeleteClick(goal)} />
+            <li key={i}>
+              <GoalCard goal={goal} deleteGoal={() => handleDeleteClick(goal)} />
+            </li>
           ))}
       </ul>
 
