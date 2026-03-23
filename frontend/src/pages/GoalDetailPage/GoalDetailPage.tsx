@@ -6,6 +6,7 @@ import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'rec
 function GoalDetailPage() {
   const { id } = useParams();
   const [goal, setGoal] = useState<Goal>();
+  console.log(goal);
 
   useEffect(() => {
     if (id) {
@@ -16,8 +17,6 @@ function GoalDetailPage() {
       fetchGoal(+id);
     }
   }, [id]);
-
-  console.log(goal);
 
   return (
     <div>
@@ -30,14 +29,14 @@ function GoalDetailPage() {
             <span>Last: {goal.progress_data.measurements[0]?.measured_value || 0}</span>
           </div>
 
-          <ResponsiveContainer width="100%" height={250}>
+          <ResponsiveContainer width="90%" height={250}>
             <LineChart data={goal.progress_data.measurements}>
               <XAxis
                 dataKey="measured_at"
-                tickFormatter={(d) => new Date(d).toLocaleDateString()}
+                tickFormatter={(d) => new Date(d).toLocaleDateString('en-CA')}
               />
               <YAxis />
-              <Tooltip />
+              <Tooltip labelFormatter={(d) => new Date(d).toLocaleDateString('en-CA')} />
               <Line
                 type="monotone"
                 dataKey="measured_value"

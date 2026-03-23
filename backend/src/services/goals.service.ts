@@ -21,6 +21,7 @@ export async function createNewGoal(
     frequency: string;
     start_value: number;
     target_value: number;
+    unit: string;
     target_type: string;
     tasks_count: number;
   }
@@ -38,6 +39,7 @@ export async function createGoalWithTodos(
     frequency: string;
     start_value: number;
     target_value: number;
+    unit: string;
     target_type: string;
     tasks_count: number;
   }

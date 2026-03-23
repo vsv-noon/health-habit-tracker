@@ -3,6 +3,8 @@ import { fetchGoalById } from '../../api/goals.api';
 import { MeasurementInput } from '../MeasurementInput/MeasurementInput';
 import type { TodoItemProps } from './types';
 
+import './style.css';
+
 export function TodoItem({
   todo,
   onComplete,
@@ -34,13 +36,12 @@ export function TodoItem({
       onDrop={onDrop}
     >
       <input
+        className="todo-checkbox"
+        style={goalType === 'metric' ? { pointerEvents: 'none' } : { pointerEvents: 'auto' }}
         type="checkbox"
         title="select to complete"
         checked={todo.completed}
-        disabled={
-          currentDate !== todo.due_date ||
-          (currentDate === todo.due_date && todo.completed === true)
-        }
+        // disabled={currentDate !== todo.due_date || goalType === 'metric'}
         onChange={onComplete}
         onPointerDown={(e) => e.stopPropagation()}
       />

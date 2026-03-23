@@ -26,18 +26,12 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       type: 'text',
     },
     measured_at: {
-      type: 'timestamptz',
-      default: pgm.func('now()'),
+      type: 'date',
     },
     metadata: {
       type: 'JSONB',
     },
   });
-
-  pgm.createIndex('goal_measurements', [
-    { name: 'goal_id' },
-    { name: 'measured_at', sort: 'DESC' },
-  ]);
 }
 
 export async function down(pgm: MigrationBuilder): Promise<void> {
