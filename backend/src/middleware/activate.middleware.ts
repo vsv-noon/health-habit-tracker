@@ -2,8 +2,19 @@ import { Request, Response, NextFunction } from 'express';
 
 import { pool } from '../config/db.js';
 
+// interface CustomRequest extends Request {
+//   user?: {
+//     userId: number;
+//     isActivated?: boolean;
+//   };
+// }
+
 export async function activateMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
+    if (!req.user) {
+      return next();
+    }
+
     const userId = req.user?.userId;
 
     const userRes = await pool.query('SELECT is_activated FROM users WHERE id = $1', [userId]);
@@ -20,9 +31,11 @@ export async function activateMiddleware(req: Request, res: Response, next: Next
         .json({ message: 'Ваш аккаунт не активирован. Пожалуйста, подтвердите email.' });
     }
 
+    req.user.isActivated = true;
+
     next();
   } catch (err) {
-    console.error(err);
+    console.error('Activation Middleware Error', err);
     return res.status(500).json({ message: 'Ошибка при проверке активации' });
   }
 }

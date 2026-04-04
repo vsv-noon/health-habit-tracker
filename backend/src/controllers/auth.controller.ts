@@ -70,21 +70,6 @@ export async function login(req: Request, res: Response) {
   }
 }
 
-// export async function me(req: Request, res: Response) {
-//   if (!req.user) {
-//     return res.status(401).json({ error: 'Unauthorized' });
-//   }
-
-//   const userId = req.user.userId;
-//   const user = await findUserById(userId);
-
-//   return res.json({
-//     userId: user?.id,
-//     email: user?.email,
-//     isActivated: user?.is_activated,
-//   });
-// }
-
 export async function me(req: Request, res: Response) {
   if (!req.user) {
     return res.status(401).json({ error: 'Unauthorized' });

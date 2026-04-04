@@ -12,12 +12,12 @@ import { createUser, findUserByEmail } from '../models/user.model.js';
 import {
   generateRefreshToken,
   hashToken,
-  REFRESH_TOKEN_EXPIRES_IN,
   signAccessToken,
   signActivationToken,
   signResetToken,
 } from '../utils/jwt.js';
 import { comparePassword, hashPassword } from '../utils/password.js';
+import { ENV } from '../config/env.js';
 
 interface LoginResponse {
   user: { id: number; email: string; isActivated: boolean };
@@ -77,7 +77,8 @@ export async function login(email: string, password: string): Promise<LoginRespo
   const refreshTokenStr = generateRefreshToken();
 
   // const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
-  const expiresAt = REFRESH_TOKEN_EXPIRES_IN;
+  // const expiresAt = REFRESH_TOKEN_EXPIRES_IN;
+  const expiresAt = ENV.refreshToken.expiresIn;
 
   // await createRefreshToken(user.id, refreshTokenStr, expiresAt);
   await createRefreshToken(user.id, hashToken(refreshTokenStr), expiresAt);
@@ -107,7 +108,8 @@ export async function refreshTokens(
   const newRefreshToken = generateRefreshToken();
 
   // const newExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const newExpiresAt = REFRESH_TOKEN_EXPIRES_IN;
+  // const newExpiresAt = REFRESH_TOKEN_EXPIRES_IN;
+  const newExpiresAt = ENV.refreshToken.expiresIn;
 
   await createRefreshToken(refreshToken.user_id, hashToken(newRefreshToken), newExpiresAt);
   await revokeRefreshToken(refreshTokenStr); // отзываем старый

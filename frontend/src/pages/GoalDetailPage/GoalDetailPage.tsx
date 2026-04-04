@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchGoalById, type Goal } from '../../api/goals.api';
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
@@ -26,11 +26,11 @@ function GoalDetailPage() {
             <h4>
               Progress to {goal.target_value} {goal.unit || ''}
             </h4>
-            <span>Last: {goal.progress_data.measurements[0]?.measured_value || 0}</span>
+            <span>Last: {goal.progress_data?.measurements[0]?.measured_value || 0}</span>
           </div>
 
           <ResponsiveContainer width="90%" height={250}>
-            <LineChart data={goal.progress_data.measurements}>
+            <LineChart data={goal.progress_data?.measurements}>
               <XAxis
                 dataKey="measured_at"
                 tickFormatter={(d) => new Date(d).toLocaleDateString('en-CA')}

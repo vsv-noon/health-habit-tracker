@@ -23,9 +23,6 @@ export function GoalForm({ onCreate }: GoalFormProps) {
   const [goalType, setGoalType] = useState<GoalType>('counter');
   const [unit, setUnit] = useState('kg');
 
-  console.log(untilDate);
-  console.log(tasksCount);
-
   function increment(date: Date, frequency: FrequencyType) {
     if (frequency === 'daily') date.setDate(date.getDate() + 1);
     if (frequency === 'weekly') date.setDate(date.getDate() + 7);
