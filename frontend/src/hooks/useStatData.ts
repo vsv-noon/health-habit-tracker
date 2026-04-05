@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchStats } from '../api/stats.api';
+import { fetchStats } from '../services/api/stats.api';
 
 export function useStatData(endpoint: string, from: string, to: string) {
   const [data, setData] = useState<{ completed: boolean; count: string }[]>();

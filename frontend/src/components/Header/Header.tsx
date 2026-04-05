@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
-import { useAuth } from '../../auth/useAuth';
+import { useAuth } from '../../context/AuthContext/useAuth';
+// import { useAuth } from '../../context/AuthContext';
 import { useState } from 'react';
 import { HeaderModal } from '../HeaderModal/HeaderModal';
 
@@ -12,16 +13,53 @@ export function Header() {
   return (
     <header className="header">
       <nav className="header-nav">
-        <NavLink to="/">🏠 Home</NavLink>
+        <NavLink style={({ isActive }) => ({ color: isActive ? 'grey' : '' })} to="/">
+          🏠 Home
+        </NavLink>
         {user && (
           <>
-            <NavLink to="/dashboard">Dashboard</NavLink>
-            <NavLink to="/goals">Goals</NavLink>
-            <NavLink to="/tasks">Tasks</NavLink>
-            <NavLink to="/trash">🗑 Trash</NavLink>
+            <NavLink
+              style={({ isActive, isPending }) => ({
+                color: isActive ? 'grey' : isPending ? 'blue' : 'black',
+              })}
+              to="/dashboard"
+            >
+              Dashboard
+            </NavLink>
+            <NavLink
+              style={({ isActive, isPending }) => ({
+                color: isActive ? 'grey' : isPending ? 'blue' : 'black',
+              })}
+              to="/goals"
+            >
+              Goals
+            </NavLink>
+            <NavLink
+              style={({ isActive, isPending }) => ({
+                color: isActive ? 'grey' : isPending ? 'blue' : 'black',
+              })}
+              to="/tasks"
+            >
+              Tasks
+            </NavLink>
+            <NavLink
+              style={({ isActive, isPending }) => ({
+                color: isActive ? 'grey' : isPending ? 'blue' : 'black',
+              })}
+              to="/trash"
+            >
+              🗑 Trash
+            </NavLink>
           </>
         )}
-        <NavLink to="/about">ℹ️ About</NavLink>
+        <NavLink
+          style={({ isActive, isPending }) => ({
+            color: isActive ? 'grey' : isPending ? 'blue' : 'black',
+          })}
+          to="/about"
+        >
+          ℹ️ About
+        </NavLink>
       </nav>
       {!user && (
         <div>

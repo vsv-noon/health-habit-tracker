@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../auth/useAuth';
-// import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext/useAuth';
 // import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 
 import './style.css';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { apiDelete } from '../../api/client';
-import type { Goal } from '../../api/goals.api';
+import { apiDelete } from '../../services/api/api';
+import type { Goal } from '../../services/api/goals.api';
 import GoalCard from '../GoalCard/GoalCard';
 
 import './style.css';

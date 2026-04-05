@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { apiDelete, apiFetch } from '../../api/client';
+import { apiDelete, apiFetch } from '../../services/api/api';
 import type { TodoListProps } from './types';
 import type { Todo } from '../../types/todo';
 import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';
 
 import './TodoList.css';
-import { reorderTodos } from '../../api/todos.api';
+import { reorderTodos } from '../../services/api/todos.api';
 import { TodoItem } from '../TodoItem/TodoItem';
 
 export function TodoList({ todos, onEdit, onUpdate, onDelete, onReorder }: TodoListProps) {

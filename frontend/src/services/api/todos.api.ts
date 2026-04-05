@@ -1,6 +1,6 @@
 import type { TodoFormData } from '../components/TodoForm/types';
 import type { Todo } from '../types/todo';
-import { apiFetch } from './client';
+import { apiFetch } from './api';
 
 export type CreateTodoDto = {
   title: string;

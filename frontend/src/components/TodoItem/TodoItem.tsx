@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchGoalById } from '../../api/goals.api';
+import { fetchGoalById } from '../../services/api/goals.api';
 import { MeasurementInput } from '../MeasurementInput/MeasurementInput';
 import type { TodoItemProps } from './types';
 

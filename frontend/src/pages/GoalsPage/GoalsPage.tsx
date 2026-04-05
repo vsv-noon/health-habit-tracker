@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchGoals, type Goal } from '../../api/goals.api';
+import { fetchGoals, type Goal } from '../../services/api/goals.api';
 import { GoalForm } from '../../components/GoalForm/GoalForm';
 import { GoalsList } from '../../components/GoalsList/GoalsList';
 import Loader from '../../components/Loader/Loader';

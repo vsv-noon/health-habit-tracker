@@ -1,4 +1,6 @@
-import { callLogoutAndRedirect } from '../auth/authBridge';
+// import { callLogoutAndRedirect } from '../auth/authBridge';
+
+import { logout } from './auth.api';
 
 let refreshPromise: Promise<string> | null = null;
 
@@ -19,7 +21,8 @@ export async function apiFetch<T>(url: string, options: RequestInit = {}): Promi
 
     // if (!newToken) throw new Error('Unauthorized');
     if (!newToken) {
-      callLogoutAndRedirect();
+      // callLogoutAndRedirect();
+      logout();
       throw new Error('Unauthorized');
     }
 
@@ -54,7 +57,7 @@ export async function refreshAccessToken() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refreshToken }),
       });
-      // console.log(res);
+      console.log(res);
       if (!res.ok) return null;
 
       const data = await res.json();

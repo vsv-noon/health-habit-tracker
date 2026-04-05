@@ -4,8 +4,8 @@ import { createBrowserRouter } from 'react-router-dom';
 import { RootLayout } from '../layouts/RootLayout';
 // import { AppLayout } from '../layouts/AppLayout';
 
-import { PublicOnlyRoute } from '../auth/PublicOnlyRoute';
-import { ProtectedRoute } from '../auth/ProtectedRoute';
+import { PublicOnlyRoute } from '../routes/PublicOnlyRoute';
+import { ProtectedRoute } from '../routes/ProtectedRoute';
 import GoalDetailPage from '../pages/GoalDetailPage/GoalDetailPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage/ResetPasswordPage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage/ForgotPasswordPage';

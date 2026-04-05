@@ -1,30 +1,11 @@
-import type { AuthFormType } from '../auth/types';
-import { apiFetch } from './client';
+import type { AuthFormType } from '../../context/AuthContext/types';
+import { apiFetch } from './api';
 
 export type AuthResponse = {
   accessToken: string;
   refreshToken: string;
   user: { id: number; email: string; isActivated: boolean };
 };
-
-// export function login(email: string, password: string, captchaToken: string, isActivated: boolean) {
-//   return apiFetch<AuthResponse>('/auth/login', {
-//     method: 'POST',
-//     body: JSON.stringify({ email, password, captchaToken, isActivated }),
-//   });
-// }
-
-// export function register(
-//   email: string,
-//   password: string,
-//   captchaToken: string,
-//   isActivated: boolean,
-// ) {
-//   return apiFetch<AuthResponse>('/auth/register', {
-//     method: 'POST',
-//     body: JSON.stringify({ email, password, captchaToken, isActivated }),
-//   });
-// }
 
 export function login(data: AuthFormType) {
   return apiFetch<AuthResponse>('/auth/login', {

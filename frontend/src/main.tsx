@@ -3,10 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 
 import { router } from './router/router.tsx';
-import { AuthProvider } from './auth/AuthProvider.tsx';
+import { AuthProvider } from './context/AuthContext/AuthProvider.tsx';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx';
 import Loader from './components/Loader/Loader.tsx';
-// import { AuthProvider } from './context/AuthContext.tsx';
+
 import './index.css';
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

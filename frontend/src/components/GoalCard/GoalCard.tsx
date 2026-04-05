@@ -1,6 +1,6 @@
 // import { apiDelete } from '../../api/client';
 import { Link } from 'react-router-dom';
-import type { Goal } from '../../api/goals.api';
+import type { Goal } from '../../services/api/goals.api';
 
 import './style.css';
 

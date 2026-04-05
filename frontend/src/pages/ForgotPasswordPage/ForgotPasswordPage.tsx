@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { forgotPassword } from '../../api/auth.api';
+import { forgotPassword } from '../../services/api/auth.api';
 // import { useNavigate } from 'react-router-dom';
 
 import './style.css';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import './style.css';
-import { createGoal, type Goal } from '../../api/goals.api';
+import { createGoal, type Goal } from '../../services/api/goals.api';
 
 type FrequencyType = 'daily' | 'weekly' | 'monthly';
 type TargetType = 'count' | 'date';

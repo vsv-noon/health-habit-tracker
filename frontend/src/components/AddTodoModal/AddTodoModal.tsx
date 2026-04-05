@@ -1,7 +1,7 @@
 import { Modal } from '../Modal/Modal';
 import { useTodoForm } from '../../hooks/useTodoForm';
 import { TodoForm } from '../TodoForm/TodoForm';
-import { createTodo } from '../../api/todos.api';
+import { createTodo } from '../../services/api/todos.api';
 import type { AddTodoModalProps } from './types';
 import { useEffect } from 'react';
 import { initialForm } from './constants';

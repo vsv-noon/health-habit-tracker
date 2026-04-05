@@ -1,4 +1,4 @@
-import { useAuth } from '../../auth/useAuth';
+import { useAuth } from '../../context/AuthContext/useAuth';
 import { Modal } from '../Modal/Modal';
 
 import './style.css';

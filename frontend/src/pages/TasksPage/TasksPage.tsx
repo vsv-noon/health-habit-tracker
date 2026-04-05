@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { apiFetch } from '../../api/client';
+import { apiFetch } from '../../services/api/api';
 import type { Todo } from '../../types/todo';
 import { requestNotificationPermission } from '../../hooks/useNotifications';
 import { useReminders } from '../../hooks/useReminders';

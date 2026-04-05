@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchGoalById, type Goal } from '../../api/goals.api';
+import { fetchGoalById, type Goal } from '../../services/api/goals.api';
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 function GoalDetailPage() {

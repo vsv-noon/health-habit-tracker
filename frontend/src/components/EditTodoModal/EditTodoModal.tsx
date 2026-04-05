@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Modal } from '../Modal/Modal';
 import { useTodoForm } from '../../hooks/useTodoForm';
 import { TodoForm } from '../TodoForm/TodoForm';
-import { updateTodo } from '../../api/todos.api';
+import { updateTodo } from '../../services/api/todos.api';
 import type { EditTodoModalProps } from './types';
 import { formattedDate } from '../../utils/date';
 import { initialForm } from '../AddTodoModal/constants';

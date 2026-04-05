@@ -1,4 +1,4 @@
-import { apiFetch } from './client';
+import { apiFetch } from './api';
 
 export type Measurements = {
   measured_value: number;
