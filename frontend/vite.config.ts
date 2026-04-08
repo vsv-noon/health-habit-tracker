@@ -6,6 +6,7 @@ import react from '@vitejs/plugin-react';
 const viteConfig = defineConfig({
   plugins: [react()],
   server: {
+    // host: '0.0.0.0', // Required for Docker access
     host: true, // Needed for the Docker Container port mapping to work correctly
     // strictPort: true,
     port: 3000, // Port inside a container
@@ -13,7 +14,7 @@ const viteConfig = defineConfig({
     //   clientPort: 80,
     // },
     watch: {
-      usePolling: true,
+      usePolling: true, // Use if HMR doesn't trigger on some OS (e.g., WSL/Windows)
     },
   },
 });

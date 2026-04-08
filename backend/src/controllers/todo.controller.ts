@@ -63,6 +63,27 @@ export async function reorderTodos(req: Request, res: Response) {
   }
 }
 
+/**
+ * @swagger
+ * /api/todos:
+ *  get:
+ *    summary: Retrieve a list of todos
+ *    security:
+ *      - bearerAuth: []
+ *    tags: [Todos]
+ *    description: Returns an array of todos objects from the database.
+ *    produces:
+ *      - application/json
+ *    responses:
+ *      200:
+ *        description: A successful response with a list of users.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ */
 export async function getTodos(req: Request, res: Response) {
   if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
 

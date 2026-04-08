@@ -22,8 +22,8 @@
     "exactOptionalPropertyTypes": true,
     "alwaysStrict": true,
     "useUnknownInCatchVariables": true,
-
-    "isolatedModules": true
+    "isolatedModules": true,
+    "resolveJsonModule": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]

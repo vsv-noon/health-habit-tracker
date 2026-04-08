@@ -26,8 +26,8 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./backend:/app
-      - server_node_modules:/app/node_modules
+      - ./backend:/app # Bind mount: syncs local source code
+      - server_node_modules:/app/node_modules # Named volume: protects container dependencies
     environment:
       # node-pg-migrate автоматически использует DATABASE_URL
       DATABASE_URL: postgres://postgres:postgres@db:5432/my_pern_app
@@ -82,8 +82,11 @@ services:
       - "1025:1025" # SMTP
       - "8025:8025" # Web UI
     environment:
-      MP_SMTP_DISABLE_RDNS: "true"
-      MP_MAX_MESSAGES: 5000 # Optional: auto-prune oldest messages
+      - MP_SMTP_DISABLE_RDNS=true
+      - MP_DATABASE=/data/mailpit.db
+      - MP_MAX_MESSAGES=5000 # Optional: auto-prune oldest messages
+    volumes:
+      - mailpit_data:/data
     networks:
       - my-pern-app-network
 
@@ -93,5 +96,6 @@ networks:
 
 volumes:
   pgdata:
-  server_node_modules:
+  server_node_modules:  # Declare the named volume here
   client_node_modules:
+  mailpit_data:

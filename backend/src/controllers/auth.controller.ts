@@ -5,6 +5,32 @@ import * as authService from '../services/auth.service.js';
 import { pool } from '../config/db.js';
 import { clearRefreshCookie, setRefreshCookie } from '../utils/cookies.js';
 
+/**
+ * @openapi
+ * /api/auth/register:
+ *  post:
+ *    summary: Registering a new Account
+ *    tags: [Auth]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              email: {type: string}
+ *              password: {type: string}
+ *            example: # Sample object
+ *              email: email@email.com
+ *              password: password
+ *    responses:
+ *      200:
+ *        description: OK
+ *      400:
+ *        description: Email and password are required
+ *      409:
+ *        description: User already exists
+ */
 export async function register(req: Request, res: Response) {
   const { email, password } = req.body as {
     email?: string;
@@ -37,6 +63,32 @@ export async function register(req: Request, res: Response) {
   }
 }
 
+/**
+ * @openapi
+ * /api/auth/login:
+ *  post:
+ *    summary: Account login
+ *    tags: [Auth]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              email: {type: string}
+ *              password: {type: string}
+ *            example: # Sample object
+ *              email: email@email.com
+ *              password: password
+ *    responses:
+ *      200:
+ *        description: OK
+ *      401:
+ *        description: Invalid credentials
+ *      404:
+ *        description: User not found
+ */
 export async function login(req: Request, res: Response) {
   const { email, password } = req.body as {
     email?: string;
