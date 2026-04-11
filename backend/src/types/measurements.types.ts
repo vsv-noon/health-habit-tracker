@@ -11,9 +11,10 @@ export interface MeasurementInput {
 }
 
 export interface SaveFullBodyMeasurementsDTO {
-  userId: string;
-  measuredAt?: string | Date;
+  userId: number;
+  measuredAt?: Date;
   measurements: MeasurementInput[];
+  comment: string;
 }
 
 export interface MeasurementRow {

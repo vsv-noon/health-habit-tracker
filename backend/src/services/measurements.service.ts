@@ -1,6 +1,10 @@
 import * as measurementsModel from '../models/measurements.model.js';
 import { pool } from '../config/db.js';
-import { MeasurementInput, MeasurementRow } from '../types/measurements.types.js';
+import {
+  MeasurementRow,
+  SaveFullBodyMeasurementsDTO,
+  SaveMeasurementsResult,
+} from '../types/measurements.types.js';
 
 export async function createNewMeasurement(
   userId: number,
@@ -18,13 +22,11 @@ export async function createNewMeasurement(
 
 export async function saveFullBodyMeasurements(
   userId: number,
-  measuredAt: Date,
-  measurements: MeasurementInput[],
-  comment: string
-) {
+  dto: SaveFullBodyMeasurementsDTO
+): Promise<SaveMeasurementsResult> {
   const client = await pool.connect();
 
-  const date = measuredAt || new Date();
+  const date = dto.measuredAt || new Date();
 
   try {
     await client.query('BEGIN');
@@ -32,18 +34,18 @@ export async function saveFullBodyMeasurements(
     const session = await measurementsModel.createSession(client, {
       userId,
       measuredAt: date,
-      comment,
+      comment: dto.comment,
     });
 
     const sessionId = session.id;
 
-    const typeNames = [...new Set(measurements.map((m) => m.type))];
+    const typeNames = [...new Set(dto.measurements.map((m) => m.type))];
 
     await measurementsModel.upsertMeasurementTypes(client, typeNames);
 
     const typeMap = await measurementsModel.getMeasurementTypesMap(client, typeNames);
 
-    const rows: MeasurementRow[] = measurements.map((m) => {
+    const rows: MeasurementRow[] = dto.measurements.map((m) => {
       if (typeof m.measured_value !== 'number' || m.measured_value <= 0) {
         throw new Error(`Invalid value for ${m.type}`);
       }
