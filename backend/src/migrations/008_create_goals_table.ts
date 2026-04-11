@@ -16,6 +16,11 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       type: 'text',
       notNull: true,
     },
+    type_id: {
+      type: 'integer',
+      references: 'measurement_types',
+      onDelete: 'CASCADE',
+    },
     goal_type: {
       type: 'text',
       notNull: true,

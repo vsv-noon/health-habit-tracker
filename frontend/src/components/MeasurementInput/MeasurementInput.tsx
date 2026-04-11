@@ -11,7 +11,7 @@ export function MeasurementInput({ goalId, onMeasurement }: MeasurementInputProp
   const [date, setDate] = useState(new Date().toLocaleDateString('en-CA'));
 
   const addMeasurement = async () => {
-    await apiFetch('/goal-measurements', {
+    await apiFetch('/measurements', {
       method: 'POST',
       body: JSON.stringify({
         goal_id: goalId,

@@ -76,7 +76,7 @@ export async function getGoalById(userId: number, id: number) {
       'type', 'metric',
       'measurements', COALESCE(
         (SELECT json_agg(row_to_json(gm))
-        FROM (SELECT goal_id, measured_value, measured_at FROM goal_measurements) gm WHERE gm.goal_id = g.id),
+        FROM (SELECT goal_id, measured_value, measured_at FROM measurements) gm WHERE gm.goal_id = g.id),
         '[]'::json        
         ),
         'target_value', g.target_value

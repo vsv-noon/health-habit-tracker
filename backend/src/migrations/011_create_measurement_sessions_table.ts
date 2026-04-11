@@ -1,16 +1,10 @@
 import { MigrationBuilder } from 'node-pg-migrate';
 
 export async function up(pgm: MigrationBuilder): Promise<void> {
-  pgm.createTable('goal_measurements', {
+  pgm.createTable('measurement_sessions', {
     id: {
       type: 'serial',
       primaryKey: true,
-    },
-    goal_id: {
-      type: 'integer',
-      notNull: true,
-      references: 'goals(id)',
-      onDelete: 'CASCADE',
     },
     user_id: {
       type: 'integer',
@@ -18,22 +12,19 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       references: 'users',
       onDelete: 'CASCADE',
     },
-    measured_value: {
-      type: 'double precision',
-      default: 1,
-    },
-    note: {
-      type: 'text',
-    },
     measured_at: {
       type: 'date',
     },
-    metadata: {
-      type: 'JSONB',
+    comment: {
+      type: 'text',
+    },
+    created_at: {
+      type: 'timestamptz',
+      default: pgm.func('now()'),
     },
   });
 }
 
 export async function down(pgm: MigrationBuilder): Promise<void> {
-  pgm.dropTable('goal_measurements');
+  pgm.dropTable('measurement_sessions');
 }
