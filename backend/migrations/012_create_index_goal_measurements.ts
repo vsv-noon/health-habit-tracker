@@ -4,8 +4,13 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
   pgm.noTransaction();
 
   pgm.sql(`
+    CREATE UNIQUE INDEX CONCURRENTLY idx_measurement_sessions_unique_day
+    ON measurement_sessions (user_id, session_date, category)
+    `);
+
+  pgm.sql(`
     CREATE UNIQUE INDEX CONCURRENTLY idx_measurements_unique_day
-    ON measurements (type_id, CAST(measured_at AS DATE));
+    ON measurements (session_id, type_id);
     `);
 
   // CREATE UNIQUE INDEX CONCURRENTLY idx_measurements_unique_day
@@ -21,6 +26,10 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 
 export async function down(pgm: MigrationBuilder): Promise<void> {
   pgm.noTransaction();
+
+  pgm.sql(`
+    DROP INDEX CONCURRENTLY IF EXISTS idx_measurement_sessions_unique_day;
+    `);
 
   pgm.sql(`
     DROP INDEX CONCURRENTLY IF EXISTS idx_measurements_unique_day;

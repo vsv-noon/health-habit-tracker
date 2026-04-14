@@ -70,6 +70,7 @@ export function BodyMeasurementsForm() {
         body: JSON.stringify({
           measured_at: new Date().toLocaleDateString('en-CA'),
           measurements,
+          category: 'body',
           comment,
         }),
       });

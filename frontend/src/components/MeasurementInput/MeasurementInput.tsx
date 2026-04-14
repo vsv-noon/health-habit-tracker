@@ -13,7 +13,7 @@ export function MeasurementInput({ goalId, onMeasurement }: MeasurementInputProp
   const [value, setValue] = useState('');
   const [date, setDate] = useState(new Date().toLocaleDateString('en-CA'));
   // console.log(types.filter((e) => e.name === 'weight'));
-  console.log(types[0].id);
+  // console.log(types[0].id);
   const addMeasurement = async () => {
     await apiFetch('/measurements', {
       method: 'POST',

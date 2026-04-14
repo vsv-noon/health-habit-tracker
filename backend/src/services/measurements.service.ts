@@ -1,4 +1,6 @@
 import * as measurementsModel from '../models/measurements.model.js';
+import * as measurementTypesModel from '../models/measurementTypes.model.js';
+import * as measurementSessionsModel from '../models/measurementSessions.model.js';
 import { pool } from '../config/db.js';
 import {
   MeasurementRow,
@@ -26,24 +28,26 @@ export async function saveFullBodyMeasurements(
 ): Promise<SaveMeasurementsResult> {
   const client = await pool.connect();
 
+  console.log(dto);
+
   const date = dto.measuredAt || new Date();
 
   try {
     await client.query('BEGIN');
 
-    const session = await measurementsModel.createSession(client, {
+    const session = await measurementSessionsModel.createSession(client, {
       userId,
-      measuredAt: date,
-      comment: dto.comment,
+      sessionDate: date,
+      category: dto.category,
     });
 
     const sessionId = session.id;
 
     const typeNames = [...new Set(dto.measurements.map((m) => m.type))];
 
-    await measurementsModel.upsertMeasurementTypes(client, typeNames);
+    await measurementTypesModel.upsertMeasurementTypes(client, typeNames);
 
-    const typeMap = await measurementsModel.getMeasurementTypesMap(client, typeNames);
+    const typeMap = await measurementTypesModel.getMeasurementTypesMap(client, typeNames);
 
     const rows: MeasurementRow[] = dto.measurements.map((m) => {
       if (typeof m.measured_value !== 'number' || m.measured_value <= 0) {

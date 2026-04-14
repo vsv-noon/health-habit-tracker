@@ -1,7 +1,7 @@
 import { PoolClient } from 'pg';
 
 import { pool } from '../config/db.js';
-import { Session, MeasurementRow, MeasurementsRow } from '../types/measurements.types.js';
+import { MeasurementRow, MeasurementsRow } from '../types/measurements.types.js';
 
 export async function createGoalMeasurement(userId: number, data: MeasurementsRow) {
   const { type_id, goal_id, measured_value, note, measured_at } = data;
@@ -31,55 +31,6 @@ export async function createGoalMeasurement(userId: number, data: MeasurementsRo
   return result.rows[0];
 }
 
-export async function createSession(
-  client: PoolClient,
-  { userId, measuredAt, comment }: { userId: number; measuredAt: Date; comment?: string }
-): Promise<Session> {
-  const res = await client.query(
-    `
-    INSERT INTO measurement_sessions (user_id, measured_at, comment)
-    VALUES ($1, $2, $3)
-    RETURNING id
-    `,
-    [userId, measuredAt, comment || null]
-  );
-
-  return res.rows[0];
-}
-
-export async function upsertMeasurementTypes(client: PoolClient, typeNames: string[]) {
-  if (typeNames.length === 0) return;
-
-  const values = typeNames.map((_, i) => `($${i + 1}, 'cm')`).join(',');
-
-  await client.query(
-    `
-    INSERT INTO measurement_types (name, unit)
-    VALUES ${values}
-    ON CONFLICT (name) DO NOTHING
-    `,
-    typeNames
-  );
-}
-
-export async function getMeasurementTypesMap(client: PoolClient, typeNames: string[]) {
-  const res = await client.query(
-    `
-    SELECT id, name
-    FROM measurement_types
-    WHERE name = ANY($1)
-    `,
-    [typeNames]
-  );
-
-  const map: Record<string, number> = {};
-  for (const row of res.rows) {
-    map[row.name] = row.id;
-  }
-
-  return map;
-}
-
 export async function insertMeasurements(
   client: PoolClient,
   rows: MeasurementRow[]
@@ -99,11 +50,11 @@ export async function insertMeasurements(
     `
     INSERT INTO measurements (user_id, type_id, session_id, measured_value, measured_at)
     VALUES ${placeholders.join(',')}
-    ON CONFLICT (type_id, DATE(measured_at)) DO UPDATE
+    ON CONFLICT (session_id, type_id) 
+    DO UPDATE
     SET
       measured_value = EXCLUDED.measured_value,
-      note = EXCLUDED.note,
-      measured_at = EXCLUDED.measured_at
+      note = EXCLUDED.note
     RETURNING *
     `,
     values

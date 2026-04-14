@@ -70,3 +70,36 @@ export async function remove(client: PoolClient, id: number): Promise<boolean> {
 
   return res.rowCount! > 0;
 }
+
+export async function upsertMeasurementTypes(client: PoolClient, typeNames: string[]) {
+  if (typeNames.length === 0) return;
+
+  const values = typeNames.map((_, i) => `($${i + 1}, 'cm')`).join(',');
+
+  await client.query(
+    `
+    INSERT INTO measurement_types (name, unit)
+    VALUES ${values}
+    ON CONFLICT (name) DO NOTHING
+    `,
+    typeNames
+  );
+}
+
+export async function getMeasurementTypesMap(client: PoolClient, typeNames: string[]) {
+  const res = await client.query(
+    `
+    SELECT id, name
+    FROM measurement_types
+    WHERE name = ANY($1)
+    `,
+    [typeNames]
+  );
+
+  const map: Record<string, number> = {};
+  for (const row of res.rows) {
+    map[row.name] = row.id;
+  }
+
+  return map;
+}

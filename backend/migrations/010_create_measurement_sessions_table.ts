@@ -12,10 +12,11 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       references: 'users',
       onDelete: 'CASCADE',
     },
-    measured_at: {
+    session_date: {
       type: 'date',
+      notNull: true,
     },
-    comment: {
+    category: {
       type: 'text',
     },
     created_at: {

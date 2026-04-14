@@ -2,14 +2,12 @@ import { Router } from 'express';
 
 import { authMiddleware } from '../middleware/auth.middleware.js';
 import { activateMiddleware } from '../middleware/activate.middleware.js';
-import * as measurements from '../controllers/measurements.controller.js';
+import * as measurementSessionsController from '../controllers/measurementSessions.controller.js';
 
 const router = Router();
 router.use(authMiddleware);
 router.use(activateMiddleware);
 
-// router.get('/measurements/session/:sessionId');
-router.post('/body', measurements.saveFullBodyMeasurementsController);
-router.post('/', measurements.createMeasurement);
+router.get('/', measurementSessionsController.getMeasurementSessionsController);
 
 export default router;

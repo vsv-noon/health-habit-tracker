@@ -15,7 +15,7 @@ export interface SaveFullBodyMeasurementsDTO {
   userId: number;
   measuredAt?: Date;
   measurements: MeasurementInput[];
-  comment: string;
+  category: string;
 }
 
 export interface MeasurementRow {
