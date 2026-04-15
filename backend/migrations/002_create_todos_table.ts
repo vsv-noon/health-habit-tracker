@@ -3,13 +3,13 @@ import { MigrationBuilder } from 'node-pg-migrate';
 export async function up(pgm: MigrationBuilder): Promise<void> {
   pgm.createTable('todos', {
     id: {
-      type: 'serial',
+      type: 'integer GENERATED ALWAYS AS IDENTITY',
       primaryKey: true,
     },
 
     user_id: {
       type: 'integer',
-      references: 'users(id)',
+      references: 'users',
       onDelete: 'CASCADE',
     },
 

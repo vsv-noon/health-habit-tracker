@@ -3,7 +3,7 @@ import { MigrationBuilder } from 'node-pg-migrate';
 export async function up(pgm: MigrationBuilder): Promise<void> {
   pgm.createTable('measurement_types', {
     id: {
-      type: 'serial',
+      type: 'integer GENERATED ALWAYS AS IDENTITY',
       primaryKey: true,
     },
     name: {
