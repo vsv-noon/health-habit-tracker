@@ -49,7 +49,7 @@ export async function getSessionById(client: PoolClient, sessionId: number, user
           'unit', t.unit,
           'measured_value', m.measured_value
         )
-        ORDER BY t.name
+
       ) AS measurements
     FROM measurement_sessions s
     LEFT JOIN measurements m ON m.session_id = s.id

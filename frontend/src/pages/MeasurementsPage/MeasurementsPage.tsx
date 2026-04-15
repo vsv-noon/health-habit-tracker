@@ -4,8 +4,8 @@ import { apiFetch } from '../../services/api/api';
 import Calendar from 'react-calendar';
 // import type { CalendarProps } from 'react-calendar/src/Calendar.js';
 import 'react-calendar/dist/Calendar.css';
-import MeasurementsList from '../../components/MeasurementsList/MeasurementsList';
-import { Link } from 'react-router-dom';
+import MeasurementsList from '../../components/BodyMeasurementsList/BodyMeasurementsList';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import Loader from '../../components/Loader/Loader';
 
 import './style.css';
@@ -20,16 +20,23 @@ export interface CalendarEventProps {
 
 function MeasurementsPage() {
   const [sessions, setSessions] = useState<CalendarEventProps[]>([]);
-  const [sessionId, setSessionId] = useState<number | null>(null);
+  // const [sessionId, setSessionId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
+  // console.log(sessions);
+
+  const handleCloseDetails = () => {
+    navigate(`/measurements`);
+  };
   function handleClickDay(clickedDay: Date) {
     const foundSession = sessions.find(
       (s) => s.session_date === clickedDay.toLocaleDateString('en-CA'),
     );
 
     if (foundSession) {
-      setSessionId(foundSession.id);
+      // setSessionId(foundSession.id);
+      navigate(`/measurements/measurement-details/${foundSession.id}`);
     }
   }
 
@@ -48,8 +55,9 @@ function MeasurementsPage() {
       setLoading(false);
     }
   }, []);
+
   return (
-    <div className="measurementPage">
+    <div className="measurementsPage" onClick={handleCloseDetails}>
       {loading && <Loader />}
       <Link className="link-btn" to="/body-measurement-form">
         New Measurement
@@ -66,7 +74,10 @@ function MeasurementsPage() {
           }}
         />
       )}
-      <MeasurementsList id={sessionId} />
+      <MeasurementsList sessions={sessions} />
+      <div onClick={(e) => e.stopPropagation()}>
+        <Outlet context={{ handleCloseDetails }} />
+      </div>
     </div>
   );
 }

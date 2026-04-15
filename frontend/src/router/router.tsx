@@ -30,6 +30,9 @@ const MeasurementsPage = lazy(() => import('../pages/MeasurementsPage/Measuremen
 const BodyMeasurementsForm = lazy(
   () => import('../components/BodyMeasurementsForm/BodyMeasurementsForm'),
 );
+const BodyMeasurementsDetails = lazy(
+  () => import('../components/BodyMeasurementsDetails/BodyMeasurementsDetails'),
+);
 
 export const router = createBrowserRouter([
   {
@@ -77,6 +80,12 @@ export const router = createBrowserRouter([
           {
             path: 'measurements',
             element: <MeasurementsPage />,
+            children: [
+              {
+                path: 'body-measurements-details/:id',
+                element: <BodyMeasurementsDetails />,
+              },
+            ],
           },
           {
             path: 'body-measurement-form',
