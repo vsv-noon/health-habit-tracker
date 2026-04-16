@@ -1,5 +1,8 @@
 .measurementsPage {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 }
 
 .calendar {
@@ -90,5 +93,4 @@
   color: #000;
   padding: 5px;
   cursor: pointer;
-  margin-bottom: 50px;
 }

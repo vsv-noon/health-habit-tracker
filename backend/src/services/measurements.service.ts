@@ -28,8 +28,6 @@ export async function saveFullBodyMeasurements(
 ): Promise<SaveMeasurementsResult> {
   const client = await pool.connect();
 
-  console.log(dto);
-
   const date = dto.measured_at || new Date();
 
   try {

@@ -8,7 +8,7 @@ export async function getMeasurementSessions(userId: number) {
     `
     SELECT * FROM measurement_sessions
     WHERE user_id = $1
-    ORDER BY created_at DESC
+    ORDER BY session_date DESC
     `,
     [userId]
   );

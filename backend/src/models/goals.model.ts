@@ -2,6 +2,7 @@ import { pool } from '../config/db.js';
 
 export type GoalsRow = {
   title: string;
+  type_id: number;
   goal_type: string;
   start_date: Date;
   until_date: Date;
@@ -17,6 +18,7 @@ export type GoalsRow = {
 export async function createGoal(userId: number, data: GoalsRow) {
   const {
     title,
+    type_id,
     goal_type,
     start_date,
     until_date,
@@ -31,13 +33,14 @@ export async function createGoal(userId: number, data: GoalsRow) {
 
   const result = await pool.query(
     `
-    INSERT INTO goals (user_id, title, goal_type, start_date, until_date, frequency, target_type, start_value, current_value, target_value, unit, tasks_count)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+    INSERT INTO goals (user_id, title, type_id, goal_type, start_date, until_date, frequency, target_type, start_value, current_value, target_value, unit, tasks_count)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
     RETURNING *
     `,
     [
       userId,
       title,
+      type_id,
       goal_type,
       start_date,
       until_date,

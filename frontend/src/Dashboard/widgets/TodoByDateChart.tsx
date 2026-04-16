@@ -13,7 +13,7 @@ export default function TodoByDateChart({
   to: string;
 }) {
   const data = useStatData(endpoint, from, to);
-
+  console.log(data);
   return (
     <div style={{ width: '100%', height: 300 }}>
       <ResponsiveContainer width="100%" height={300}>

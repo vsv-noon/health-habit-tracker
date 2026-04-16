@@ -9,6 +9,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import Loader from '../../components/Loader/Loader';
 
 import './style.css';
+import BodyMeasurementsChart from '../../components/BodyMeasurementsChart/BodyMeasurementsChart';
 
 export interface CalendarEventProps {
   id: number;
@@ -24,19 +25,18 @@ function MeasurementsPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // console.log(sessions);
-
   const handleCloseDetails = () => {
     navigate(`/measurements`);
   };
-  function handleClickDay(clickedDay: Date) {
+  function handleClickDay(clickedDay: Date, event: React.MouseEvent<HTMLButtonElement>) {
+    event.stopPropagation();
     const foundSession = sessions.find(
       (s) => s.session_date === clickedDay.toLocaleDateString('en-CA'),
     );
 
     if (foundSession) {
       // setSessionId(foundSession.id);
-      navigate(`/measurements/measurement-details/${foundSession.id}`);
+      navigate(`/measurements/body-measurements-details/${foundSession.id}`);
     }
   }
 
@@ -59,7 +59,7 @@ function MeasurementsPage() {
   return (
     <div className="measurementsPage" onClick={handleCloseDetails}>
       {loading && <Loader />}
-      <Link className="link-btn" to="/body-measurement-form">
+      <Link className="link-btn" to="/body-measurement-form" onClick={(e) => e.stopPropagation()}>
         New Measurement
       </Link>
       {sessions && (
@@ -78,6 +78,7 @@ function MeasurementsPage() {
       <div onClick={(e) => e.stopPropagation()}>
         <Outlet context={{ handleCloseDetails }} />
       </div>
+      <BodyMeasurementsChart />
     </div>
   );
 }
