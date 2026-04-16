@@ -4,19 +4,19 @@ import { pool } from '../config/db.js';
 import { MeasurementRow, MeasurementsRow } from '../types/measurements.types.js';
 
 export async function createGoalMeasurement(userId: number, data: MeasurementsRow) {
-  const { type_id, goal_id, measured_value, note, measured_at } = data;
+  const { measurement_type_id, goal_id, measured_value, note, measured_at } = data;
 
   const result = await pool.query(
     `
-    INSERT INTO measurements (type_id, goal_id, user_id, measured_value, note, measured_at)
+    INSERT INTO measurements (measurement_type_id, goal_id, user_id, measured_value, note, measured_at)
     VALUES ($1, $2, $3, $4, $5, $6)
-    ON CONFLICT (type_id, DATE(measured_at)) DO UPDATE SET
+    ON CONFLICT (measurement_type_id, DATE(measured_at)) DO UPDATE SET
       measured_value = EXCLUDED.measured_value,
       note = EXCLUDED.note,
       measured_at = EXCLUDED.measured_at
     RETURNING *
     `,
-    [type_id, goal_id, userId, measured_value, note, measured_at]
+    [measurement_type_id, goal_id, userId, measured_value, note, measured_at]
   );
 
   await pool.query(
@@ -48,9 +48,9 @@ export async function insertMeasurements(
 
   await client.query(
     `
-    INSERT INTO measurements (user_id, type_id, session_id, measured_value, measured_at)
+    INSERT INTO measurements (user_id, measurement_type_id, session_id, measured_value, measured_at)
     VALUES ${placeholders.join(',')}
-    ON CONFLICT (session_id, type_id) 
+    ON CONFLICT (session_id, measurement_type_id) 
     DO UPDATE
     SET
       measured_value = EXCLUDED.measured_value,

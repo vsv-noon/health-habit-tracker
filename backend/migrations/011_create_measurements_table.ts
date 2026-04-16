@@ -12,7 +12,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       references: 'users',
       onDelete: 'CASCADE',
     },
-    type_id: {
+    measurement_type_id: {
       type: 'integer',
       notNull: true,
       references: 'measurement_types',

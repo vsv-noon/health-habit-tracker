@@ -41,14 +41,13 @@ function BodyMeasurementsChart() {
   const [targetValue, setTargetValue] = useState<Target | null>(null);
   const [selectorType, setSelectorType] = useState('weight');
 
-  const type = selectorType;
-  // const type = 'weight';
-  console.log(selectorType);
+  const from = '2009-01-01';
+  const to = '2027-01-01';
 
   useEffect(() => {
     async function load() {
       const { target, result } = await apiFetch<AnalyticsResponse>(
-        `/measurements/analytics?type=${type}&from=${'2009-01-01'}&to=${'2027-01-01'}`,
+        `/measurements/analytics?type=${selectorType}&from=${from}&to=${to}`,
       );
 
       const map: Record<string, ChartDataPoint> = {};
@@ -67,7 +66,7 @@ function BodyMeasurementsChart() {
       setTargetValue(target);
     }
     load();
-  }, [type]);
+  }, [selectorType]);
 
   return (
     <div>
@@ -86,7 +85,7 @@ function BodyMeasurementsChart() {
           <Tooltip />
           <Legend />
 
-          <Line type="monotone" dataKey={type} />
+          <Line type="monotone" dataKey={selectorType} />
           {targetValue && (
             <ReferenceLine y={targetValue.target_value} stroke="red" strokeDasharray="3 3">
               <Label value={targetValue.target_value} position="bottom" />

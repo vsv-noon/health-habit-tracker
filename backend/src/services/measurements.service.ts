@@ -11,7 +11,7 @@ import {
 export async function createNewMeasurement(
   userId: number,
   data: {
-    type_id: number;
+    measurement_type_id: number;
     session_id: number;
     goal_id: number;
     measured_value: number;

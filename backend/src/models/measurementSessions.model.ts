@@ -53,7 +53,7 @@ export async function getSessionById(client: PoolClient, sessionId: number, user
       ) AS measurements
     FROM measurement_sessions s
     LEFT JOIN measurements m ON m.session_id = s.id
-    LEFT JOIN measurement_types t ON t.id = m.type_id
+    LEFT JOIN measurement_types t ON t.id = m.measurement_type_id
     WHERE s.id = $1 AND s.user_id = $2
     GROUP BY s.id
     `,
@@ -70,7 +70,7 @@ export async function upsertMeasurement(
 ) {
   await client.query(
     `
-    INSERT INTO measurements (session_id, type_id, value)
+    INSERT INTO measurements (session_id, measurement_type_id, value)
     SELECT
       $1,
       t.id,
@@ -78,7 +78,7 @@ export async function upsertMeasurement(
     FROM jsonb_to_recordset($2::jsonb)
       AS v(name TEXT, value NUMERIC)
     JOIN measurement_types t on t.name = v.name
-    ON CONFLICT (session_id, type_id)
+    ON CONFLICT (session_id, measurement_type_id)
     DO UPDATE SET value = EXCLUDED.value
     `,
     [sessionId, JSON.stringify(measurements)]
@@ -95,7 +95,7 @@ export async function deleteMissingMeasurements(
     DELETE FROM measurements m
     USING measurement_types t
     WHERE m.session_id = $1
-      AND m.type_id = t.id
+      AND m.measurement_type_id = t.id
       AND t.name NOT IN (${names.map((_, i) => `$${i + 2}`).join(',')})
     `,
     [sessionId, ...names]

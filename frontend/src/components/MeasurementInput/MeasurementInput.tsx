@@ -18,7 +18,7 @@ export function MeasurementInput({ goalId, onMeasurement }: MeasurementInputProp
     await apiFetch('/measurements', {
       method: 'POST',
       body: JSON.stringify({
-        type_id: types[0].id,
+        measurement_type_id: types[0].id,
         goal_id: goalId,
         measured_value: Number(value),
         measured_at: date,

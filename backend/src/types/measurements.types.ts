@@ -1,5 +1,5 @@
 export type MeasurementsRow = {
-  type_id: number;
+  measurement_type_id: number;
   goal_id: number;
   measured_value: number;
   note: string;

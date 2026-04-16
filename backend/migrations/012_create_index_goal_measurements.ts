@@ -10,7 +10,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 
   pgm.sql(`
     CREATE UNIQUE INDEX CONCURRENTLY idx_measurements_unique_day
-    ON measurements (session_id, type_id);
+    ON measurements (session_id, measurement_type_id);
     `);
 
   // CREATE UNIQUE INDEX CONCURRENTLY idx_measurements_unique_day

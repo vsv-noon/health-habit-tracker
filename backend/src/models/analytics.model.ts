@@ -15,7 +15,7 @@ export async function getMeasurementsAnalytics(
       m.measured_value
     FROM measurements m
     JOIN measurement_sessions s ON s.id = m.session_id
-    JOIN measurement_types t ON t.id = m.type_id
+    JOIN measurement_types t ON t.id = m.measurement_type_id
     WHERE
       s.user_id = $1
       AND t.name = $2
@@ -39,7 +39,7 @@ export async function getGoalTargetValueByTypeName(
     FROM measurement_types mt
 
     LEFT JOIN goals g
-      ON g.type_id= mt.id
+      ON g.measurement_type_id= mt.id
     WHERE mt.name = $1 AND g.user_id = $2   
     `,
     [name, userId]
