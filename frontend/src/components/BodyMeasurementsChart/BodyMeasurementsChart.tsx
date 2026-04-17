@@ -81,7 +81,7 @@ function BodyMeasurementsChart() {
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
           <XAxis dataKey="date" />
-          <YAxis />
+          <YAxis scale="log" type="number" domain={['dataMin - 5', 'dataMax + 5']} />
           <Tooltip />
           <Legend />
 

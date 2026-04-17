@@ -9,7 +9,7 @@ import { initialForm } from '../AddTodoModal/constants';
 
 export function EditTodoModal({ todo, onClose, onUpdated }: EditTodoModalProps) {
   const { form, setForm, update, validate, error } = useTodoForm(initialForm);
-
+  // console.log(todo?.remind_at)
   useEffect(() => {
     if (todo) {
       setForm({

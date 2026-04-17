@@ -115,7 +115,7 @@ export default function TodosPage() {
   useReminders(todos);
 
   return (
-    <div className="home-page-container">
+    <div className="tasksPage">
       <h1>PERN ToDo Calendar</h1>
       <div className="control">
         <button onClick={() => setModalOpen(true)}>➕ Add task</button>

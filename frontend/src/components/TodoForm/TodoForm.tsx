@@ -85,6 +85,13 @@ export function TodoForm({
     setActiveIndex(-1);
   }
 
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const date = new Date(e.target.value);
+    if (!isNaN(date.getTime())) {
+      update('remind_at', date.toISOString());
+    }
+  };
+
   return (
     <div className="todo-form">
       <div className="modal-header">
@@ -137,7 +144,8 @@ export function TodoForm({
         <input
           type="datetime-local"
           value={form.remind_at}
-          onChange={(e) => update('remind_at', e.target.value)}
+          // onChange={(e) => update('remind_at', e.target.value)}
+          onChange={handleTimeChange}
         />
       </label>
       <label>
