@@ -15,6 +15,7 @@ export interface CalendarEventProps {
   id: number;
   user_id: number;
   session_date: string;
+  recorded_at: string;
   category: string;
   created_at: Date;
 }

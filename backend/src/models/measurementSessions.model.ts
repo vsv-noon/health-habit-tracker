@@ -18,17 +18,26 @@ export async function getMeasurementSessions(userId: number) {
 
 export async function createSession(
   client: PoolClient,
-  { userId, sessionDate, category }: { userId: number; sessionDate: Date; category?: string }
+  {
+    userId,
+    sessionDate,
+    recordedAt,
+    category,
+  }: { userId: number; sessionDate: Date; recordedAt: Date; category?: string }
 ): Promise<Session> {
   const res = await client.query(
     `
-    INSERT INTO measurement_sessions (user_id, session_date, category)
-    VALUES ($1, $2, $3)
+    INSERT INTO measurement_sessions (user_id, session_date, recorded_at, category)
+    VALUES ($1, $2, $3, $4)
     ON CONFLICT (user_id, session_date, category)
-    DO UPDATE SET session_date = EXCLUDED.session_date
+    WHERE category = 'body'
+    DO UPDATE 
+    SET 
+      session_date = EXCLUDED.session_date,
+      recorded_at = EXCLUDED.recorded_at
     RETURNING id
     `,
-    [userId, sessionDate, category]
+    [userId, sessionDate, recordedAt, category]
   );
 
   return res.rows[0];
@@ -41,6 +50,7 @@ export async function getSessionById(client: PoolClient, sessionId: number, user
       s.id,
       s.user_id,
       s.session_date,
+      s.recorded_at,
       s.category,
       json_agg(
         json_build_object(

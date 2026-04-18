@@ -54,6 +54,7 @@ export async function insertMeasurements(
     DO UPDATE
     SET
       measured_value = EXCLUDED.measured_value,
+      measured_at = EXCLUDED.measured_at,
       note = EXCLUDED.note
     RETURNING *
     `,

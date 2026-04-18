@@ -3,31 +3,29 @@ import { apiFetch } from '../../services/api/api';
 import { useMeasurementTypes, type MeasurementType } from '../../hooks/useMeasurementTypes';
 import { useNavigate } from 'react-router-dom';
 
-// type MeasurementField = {
-//   key: string;
-//   label: string;
-// };
-
-// type MeasurementsState = Record<string, string>;
-
-// const defaultFields: MeasurementField[] = [
-//   { key: 'waist', label: 'Waist (cm)' },
-//   { key: 'chest', label: 'Chest (cm)' },
-//   { key: 'hips', label: 'Hips (cm)' },
-//   { key: 'left_biceps', label: 'Left Biceps (cm)' },
-//   { key: 'right_biceps', label: 'Right Biceps (cm)' },
-//   { key: 'thigh', label: 'Thigh (cm)' },
-// ];
-
 function BodyMeasurementsForm() {
   const { types, loading } = useMeasurementTypes();
-  // const [fields, setFields] = useState<MeasurementField[]>(defaultFields);
   const [values, setValues] = useState<Record<string, string>>({});
   const [comment, setComment] = useState('');
-  const [date, setDate] = useState(new Date().toLocaleDateString('en-CA'));
+  // const [date, setDate] = useState(new Date().toISOString().slice(0, 16));
+  const [category, setCategory] = useState('body');
   // const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
+
+  function getSystemLocalFormat() {
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
+  const [localTime, setLocalTime] = useState(getSystemLocalFormat());
+  console.log(localTime);
 
   function groupTypes(types: MeasurementType[]) {
     return {
@@ -72,9 +70,9 @@ function BodyMeasurementsForm() {
       await apiFetch('/measurements/body', {
         method: 'POST',
         body: JSON.stringify({
-          measured_at: date,
+          measured_at: new Date(localTime).toISOString(),
           measurements,
-          category: 'body',
+          category: category,
           comment,
         }),
       });
@@ -93,55 +91,76 @@ function BodyMeasurementsForm() {
 
   return (
     <form onSubmit={handleSubmit} style={styles.form}>
-      <h2>Body Measurements (circumference)</h2>
+      <h2>New Measurements</h2>
+      <label>Category</label>
+      <select onChange={(e) => setCategory(e.target.value)}>
+        <option value="body">Body Measurements (weight, circumference)</option>
+        <option value="health">Health Metrics (blood pressure, heart rate)</option>
+      </select>
 
-      <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-      <div style={styles.grid}>
-        {grouped.body.map((type) => (
-          <div key={type.id} style={styles.field}>
-            <label>
-              {type.label} ({type.unit})
-            </label>
-            <input
-              type="number"
-              step={type.name === 'weight' ? '0.1' : '1'}
-              value={values[type.name] || ''}
-              onChange={(e) => handleChange(type.name, e.target.value)}
-              placeholder={type.name === 'weight' ? '0.0' : '0'}
-            />
+      {/* <input type="date" value={date} onChange={(e) => setDate(e.target.value)} /> */}
+      {/* <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} /> */}
+      <input
+        type="datetime-local"
+        value={localTime}
+        onChange={(e) => setLocalTime(e.target.value)}
+      />
+      {category === 'body' && (
+        <>
+          <h3>Body Measurements (circumference)</h3>
+          <div style={styles.grid}>
+            {grouped.body.map((type) => (
+              <div key={type.id} style={styles.field}>
+                <label>
+                  {type.label} ({type.unit})
+                </label>
+                <input
+                  type="number"
+                  step={type.name === 'weight' ? '0.1' : '1'}
+                  value={values[type.name] || ''}
+                  onChange={(e) => handleChange(type.name, e.target.value)}
+                  placeholder={type.name === 'weight' ? '0.0' : '0'}
+                />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
 
-      <h2>Health</h2>
+      {category === 'health' && (
+        <>
+          <h3>Health</h3>
 
-      <div style={styles.grid}>
-        {grouped.health.map((type) => (
-          <div key={type.id} style={styles.field}>
-            <label>
-              {type.label} ({type.unit})
-            </label>
-            <input
-              type="number"
-              step="1"
-              value={values[type.name] || ''}
-              onChange={(e) => handleChange(type.name, e.target.value)}
-              placeholder="0"
-            />
+          <div style={styles.grid}>
+            {grouped.health.map((type) => (
+              <div key={type.id} style={styles.field}>
+                <label>
+                  {type.label} ({type.unit})
+                </label>
+                <input
+                  type="number"
+                  step="1"
+                  value={values[type.name] || ''}
+                  onChange={(e) => handleChange(type.name, e.target.value)}
+                  placeholder="0"
+                  required
+                />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
 
       {/* <button type="button" onClick={handleAddField}>
         {' '}
         + Add measurement
       </button> */}
 
-      <textarea
+      {/* <textarea
         placeholder="Comment (optional"
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-      />
+      /> */}
 
       <button type="submit">{loading ? 'Saving...' : 'Save Measurements'}</button>
     </form>

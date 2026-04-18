@@ -36,18 +36,45 @@ type ChartDataPoint = {
   [key: string]: string | number | undefined;
 };
 
+const chartConfig = {
+  'blood_pressure_systolic,blood_pressure_diastolic,pulse': [
+    { key: 'blood_pressure_systolic', color: '#ff4d4f', name: 'Systolic' },
+    { key: 'blood_pressure_diastolic', color: '#1890ff', name: 'Diastolic' },
+    { key: 'pulse', color: '#52c41a', name: 'Pulse' },
+  ],
+  weight: [{ key: 'weight', color: '#722ed1', name: 'Weight' }],
+  chest: [{ key: 'chest', color: '#722ed1', name: 'Chest' }],
+  waist: [{ key: 'waist', color: '#722ed1', name: 'Waist' }],
+  abdominal: [{ key: 'abdominal', color: '#722ed1', name: 'Abdominal' }],
+  hips: [{ key: 'hips', color: '#722ed1', name: 'Hips' }],
+};
+
+const measurementType = [
+  {
+    label: 'Blood Pressure',
+    value: 'blood_pressure_systolic,blood_pressure_diastolic,pulse',
+  },
+  { label: 'Weight', value: 'weight' },
+  { label: 'Chest', value: 'chest' },
+  { label: 'Waist', value: 'waist' },
+  { label: 'Abdominal', value: 'abdominal' },
+  { label: 'Hips', value: 'hips' },
+];
+
 function BodyMeasurementsChart() {
   const [data, setData] = useState<ChartDataPoint[]>([]);
   const [targetValue, setTargetValue] = useState<Target | null>(null);
-  const [selectorType, setSelectorType] = useState('weight');
+  const [selectorType, setSelectorType] = useState<string>('weight');
 
   const from = '2009-01-01';
   const to = '2027-01-01';
 
+  const lines = chartConfig[selectorType as keyof typeof chartConfig] || [];
+
   useEffect(() => {
     async function load() {
       const { target, result } = await apiFetch<AnalyticsResponse>(
-        `/measurements/analytics?type=${selectorType}&from=${from}&to=${to}`,
+        `/measurements/analytics?types=${selectorType}&from=${from}&to=${to}`,
       );
 
       const map: Record<string, ChartDataPoint> = {};
@@ -68,24 +95,57 @@ function BodyMeasurementsChart() {
     load();
   }, [selectorType]);
 
+  function customChartFormatter(item: Date) {
+    return new Date(item).toLocaleString('en-CA', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+  }
+
   return (
     <div>
       BodyMeasurementsChart
       <select value={selectorType} onChange={(e) => setSelectorType(e.target.value)}>
-        <option value="weight">Weight</option>
-        <option value="chest">Chest</option>
-        <option value="waist">Waist</option>
-        <option value="abdominal">Abdominal</option>
-        <option value="hips">Hips</option>
+        {measurementType.map((opt, i) => (
+          <option key={i} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
       </select>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
-          <XAxis dataKey="date" />
-          <YAxis scale="log" type="number" domain={['dataMin - 5', 'dataMax + 5']} />
-          <Tooltip />
-          <Legend />
+          <XAxis dataKey="date" domain={['auto', 'auto']} tickFormatter={customChartFormatter} />
+          <YAxis type="number" domain={['dataMin - 5', 'dataMax + 5']} />
+          <Tooltip
+            labelFormatter={(value) =>
+              new Date(value).toLocaleString('en-CA', {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+              })
+            }
+          />
+          <Tooltip labelFormatter={(label) => customChartFormatter(label)} />
 
-          <Line type="monotone" dataKey={selectorType} />
+          <Legend />
+          {lines.map((line) => (
+            <Line
+              key={line.key}
+              type="monotone"
+              dataKey={line.key}
+              stroke={line.color}
+              name={line.name}
+              dot={false}
+            />
+          ))}
+
           {targetValue && (
             <ReferenceLine y={targetValue.target_value} stroke="red" strokeDasharray="3 3">
               <Label value={targetValue.target_value} position="bottom" />

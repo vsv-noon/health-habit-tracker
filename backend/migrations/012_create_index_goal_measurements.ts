@@ -3,9 +3,15 @@ import { MigrationBuilder } from 'node-pg-migrate';
 export async function up(pgm: MigrationBuilder): Promise<void> {
   pgm.noTransaction();
 
+  // pgm.sql(`
+  //   CREATE UNIQUE INDEX CONCURRENTLY idx_measurement_sessions_unique_day
+  //   ON measurement_sessions (user_id, session_date, category)
+  //    `);
+
   pgm.sql(`
     CREATE UNIQUE INDEX CONCURRENTLY idx_measurement_sessions_unique_day
     ON measurement_sessions (user_id, session_date, category)
+    WHERE category = 'body';
     `);
 
   pgm.sql(`

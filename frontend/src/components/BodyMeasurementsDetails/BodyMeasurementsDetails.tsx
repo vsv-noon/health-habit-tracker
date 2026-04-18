@@ -12,6 +12,7 @@ export interface MeasurementsProps {
 
 export interface BodyMeasurementDetailsProps {
   session_date: string;
+  recorded_at: string;
   measurements: MeasurementsProps[];
 }
 
@@ -38,6 +39,7 @@ function BodyMeasurementDetails() {
       <button onClick={handleCloseDetails}>Close</button>
       <h2>Body Measurements Details</h2>
       <h4>{value && value.session_date}</h4>
+      <h5>{value && new Date(value.recorded_at).toLocaleString()}</h5>
       <ul className="bodyMeasurementsDetailsList">
         {value &&
           value.measurements.map((el, i) => (

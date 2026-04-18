@@ -16,6 +16,10 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       type: 'date',
       notNull: true,
     },
+    recorded_at: {
+      type: 'timestamptz',
+      notNull: true,
+    },
     category: {
       type: 'text',
     },

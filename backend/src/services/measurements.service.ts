@@ -36,6 +36,7 @@ export async function saveFullBodyMeasurements(
     const session = await measurementSessionsModel.createSession(client, {
       userId,
       sessionDate: date,
+      recordedAt: date,
       category: dto.category,
     });
 

@@ -35,7 +35,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       check: 'measured_value >= 0',
     },
     measured_at: {
-      type: 'date',
+      type: 'timestamptz',
     },
     note: {
       type: 'text',
