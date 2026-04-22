@@ -8,7 +8,7 @@ export async function getMeasurementSessions(userId: number) {
     `
     SELECT * FROM measurement_sessions
     WHERE user_id = $1
-    ORDER BY session_date DESC
+    ORDER BY recorded_at DESC
     `,
     [userId]
   );
@@ -109,5 +109,17 @@ export async function deleteMissingMeasurements(
       AND t.name NOT IN (${names.map((_, i) => `$${i + 2}`).join(',')})
     `,
     [sessionId, ...names]
+  );
+}
+
+export async function deleteSessionById(client: PoolClient, userId: number, sessionId: number) {
+  await client.query(
+    `
+    DELETE FROM measurement_sessions
+    WHERE user_id = $1
+      AND id = $2
+    RETURNING 1
+    `,
+    [userId, sessionId]
   );
 }

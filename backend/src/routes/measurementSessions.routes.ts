@@ -11,5 +11,6 @@ router.use(activateMiddleware);
 router.get('/', measurementSessionsController.getMeasurementSessionsController);
 router.get('/:id', measurementSessionsController.getMeasurementSessionByIdController);
 router.patch('/:id', measurementSessionsController.updateMeasurementSessionByIdController);
+router.delete('/:id', measurementSessionsController.deleteMeasurementSessionByIdController);
 
 export default router;

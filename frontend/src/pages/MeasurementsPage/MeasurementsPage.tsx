@@ -44,18 +44,18 @@ function MeasurementsPage() {
   useEffect(() => {
     try {
       setLoading(true);
-      async function load() {
+      async function loadSessions() {
         const data = await apiFetch('/measurement-sessions');
         setSessions(data as CalendarEventProps[]);
       }
 
-      load();
+      loadSessions();
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [sessions]);
 
   return (
     <div className="measurementsPage" onClick={handleCloseDetails}>

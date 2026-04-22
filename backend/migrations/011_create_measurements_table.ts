@@ -27,7 +27,8 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     session_id: {
       type: 'integer',
       references: 'measurement_sessions',
-      onDelete: 'SET NULL',
+      // onDelete: 'SET NULL',
+      onDelete: 'CASCADE',
     },
     measured_value: {
       type: 'numeric(10, 2)',

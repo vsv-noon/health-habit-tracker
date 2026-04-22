@@ -95,7 +95,7 @@ function MeasurementsChart() {
       setTargetValue(target);
     }
     load();
-  }, [selectorType]);
+  }, [selectorType, data]);
 
   function customChartFormatter(item: Date) {
     return new Date(item).toLocaleString('en-CA', {
@@ -124,20 +124,35 @@ function MeasurementsChart() {
         ))}
       </select>
       <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={data}>
+        <LineChart data={data} width={500} height={300}>
           <XAxis
             type="number"
             scale="time"
             dataKey="date"
             domain={['auto', 'auto']}
             tickFormatter={customChartFormatter}
+            // tickFormatter={(e) => new Date(e).toLocaleDateString('en-CA')}
             padding={{ left: 0, right: 10 }}
+            // interval={0}
+            angle={-45}
+            // textAnchor="end"
+            height={60}
+            tick={{ fontSize: 8, textAnchor: 'end' }}
+            // minTickGap={50}
           />
-          <YAxis type="number" domain={['dataMin - 5', 'dataMax + 5']} />
+          <YAxis
+            type="number"
+            domain={['auto', 'auto']}
+            // interval={0}
+            // angle={-45}
+            // textAnchor="end"
+            // height={35}
+            tick={{ fontSize: 8 }}
+          />
 
           <Tooltip labelFormatter={(label) => customChartFormatter(label)} itemSorter={() => 1} />
 
-          <Legend />
+          <Legend itemSorter={() => 1} />
           {lines.map((line, i) => (
             <Line
               key={i}

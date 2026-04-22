@@ -71,3 +71,19 @@ export async function updateMeasurementSession(dto: UpdateSessionDTO, userId: nu
     client.release();
   }
 }
+
+export async function deleteMeasurementSessionById(userId: number, sessionId: number) {
+  const client = await pool.connect();
+
+  try {
+    await client.query('BEGIN');
+
+    await client.query('COMMIT');
+    return await measurementSessionsModel.deleteSessionById(client, userId, sessionId);
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
+}

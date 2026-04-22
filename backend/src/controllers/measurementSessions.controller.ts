@@ -65,3 +65,18 @@ export async function updateMeasurementSessionByIdController(req: Request, res: 
     res.status(500).json({ error: 'Failed to update Measurement Session' });
   }
 }
+
+export async function deleteMeasurementSessionByIdController(req: Request, res: Response) {
+  if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
+
+  const { id } = req.params;
+
+  try {
+    await measurementSessionsService.deleteMeasurementSessionById(req.user.userId, Number(id));
+
+    return res.status(204).send();
+  } catch (err) {
+    console.error('Failed to delete session', err);
+    return res.status(500).json({ error: 'Failed to delete session' });
+  }
+}
