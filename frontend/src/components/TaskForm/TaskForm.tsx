@@ -3,6 +3,8 @@ import { apiFetch } from '../../services/api/api';
 import { useNavigate } from 'react-router-dom';
 // import { createTodo } from '../../services/api/todos.api';
 
+import './style.css';
+
 type RecurrenceType = 'daily' | 'weekly' | 'monthly';
 
 interface RecurrenceForm {
@@ -23,7 +25,8 @@ interface TaskFormState {
   recurrence: RecurrenceForm;
 }
 
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+// const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 function TaskForm() {
   const [form, setForm] = useState<TaskFormState>({
     title: '',
@@ -79,6 +82,8 @@ function TaskForm() {
           dueDate: form.dueDate,
         };
 
+    console.log(payload);
+
     await apiFetch('/tasks', {
       method: 'POST',
       body: JSON.stringify(payload),
@@ -91,113 +96,115 @@ function TaskForm() {
   };
 
   return (
-    <form className="task-form" onSubmit={handleSubmit}>
-      <h2>Create Task Form</h2>
+    <div className="task-form-container">
+      <form className="task-form" onSubmit={handleSubmit}>
+        <h2>Create Task Form</h2>
 
-      <input
-        type="text"
-        value={form.title}
-        onChange={(e) => update({ title: e.target.value })}
-        placeholder="Title"
-      />
-
-      <textarea
-        value={form.description}
-        onChange={(e) => update({ description: e.target.value })}
-        placeholder="Description"
-      />
-
-      <label>
         <input
-          type="checkbox"
-          checked={form.isRecurring}
-          onChange={(e) => update({ isRecurring: e.target.checked })}
+          type="text"
+          value={form.title}
+          onChange={(e) => update({ title: e.target.value })}
+          placeholder="Title"
         />
-      </label>
 
-      {!form.isRecurring && (
-        <div>
-          <label>Due date</label>
+        <textarea
+          value={form.description}
+          onChange={(e) => update({ description: e.target.value })}
+          placeholder="Description"
+        />
+
+        <label>
           <input
-            type="date"
-            value={form.dueDate}
-            onChange={(e) => update({ dueDate: e.target.value })}
+            type="checkbox"
+            checked={form.isRecurring}
+            onChange={(e) => update({ isRecurring: e.target.checked })}
           />
-        </div>
-      )}
+        </label>
 
-      {form.isRecurring && (
-        <div style={{ border: '1px solid #ccc', padding: 10 }}>
-          <h4>Recurrence</h4>
+        {!form.isRecurring && (
+          <div>
+            <label>Due date</label>
+            <input
+              type="date"
+              value={form.dueDate}
+              onChange={(e) => update({ dueDate: e.target.value })}
+            />
+          </div>
+        )}
 
-          <select
-            value={form.recurrence.type}
-            onChange={(e) => updateRecurrence({ type: e.target.value as RecurrenceType })}
-          >
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-          </select>
+        {form.isRecurring && (
+          <div style={{ border: '1px solid #ccc', padding: 10 }}>
+            <h4>Recurrence</h4>
 
-          <input
-            type="number"
-            min={1}
-            value={form.recurrence.interval}
-            onChange={(e) => updateRecurrence({ interval: Number(e.target.value) })}
-          />
+            <select
+              value={form.recurrence.type}
+              onChange={(e) => updateRecurrence({ type: e.target.value as RecurrenceType })}
+            >
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
 
-          {form.recurrence.type === 'weekly' && (
-            <div>
-              {days.map((d, i) => (
-                <button
-                  type="button"
-                  key={i}
-                  onClick={() => toggleDay(i)}
-                  style={{
-                    margin: 2,
-                    background: form.recurrence.daysOfWeek.includes(i) ? 'black' : 'white',
-                    color: form.recurrence.daysOfWeek.includes(i) ? 'white' : 'black',
-                  }}
-                >
-                  {d}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {form.recurrence.type === 'monthly' && (
             <input
               type="number"
               min={1}
-              max={31}
-              placeholder="Day of month"
-              value={form.recurrence.dayOfMonth || ''}
-              onChange={(e) => updateRecurrence({ dayOfMonth: Number(e.target.value) })}
+              value={form.recurrence.interval}
+              onChange={(e) => updateRecurrence({ interval: Number(e.target.value) })}
             />
-          )}
 
-          <div>
-            <label>Start</label>
-            <input
-              type="date"
-              value={form.recurrence.startDate}
-              onChange={(e) => updateRecurrence({ startDate: e.target.value })}
-            />
+            {form.recurrence.type === 'weekly' && (
+              <div>
+                {days.map((d, i) => (
+                  <button
+                    type="button"
+                    key={i}
+                    onClick={() => toggleDay(i)}
+                    style={{
+                      margin: 2,
+                      background: form.recurrence.daysOfWeek.includes(i) ? 'black' : 'white',
+                      color: form.recurrence.daysOfWeek.includes(i) ? 'white' : 'black',
+                    }}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {form.recurrence.type === 'monthly' && (
+              <input
+                type="number"
+                min={1}
+                max={31}
+                placeholder="Day of month"
+                value={form.recurrence.dayOfMonth || ''}
+                onChange={(e) => updateRecurrence({ dayOfMonth: Number(e.target.value) })}
+              />
+            )}
+
+            <div>
+              <label>Start</label>
+              <input
+                type="date"
+                value={form.recurrence.startDate}
+                onChange={(e) => updateRecurrence({ startDate: e.target.value })}
+              />
+            </div>
+
+            <div>
+              <label>End</label>
+              <input
+                type="date"
+                value={form.recurrence.endDate || ''}
+                onChange={(e) => updateRecurrence({ endDate: e.target.value })}
+              />
+            </div>
           </div>
+        )}
 
-          <div>
-            <label>End</label>
-            <input
-              type="date"
-              value={form.recurrence.endDate || ''}
-              onChange={(e) => updateRecurrence({ endDate: e.target.value })}
-            />
-          </div>
-        </div>
-      )}
-
-      <button type="submit">Create</button>
-    </form>
+        <button type="submit">Create</button>
+      </form>
+    </div>
   );
 }
 

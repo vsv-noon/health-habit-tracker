@@ -1,4 +1,4 @@
-form {
+.goals-page form {
   display: flex;
   flex-direction: column;
   max-width: 500px;
@@ -8,21 +8,21 @@ form {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
-h2 {
+.goals-page h2 {
   margin-bottom: 40px;
   text-align: center;
 }
 
-.form-title-input {
+.goals-page .form-title-input {
   margin-bottom: 15px;
 }
 
-.form-input-block {
+.goals-page .form-input-block {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-button {
+.goals-page button {
   margin: 15px 0;
 }

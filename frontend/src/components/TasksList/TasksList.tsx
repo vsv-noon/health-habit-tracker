@@ -7,7 +7,7 @@ function TasksList() {
   useEffect(() => {
     async function loadTasksList() {
       try {
-        const data = await apiFetch(`/tasks/range?start=${'2026-04-01'}&end=${'2026-04-30'}`);
+        const data = await apiFetch(`/tasks/range?start=${'2026-04-01'}&end=${'2026-08-31'}`);
         // const data = await apiFetch(`/tasks/range?start=2026-04-23&end=2026-04-30`)
         // console.log(data);
 
@@ -27,7 +27,7 @@ function TasksList() {
       <ul>
         {tasksList?.map((el, i) => (
           <li key={i}>
-            {el.id} {el.title} {el.due_date}
+            {el.id} {el.title} {el.due_date} {el.status}
           </li>
         ))}
       </ul>

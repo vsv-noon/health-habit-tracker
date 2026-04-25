@@ -15,8 +15,8 @@ function TasksPage() {
     <div>
       <h1>TasksPage</h1>
 
-      <Link to="/task-form">Task Form</Link>
-      <DayPicker mode="range" selected={selected} onSelect={handleSelect} />
+      <Link to="/task-form">➕ Add new task</Link>
+      <DayPicker mode="single" weekStartsOn={1} selected={selected} onSelect={handleSelect} />
       <TasksList />
     </div>
   );

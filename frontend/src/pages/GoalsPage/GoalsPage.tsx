@@ -29,7 +29,7 @@ export default function GoalsPage() {
     setGoals((prev) => [goal, ...prev]);
   };
   return (
-    <div>
+    <div className="goals-page">
       <h1>My Goals</h1>
       {loading && <Loader />}
       <GoalForm onCreate={handleGoalCreate} />
