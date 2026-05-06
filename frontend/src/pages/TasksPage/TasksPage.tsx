@@ -53,6 +53,9 @@ function TasksPage() {
         onSelect={setSelectedDate}
         month={month}
         onMonthChange={setMonth}
+        captionLayout="dropdown"
+        fromYear={2000}
+        toYear={2050}
         weekStartsOn={1}
         modifiers={{ hasTasks: datesWithTasks }}
         modifiersStyles={{ hasTasks: { backgroundColor: '#dbeafe', borderRadius: '50%' } }}

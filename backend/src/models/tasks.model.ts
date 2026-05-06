@@ -1,5 +1,7 @@
 import { PoolClient } from 'pg';
 
+import { pool } from '../config/db.js';
+
 export async function createTask(
   client: PoolClient,
   userId: number,
@@ -88,22 +90,56 @@ export async function createTaskInstance(
   );
 }
 
+// export async function createInstances(
+//   client: PoolClient,
+//   userId: number,
+//   taskId: number,
+//   dates: Date[]
+// ) {
+//   for (const d of dates) {
+//     const date = d.toISOString().slice(0, 10);
+
+//     await client.query(
+//       `
+//       INSERT INTO task_instances (user_id, task_id, due_date)
+//       SELECT $1, $2, $3
+//       WHERE NOT EXISTS (
+//         SELECT 1 FROM task_exceptions te
+//         WHERE te.task_id = $2
+//           AND te.date = $3
+//           AND te.type = 'deleted'
+//       )
+//       ON CONFLICT (task_id, due_date) DO NOTHING
+//       `,
+//       [userId, taskId, date]
+//     );
+//   }
+// }
+
 export async function createInstances(
   client: PoolClient,
   userId: number,
   taskId: number,
   dates: Date[]
 ) {
-  for (const d of dates) {
-    await client.query(
-      `
+  const values = dates.map((_, i) => `($1::int, $2::int, $${i + 3}::date)`).join(',');
+
+  const params = [userId, taskId, ...dates.map((d) => d.toISOString().slice(0, 10))];
+  await client.query(
+    `
       INSERT INTO task_instances (user_id, task_id, due_date)
-      VALUES ($1, $2, $3)
+      SELECT v.user_id, v.task_id, v.due_date
+      FROM (VALUES ${values}) AS v(user_id, task_id, due_date)
+      WHERE NOT EXISTS (
+        SELECT 1 FROM task_exceptions te
+        WHERE te.task_id = v.task_id
+          AND te.date = v.due_date
+          AND te.type = 'deleted'
+      )
       ON CONFLICT (task_id, due_date) DO NOTHING
       `,
-      [userId, taskId, d.toISOString().slice(0, 10)]
-    );
-  }
+    params
+  );
 }
 
 export async function getRecurringTasks(client: PoolClient, userId: number) {
@@ -156,4 +192,66 @@ export async function updateTask(client: PoolClient, status: string, id: number,
   );
 
   return result.rows[0];
+}
+
+export async function deleteTask(userId: number, taskId: number, mode: string, date: Date) {
+  if (mode === 'this') {
+    const result = await pool.query(
+      `
+      INSERT INTO task_exceptions (task_id, date, type)
+      VALUES ($1, $2, 'deleted')
+      ON CONFLICT DO NOTHING
+      `,
+      [taskId, date]
+    );
+
+    await pool.query(
+      `
+      DELETE FROM task_instances
+      WHERE user_id = $1
+        AND task_id = $2
+        AND due_date = $3
+      `,
+      [userId, taskId, date]
+    );
+
+    return result.rowCount! > 0;
+  }
+
+  if (mode === 'future') {
+    await pool.query(
+      `
+      UPDATE tasks
+      SET recurrence_end = $1
+      WHERE id = $2
+      `,
+      [date, taskId]
+    );
+
+    const result = await pool.query(
+      `
+      DELETE FROM task_instances
+      WHERE user_id = $1
+        AND task_id = $2
+        AND due_date >= $3
+        AND is_exception = false
+      RETURNING 1
+      `,
+      [userId, taskId, date]
+    );
+
+    return result.rowCount! > 0;
+  }
+  if (mode === 'all') {
+    const result = await pool.query(
+      `
+      DELETE FROM tasks
+      WHERE user_id = $1
+        AND id = $2
+      `,
+      [userId, taskId]
+    );
+
+    return result.rowCount! > 0;
+  }
 }

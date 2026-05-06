@@ -5,14 +5,16 @@ import './style.css';
 function TaskItem({
   task,
   onUpdate,
+  onDelete,
 }: {
   task: Task;
   onUpdate: (task: Task, { status }: { status: string }) => void;
+  onDelete: () => void;
 }) {
   return (
     <li key={task.id} className="task-item">
       <h5 title="task name">
-        {task.title} {task.id}{' '}
+        {task.title} {task.task_id}{' '}
         {task.status === 'missed' && <span style={{ color: 'red' }}>missed</span>}
       </h5>
       <select
@@ -30,6 +32,7 @@ function TaskItem({
         </option>
       </select>
       <span title="Due Date">{task.due_date}</span>
+      <button onClick={onDelete}>Delete</button>
     </li>
   );
 }

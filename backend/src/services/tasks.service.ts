@@ -89,3 +89,7 @@ export async function updateTaskItem(userId: number, id: number, status: string)
     client.release();
   }
 }
+
+export async function deleteTaskById(userId: number, taskId: number, mode: string, date: Date) {
+  return tasksModel.deleteTask(userId, taskId, mode, date);
+}
