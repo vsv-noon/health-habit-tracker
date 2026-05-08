@@ -1,8 +1,9 @@
 import { apiDeleteTask, apiFetch } from '../../services/api/api';
 import type { Task } from '../../pages/TasksPage/TasksPage';
 import TaskItem from '../TaskItem/TaskItem';
-import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';
 import { useState } from 'react';
+// import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';
+import DeleteTasksDialog from '../DeleteTasksDialog/DeleteTasksDialog';
 
 function TasksList({
   tasks,
@@ -12,9 +13,8 @@ function TasksList({
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }) {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [taskToDelete, setTaskToDelete] = useState(null);
-
-  console.log(tasks);
+  const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
+  const [modeSelect, setModeSelect] = useState<string>('this');
 
   async function handleUpdate(item: Task, { status }: { status: string }) {
     setTasks((prev) => prev.map((t) => (t.id === item.id ? { ...t, status } : t)));
@@ -31,23 +31,38 @@ function TasksList({
     }
   }
 
-  function handleDeleteClick(task) {
+  function handleDeleteClick(task: Task) {
     setTaskToDelete(task);
     setModalOpen(true);
   }
 
-  const mode = 'this';
+  async function handleConfirmDelete(task: Task | null, mode: string) {
+    if (!task) {
+      return;
+    }
 
-  async function handleConfirmDelete(task, mode: string) {
-    if (task) {
-      const payload = { mode };
-      if (mode !== 'all') {
-        payload.date = task.due_date;
-      }
+    const date: string = '';
+    const payload = { mode, date };
+    if (mode !== 'all') {
+      payload.date = task.due_date;
+    }
 
-      await apiDeleteTask(`/tasks/${task.task_id}`, payload);
+    await apiDeleteTask(`/tasks/${task.task_id}`, payload);
 
+    if (mode === 'this') {
       setTasks((prev) => prev.filter((t) => t.id !== task.id));
+    }
+
+    if (mode === 'following') {
+      setTasks((prev) =>
+        prev.filter(
+          (t) => t.task_id !== task.task_id || new Date(t.due_date) < new Date(task.due_date),
+        ),
+      );
+    }
+
+    if (mode === 'all') {
+      setTasks((prev) => prev.filter((t) => t.task_id !== task.task_id));
     }
   }
 
@@ -58,7 +73,7 @@ function TasksList({
 
   return (
     <div>
-      <h2>TasksList</h2>
+      <h2>Tasks List</h2>
 
       <ul>
         {tasks &&
@@ -72,12 +87,21 @@ function TasksList({
           ))}
       </ul>
 
-      <ConfirmationDialog
+      {/* <ConfirmationDialog
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title="Are your sure?"
         message={`Do you really want to delete task "${taskToDelete?.title}"`}
         onConfirm={() => handleConfirmDelete(taskToDelete, mode)}
+      /> */}
+      <DeleteTasksDialog
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        mode={modeSelect}
+        setMode={setModeSelect}
+        // title="Are your sure?"
+        // message={`Do you really want to delete task "${taskToDelete?.title}"`}
+        onConfirm={() => handleConfirmDelete(taskToDelete, modeSelect)}
       />
     </div>
   );

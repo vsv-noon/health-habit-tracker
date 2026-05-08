@@ -9,6 +9,7 @@ import { apiFetch } from '../../services/api/api';
 
 export interface Task {
   id: number;
+  task_id: number;
   title: string;
   status: string;
   due_date: string;

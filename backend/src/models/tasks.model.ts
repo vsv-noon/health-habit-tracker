@@ -218,14 +218,23 @@ export async function deleteTask(userId: number, taskId: number, mode: string, d
     return result.rowCount! > 0;
   }
 
-  if (mode === 'future') {
+  if (mode === 'following') {
     await pool.query(
       `
-      UPDATE tasks
-      SET recurrence_end = $1
-      WHERE id = $2
+      UPDATE task_recurrence
+      SET end_date = $1
+      WHERE task_id = $2
       `,
       [date, taskId]
+    );
+
+    pool.query(
+      `
+      INSERT INTO task_exceptions (task_id, date, type)
+      VALUES ($1, $2, 'deleted')
+      ON CONFLICT DO NOTHING
+      `,
+      [taskId, date]
     );
 
     const result = await pool.query(
@@ -234,7 +243,6 @@ export async function deleteTask(userId: number, taskId: number, mode: string, d
       WHERE user_id = $1
         AND task_id = $2
         AND due_date >= $3
-        AND is_exception = false
       RETURNING 1
       `,
       [userId, taskId, date]
@@ -242,6 +250,7 @@ export async function deleteTask(userId: number, taskId: number, mode: string, d
 
     return result.rowCount! > 0;
   }
+
   if (mode === 'all') {
     const result = await pool.query(
       `

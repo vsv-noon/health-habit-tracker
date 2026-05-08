@@ -47,7 +47,10 @@ export async function apiDelete(url: string): Promise<void> {
   if (!res.ok) throw new Error(`API error: ${res.status}`);
 }
 
-export async function apiDeleteTask(url: string, payload: string): Promise<void> {
+export async function apiDeleteTask(
+  url: string,
+  payload: { mode: string; date: string },
+): Promise<void> {
   const res = await fetch(import.meta.env.VITE_API_URL + url, {
     headers: {
       'Content-Type': 'application/json',
