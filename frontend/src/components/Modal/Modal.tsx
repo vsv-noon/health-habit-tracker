@@ -1,10 +1,10 @@
 import { createPortal } from 'react-dom';
 
-import './Modal.css';
 import useEscapeKey from '../../hooks/useEscapeKey';
 import useCtrlEnterKey from '../../hooks/useCtrlEnterKey';
 import type { ModalProps } from './types';
 import { useEffect, useRef } from 'react';
+import styles from './Modal.module.scss';
 
 export function Modal({ isOpen, onClose, onConfirm, customClassName, children }: ModalProps) {
   const portalRoot = document.getElementById('modal-root');
@@ -75,17 +75,17 @@ export function Modal({ isOpen, onClose, onConfirm, customClassName, children }:
   return createPortal(
     <div
       ref={overlayRef}
-      className="modal-backdrop"
+      className={styles.modalBackdrop}
       role="dialog"
       aria-modal="true"
       onMouseDown={onOverlayMouseDown}
     >
       <div
         ref={contentRef}
-        className={`modal-content ${customClassName}`}
+        className={`${styles.modalContent} ${customClassName}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <button className="close-button" onClick={onClose}>
+        <button className={styles.closeButton} onClick={onClose}>
           &times;
         </button>
         {children}

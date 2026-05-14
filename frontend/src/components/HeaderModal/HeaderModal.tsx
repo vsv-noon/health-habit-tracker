@@ -1,15 +1,10 @@
 import { useAuth } from '../../context/AuthContext/useAuth';
 import { Modal } from '../Modal/Modal';
 
-import './style.css';
+import type { ProfileModalProps } from './types';
+import styles from './HeaderModal.module.scss';
 
-type ProfileModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-};
-
-export function HeaderModal({ isOpen, onClose, onConfirm }: ProfileModalProps) {
+const HeaderModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, onConfirm }) => {
   const { user } = useAuth();
 
   function handleSignOut() {
@@ -17,11 +12,18 @@ export function HeaderModal({ isOpen, onClose, onConfirm }: ProfileModalProps) {
     onClose();
   }
   return (
-    <Modal customClassName="header-modal" isOpen={isOpen} onClose={onClose} onConfirm={onConfirm}>
-      <div className="header-modal-content">
+    <Modal
+      customClassName={styles.headerModal}
+      isOpen={isOpen}
+      onClose={onClose}
+      onConfirm={onConfirm}
+    >
+      <div className={styles.headerModalContent}>
         {user && <p>{user?.email}</p>}
         <button onClick={handleSignOut}>Sign Out</button>
       </div>
     </Modal>
   );
-}
+};
+
+export default HeaderModal;

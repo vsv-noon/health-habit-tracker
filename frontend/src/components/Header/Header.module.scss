@@ -1,0 +1,29 @@
+.header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: rem(16);
+  border-bottom: rem(1) solid #ddd;
+}
+
+.nav {
+  display: flex;
+  gap: rem(15);
+}
+
+.navLink {
+  text-decoration: none;
+}
+
+.header-user-info {
+  display: flex;
+  gap: rem(30);
+}
+
+.userBtn {
+  padding: rem(10);
+  border-radius: rem(8);
+  border: transparent;
+  cursor: pointer;
+}

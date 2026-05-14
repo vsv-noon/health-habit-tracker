@@ -10,12 +10,12 @@ import { Filters } from '../../components/Filters/Filters';
 import { formattedDate, getFirstDayOfMonth, getLastDayOfMonth } from '../../utils/date';
 import { AddTodoModal } from '../../components/AddTodoModal/AddTodoModal';
 import { EditTodoModal } from '../../components/EditTodoModal/EditTodoModal';
-import Loader from '../../components/Loader/Loader';
+import Loader from '../../components/Loader';
 import { useDebounce } from '../../hooks/useDebounce';
 // import { LAST_INDEX } from '../constants';
 import { TodoStatusChart } from '../../Dashboard/widgets/StatusChart';
 
-import './style.css';
+import styles from './TodoPage.module.scss';
 
 // type CalendarValue = Date | [Date, Date];
 type CalendarValue = string | [string, string];
@@ -115,7 +115,7 @@ export default function TodosPage() {
   useReminders(todos);
 
   return (
-    <div className="tasksPage">
+    <div className={styles.taskPage}>
       <h1>PERN ToDo Calendar</h1>
       <div className="control">
         <button onClick={() => setModalOpen(true)}>➕ Add task</button>
@@ -139,7 +139,7 @@ export default function TodosPage() {
           onStatusChange={setStatus}
         />
       </div>
-      <div className="calendar-charts-block">
+      <div className={styles.calendarChartsBlock}>
         <CalendarView
           // dateRange={dateRange}
           setDateRange={handleDateRange}
@@ -162,6 +162,7 @@ export default function TodosPage() {
             <div style={{ marginBottom: 8 }}>
               <strong>Tasks for {selectedDate}</strong>
               <button
+                className={styles.button}
                 style={{ marginLeft: 8 }}
                 onClick={() => (setSelectedDate(''), setSearch(''), setStatus('all'))}
               >

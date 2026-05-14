@@ -1,8 +1,6 @@
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { useStatData } from '../../hooks/useStatData';
 
-import './style.css';
-
 export default function TodoByDateChart({
   endpoint,
   from,

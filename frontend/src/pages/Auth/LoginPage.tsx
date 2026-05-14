@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext/useAuth';
 // import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 
-import './style.css';
+import styles from './Auth.module.scss';
 
 export interface LoginFormData {
   email: string;
@@ -67,15 +67,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="login-page">
+    <div className={styles.loginPage}>
       <h1>Sign in to your account</h1>
 
       {error && <div>{error}</div>}
-      <form className="login-page-form" onSubmit={handleSubmit}>
-        <div className="form-inputs-group">
+      <form className={styles.loginPageForm} onSubmit={handleSubmit}>
+        <div className={styles.formInputsGroup}>
           <div>
             <label htmlFor="email">Email</label>
             <input
+              className={styles.formInput}
               id="email"
               name="email"
               type="email"
@@ -87,6 +88,7 @@ export default function LoginPage() {
           <div>
             <label htmlFor="password">Password</label>
             <input
+              className={styles.formInput}
               id="password"
               name="password"
               type="password"
@@ -129,12 +131,16 @@ export default function LoginPage() {
         /> */}
 
         {/* <button type="submit" disabled={!formData.captchaToken || loading}> */}
-        <button type="submit" disabled={loading}>
+        <button className={styles.button} type="submit" disabled={loading}>
           {loading ? 'Signing in...' : 'Sign in'}
         </button>
-        <div className="links-group">
-          <Link to="/reset-password">Forgot Password?</Link>
-          <Link to="/register">Sign Up</Link>
+        <div className={styles.linksGroup}>
+          <Link className={styles.loginPageFormLink} to="/reset-password">
+            Forgot Password?
+          </Link>
+          <Link className={styles.loginPageFormLink} to="/register">
+            Sign Up
+          </Link>
 
           {/* <a href="/register">Create new account</a> */}
         </div>

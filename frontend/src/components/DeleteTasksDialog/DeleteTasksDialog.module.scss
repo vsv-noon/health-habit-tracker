@@ -1,26 +1,26 @@
-.delete-tasks-dialog {
+.deleteTasksDialog {
   display: flex;
   flex-direction: column;
   gap: 5px;
   border: none;
 }
 
-.delete-tasks-dialog h2 {
+.deleteTasksDialog h2 {
   margin-bottom: 10px;
 }
 
-.delete-tasks-dialog label {
+.deleteTasksDialog label {
   display: flex;
   /* justify-content: space-between; */
   gap: 10px;
 }
 
-.delete-tasks-dialog .buttons-block {
+.deleteTasksDialog .buttonsBlock {
   display: flex;
   justify-content: end;
   gap: 10px;
 }
 
-.delete-tasks-dialog button {
+.deleteTasksDialog button {
   padding: 3px 5px;
 }

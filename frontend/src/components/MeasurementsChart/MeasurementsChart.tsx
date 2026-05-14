@@ -12,9 +12,9 @@ import {
   YAxis,
 } from 'recharts';
 
-import './style.css';
 import type { CalendarEventProps } from '../../pages/MeasurementsPage/MeasurementsPage';
 import { getFirstDayOfMonth, getLastDayOfMonth } from '../../utils/date';
+import styles from './MeasurementsChart.module.scss';
 
 export interface ApiResponse {
   target: string;
@@ -115,11 +115,11 @@ function MeasurementsChart({ sessionsList }: { sessionsList: CalendarEventProps[
   }
 
   return (
-    <div className="rechartContainer">
+    <div className={styles.rechartContainer}>
       <h4>Measurements chart</h4>
 
       <select
-        className="rechartsSelector"
+        className={styles.rechartsSelector}
         value={selectorType}
         onChange={(e) => setSelectorType(e.target.value)}
       >

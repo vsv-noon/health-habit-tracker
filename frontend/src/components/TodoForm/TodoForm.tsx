@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { fetchTitleSuggestions } from '../../services/api/todos.api';
 
 // import { styles } from './styles';
-import './styles.css';
 import { useDebounce } from '../../hooks/useDebounce';
 import { getSystemLocalFormat } from '../../utils/date';
+import styles from './TodoForm.module.scss';
 
 export function TodoForm({
   todoFormTitle,
@@ -94,14 +94,14 @@ export function TodoForm({
   };
 
   return (
-    <div className="todo-form">
-      <div className="modal-header">
+    <div className={styles.todoForm}>
+      <div className={styles.modalHeader}>
         <h3>{todoFormTitle}</h3>
       </div>
       <div>
-        <div className="field">
+        <div className={styles.field}>
           <input
-            className="input-title"
+            className={styles.inputTitle}
             type="text"
             autoFocus
             placeholder="Title"
@@ -113,7 +113,7 @@ export function TodoForm({
             onBlur={() => setTimeout(() => setOpen(false), 150)}
           />
           {open && suggestions.length > 0 && (
-            <ul className="autocomplete">
+            <ul className={styles.autocomplete}>
               {suggestions.map((s, i) => (
                 <li
                   key={i}
@@ -170,12 +170,12 @@ export function TodoForm({
           />
         </label>
       )}
-      {error && <p className="error">{error}</p>}
+      {error && <p className={styles.error}>{error}</p>}
       <div className="actions">
         <button onClick={onClose}>Cancel</button>
         <button onClick={onSubmit}>{submitLabel}</button>
       </div>
-      <p className="hint">💡 Ctrl + Enter — create • Esc — close</p>
+      <p className={styles.hint}>💡 Ctrl + Enter — create • Esc — close</p>
     </div>
   );
 }

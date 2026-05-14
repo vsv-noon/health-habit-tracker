@@ -3,9 +3,9 @@ import { format, startOfMonth, endOfMonth, isSameDay } from 'date-fns';
 import { DayPicker } from 'react-day-picker';
 import { Link } from 'react-router-dom';
 import TasksList from '../../components/TasksList/TasksList';
+import { apiFetch } from '../../services/api/api';
 
 import 'react-day-picker/style.css';
-import { apiFetch } from '../../services/api/api';
 
 export interface Task {
   id: number;

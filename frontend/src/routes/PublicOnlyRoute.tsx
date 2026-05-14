@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext/useAuth';
+import { useAuth } from '@/context/AuthContext/useAuth';
 export function PublicOnlyRoute() {
   const { user, loading } = useAuth();
 

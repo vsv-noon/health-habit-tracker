@@ -1,7 +1,7 @@
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { useStatData } from '../../hooks/useStatData';
 
-import './style.css';
+import styles from './widgets.module.scss';
 
 export type ChartData = {
   name: string;
@@ -25,7 +25,7 @@ export function TodoStatusChart({ endpoint, from, to }: StatusChartProps) {
   }));
 
   return (
-    <div className="chart-container">
+    <div className={styles.chartContainer}>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie data={data} dataKey="value" outerRadius={90} label>

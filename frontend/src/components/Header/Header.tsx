@@ -2,18 +2,19 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext/useAuth';
 // import { useAuth } from '../../context/AuthContext';
 import { useState } from 'react';
-import { HeaderModal } from '../HeaderModal/HeaderModal';
+import HeaderModal from '../HeaderModal';
 
-import './style.css';
+import styles from './Header.module.scss';
 
-export function Header() {
+const Header: React.FC = () => {
   const { user, logout } = useAuth();
   const [isModalOpen, setModalOpen] = useState(false);
 
   return (
-    <header className="header">
-      <nav className="header-nav">
+    <header className={styles.header}>
+      <nav className={styles.nav}>
         <NavLink
+          className={styles.navLink}
           style={({ isActive, isPending }) => ({
             color: isActive ? 'grey' : isPending ? 'blue' : 'black',
           })}
@@ -24,6 +25,7 @@ export function Header() {
         {user && (
           <>
             <NavLink
+              className={styles.navLink}
               style={({ isActive, isPending }) => ({
                 color: isActive ? 'grey' : isPending ? 'blue' : 'black',
               })}
@@ -32,6 +34,7 @@ export function Header() {
               Dashboard
             </NavLink>
             <NavLink
+              className={styles.navLink}
               style={({ isActive, isPending }) => ({
                 color: isActive ? 'grey' : isPending ? 'blue' : 'black',
               })}
@@ -40,6 +43,7 @@ export function Header() {
               Goals
             </NavLink>
             <NavLink
+              className={styles.navLink}
               style={({ isActive, isPending }) => ({
                 color: isActive ? 'grey' : isPending ? 'blue' : 'black',
               })}
@@ -48,6 +52,7 @@ export function Header() {
               Todos
             </NavLink>
             <NavLink
+              className={styles.navLink}
               style={({ isActive, isPending }) => ({
                 color: isActive ? 'grey' : isPending ? 'blue' : 'black',
               })}
@@ -56,6 +61,7 @@ export function Header() {
               Tasks
             </NavLink>
             <NavLink
+              className={styles.navLink}
               style={({ isActive, isPending }) => ({
                 color: isActive ? 'grey' : isPending ? 'blue' : 'black',
               })}
@@ -64,6 +70,7 @@ export function Header() {
               Measurements
             </NavLink>
             <NavLink
+              className={styles.navLink}
               style={({ isActive, isPending }) => ({
                 color: isActive ? 'grey' : isPending ? 'blue' : 'black',
               })}
@@ -74,6 +81,7 @@ export function Header() {
           </>
         )}
         <NavLink
+          className={styles.navLink}
           style={({ isActive, isPending }) => ({
             color: isActive ? 'grey' : isPending ? 'blue' : 'black',
           })}
@@ -84,11 +92,19 @@ export function Header() {
       </nav>
       {!user && (
         <div>
-          <NavLink to="/login">Sign in</NavLink>
+          <NavLink className={styles.userBtn} to="/login">
+            Sign in
+          </NavLink>
         </div>
       )}
-      {user && <button onClick={() => setModalOpen(true)}>{user?.email}</button>}
+      {user && (
+        <button className={styles.userBtn} onClick={() => setModalOpen(true)}>
+          {user?.email}
+        </button>
+      )}
       <HeaderModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onConfirm={logout} />
     </header>
   );
-}
+};
+
+export default Header;

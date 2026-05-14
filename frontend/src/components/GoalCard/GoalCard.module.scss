@@ -1,10 +1,10 @@
-.goal-card {
+.goalCard {
   display: flex;
 
   align-items: center;
 }
 
-.goal-card-h3 {
+.h3 {
   flex: 1;
 }
 
@@ -14,7 +14,7 @@ button {
   border-radius: 8px;
 }
 
-.goal-card-progress-bar {
+.progressBar {
   display: flex;
   align-items: center;
   justify-content: start;
@@ -24,19 +24,19 @@ button {
   width: 150px;
 }
 
-.goal-card-bar {
+.bar {
   width: 100%;
   /* flex: 1; */
   background: grey;
   height: 15px;
 }
 
-.goal-card-bar-fill {
+.barFill {
   background: orange;
   height: 15px;
 }
 
-.goal-card-bar-value {
+.barValue {
   min-width: 15px;
   text-align: end;
 }

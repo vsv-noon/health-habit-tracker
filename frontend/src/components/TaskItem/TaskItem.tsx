@@ -1,6 +1,6 @@
-import type { Task } from '../../pages/TasksPage/TasksPage';
+import type { Task } from '@/pages/TasksPage/TasksPage';
 
-import './style.css';
+import styles from './TaskItem.module.scss';
 
 function TaskItem({
   task,
@@ -12,7 +12,7 @@ function TaskItem({
   onDelete: () => void;
 }) {
   return (
-    <li key={task.id} className="task-item">
+    <li key={task.id} className={styles.taskItem}>
       <h5 title="task name">
         {task.title} {task.task_id}{' '}
         {task.status === 'missed' && <span style={{ color: 'red' }}>missed</span>}

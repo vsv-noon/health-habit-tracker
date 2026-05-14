@@ -1,7 +1,7 @@
 import { type ChangeEvent } from 'react';
 import { Modal } from '../Modal/Modal';
 
-import './style.css';
+import styles from './DeleteTasksDialog.module.scss';
 
 interface DeleteTasksDialogProps {
   isOpen: boolean;
@@ -24,7 +24,7 @@ function DeleteTasksDialog({ isOpen, onClose, onConfirm, mode, setMode }: Delete
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} onConfirm={onConfirm}>
-      <fieldset className="delete-tasks-dialog">
+      <fieldset className={styles.deleteTasksDialog}>
         <h2>Delete Recurring Task</h2>
         <label>
           <input
@@ -56,7 +56,7 @@ function DeleteTasksDialog({ isOpen, onClose, onConfirm, mode, setMode }: Delete
           />
           <span>All tasks</span>
         </label>
-        <div className="buttons-block">
+        <div className={styles.buttonsBlock}>
           <button onClick={onClose}>Cancel</button>
           <button onClick={handleConfirm}>OK</button>
         </div>

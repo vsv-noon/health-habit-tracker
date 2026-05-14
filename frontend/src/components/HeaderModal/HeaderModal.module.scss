@@ -1,20 +1,20 @@
-.modal-backdrop {
+.modalBackdrop {
   background-color: transparent;
 }
 
-.close-button {
+.closeButton {
   display: none;
 }
 
-.header-modal {
-  position: fixed;
+.headerModal {
+  // position: absolute;
   right: 0;
-  top: 5%;
-  width: 150px;
-  height: 200px;
+  top: 8%;
+  width: rem(150);
+  height: rem(200);
 }
 
-.header-modal-content {
+.headerModalContent {
   height: 100%;
   display: flex;
   flex-direction: column;

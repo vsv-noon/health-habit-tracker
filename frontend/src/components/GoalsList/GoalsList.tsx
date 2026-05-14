@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { apiDelete } from '../../services/api/api';
-import type { Goal } from '../../services/api/goals.api';
-import GoalCard from '../GoalCard/GoalCard';
+import { apiDelete } from '@/services/api/api';
+import type { Goal } from '@/services/api/goals.api';
+import GoalCard from '@/components/GoalCard/GoalCard';
 
-import './style.css';
-import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';
+import { ConfirmationDialog } from '@/components/ConfirmationDialog/ConfirmationDialog';
+import styles from './GoalList.module.scss';
 
-export function GoalsList({
+function GoalsList({
   goals,
   setGoals,
 }: {
@@ -39,7 +39,7 @@ export function GoalsList({
 
   return (
     <>
-      <ul className="goals-list">
+      <ul className={styles.goalList}>
         <h1>GoalList</h1>
         {goals &&
           goals.map((goal, i) => (
@@ -59,3 +59,5 @@ export function GoalsList({
     </>
   );
 }
+
+export default GoalsList;

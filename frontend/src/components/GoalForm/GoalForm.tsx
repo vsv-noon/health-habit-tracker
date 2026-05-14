@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import './style.css';
-import { createGoal, type Goal } from '../../services/api/goals.api';
+import { createGoal, type Goal } from '@/services/api/goals.api';
+import styles from './GoalForm.module.scss';
 
 type FrequencyType = 'daily' | 'weekly' | 'monthly';
 type TargetType = 'count' | 'date';
@@ -11,7 +11,7 @@ type GoalFormProps = {
   onCreate: (goal: Goal) => void;
 };
 
-export function GoalForm({ onCreate }: GoalFormProps) {
+function GoalForm({ onCreate }: GoalFormProps) {
   const [title, setTitle] = useState('');
   const [frequency, setFrequency] = useState<FrequencyType>('daily');
   const [targetType, setTargetType] = useState<TargetType>('count');
@@ -102,7 +102,7 @@ export function GoalForm({ onCreate }: GoalFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={styles.goalForm} onSubmit={handleSubmit}>
       <h2>New Goal</h2>
 
       <label>
@@ -114,7 +114,7 @@ export function GoalForm({ onCreate }: GoalFormProps) {
       </label>
 
       <input
-        className="form-title-input"
+        className={styles.titleInput}
         type="text"
         placeholder="Learn 30 words a day"
         value={title}
@@ -122,7 +122,7 @@ export function GoalForm({ onCreate }: GoalFormProps) {
         required
       />
 
-      <div className="form-input-block">
+      <div className={styles.inputBlock}>
         <label>
           Start date:
           <input type="date" value={startDate} onChange={handleChangeStartDate} />
@@ -197,7 +197,11 @@ export function GoalForm({ onCreate }: GoalFormProps) {
         )}
       </div>
 
-      <button type="submit">Create New Goal</button>
+      <button className={styles.button} type="submit">
+        Create New Goal
+      </button>
     </form>
   );
 }
+
+export default GoalForm;

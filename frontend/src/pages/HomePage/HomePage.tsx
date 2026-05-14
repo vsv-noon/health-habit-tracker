@@ -1,9 +1,9 @@
 // import { useEffect, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { apiFetch } from '../../api/client';
-// import Loader from '../../components/Loader/Loader';
+// import Loader from '../../components/Loader';
 
-import './style.css';
+import styles from './HomePage.module.scss';
 
 export default function HomePage() {
   // const navigate = useNavigate();
@@ -43,7 +43,7 @@ export default function HomePage() {
   return (
     <>
       {/* {loading && <Loader />} */}
-      <div className="home-page-container">
+      <div className={styles.homePage}>
         <h1>PERN Goals Tracker</h1>
       </div>
     </>

@@ -3,13 +3,13 @@ import { apiFetch } from '../../services/api/api';
 
 import Calendar from 'react-calendar';
 // import type { CalendarProps } from 'react-calendar/src/Calendar.js';
-import 'react-calendar/dist/Calendar.css';
 import MeasurementsList from '../../components/MeasurementsList/MeasurementsList';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import Loader from '../../components/Loader/Loader';
-
-import './style.css';
+import Loader from '../../components/Loader';
 import MeasurementsChart from '../../components/MeasurementsChart/MeasurementsChart';
+
+import 'react-calendar/dist/Calendar.css';
+import styles from './MeasurementsPage.module.scss';
 
 export interface CalendarEventProps {
   id: number;
@@ -58,14 +58,14 @@ function MeasurementsPage() {
   }, []);
 
   return (
-    <div className="measurementsPage" onClick={handleCloseDetails}>
+    <div className={styles.measurementsPage} onClick={handleCloseDetails}>
       {loading && <Loader />}
-      <Link className="link-btn" to="/measurement-form" onClick={(e) => e.stopPropagation()}>
+      <Link className={styles.linkBtn} to="/measurement-form" onClick={(e) => e.stopPropagation()}>
         New Measurement
       </Link>
       {sessionsList && (
         <>
-          <div className="measurementChartBlock">
+          <div className={styles.measurementChartBlock}>
             <Calendar
               onClickDay={handleClickDay}
               tileClassName={({ date, view }: { date: Date; view: string }) => {

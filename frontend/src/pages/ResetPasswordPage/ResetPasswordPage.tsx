@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { resetPassword } from '../../services/api/auth.api';
 
-import './style.css';
+import styles from './ResetPasswordPage.module.scss';
 
 function ResetPasswordPage() {
   const navigate = useNavigate();
@@ -41,10 +41,10 @@ function ResetPasswordPage() {
   };
 
   return (
-    <div className="reset-password">
+    <div className={styles.resetPassword}>
       <h1>Enter new password</h1>
-      <form className="reset-password-form" onSubmit={handleSubmit}>
-        <div className="form-inputs-group">
+      <form className={styles.resetPasswordForm} onSubmit={handleSubmit}>
+        <div className={styles.formInputsGroup}>
           <div>
             <label htmlFor="password">Password:</label>
             <input

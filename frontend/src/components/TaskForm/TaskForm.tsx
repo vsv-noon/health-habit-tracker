@@ -3,7 +3,7 @@ import { apiFetch } from '../../services/api/api';
 import { useNavigate } from 'react-router-dom';
 // import { createTodo } from '../../services/api/todos.api';
 
-import './style.css';
+import styles from './TaskForm.module.scss';
 
 type RecurrenceType = 'daily' | 'weekly' | 'monthly';
 
@@ -96,8 +96,8 @@ function TaskForm() {
   };
 
   return (
-    <div className="task-form-container">
-      <form className="task-form" onSubmit={handleSubmit}>
+    <div className={styles.taskFormContainer}>
+      <form className={styles.taskForm} onSubmit={handleSubmit}>
         <h2>Create Task Form</h2>
 
         <input

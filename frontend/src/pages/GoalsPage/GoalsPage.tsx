@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { fetchGoals, type Goal } from '../../services/api/goals.api';
-import { GoalForm } from '../../components/GoalForm/GoalForm';
-import { GoalsList } from '../../components/GoalsList/GoalsList';
-import Loader from '../../components/Loader/Loader';
+import { fetchGoals, type Goal } from '@/services/api/goals.api';
+import GoalForm from '@/components/GoalForm';
+import GoalsList from '@/components/GoalsList';
+import Loader from '@/components/Loader';
 
 export default function GoalsPage() {
   const [goals, setGoals] = useState<Goal[]>([]);

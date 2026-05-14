@@ -4,9 +4,9 @@ import type { TodoListProps } from './types';
 import type { Todo } from '../../types/todo';
 import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';
 
-import './TodoList.css';
 import { reorderTodos } from '../../services/api/todos.api';
 import { TodoItem } from '../TodoItem/TodoItem';
+import styles from './TodoList.module.scss';
 
 export function TodoList({ todos, onEdit, onUpdate, onDelete, onReorder }: TodoListProps) {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -76,7 +76,7 @@ export function TodoList({ todos, onEdit, onUpdate, onDelete, onReorder }: TodoL
   }
 
   return (
-    <>
+    <div className={styles.todoList}>
       <ul>
         {todos &&
           todos.map((todo) => (
@@ -100,6 +100,6 @@ export function TodoList({ todos, onEdit, onUpdate, onDelete, onReorder }: TodoL
         message={`Do you really want to delete task "${itemToDelete?.title}"`}
         onConfirm={() => handleConfirmDelete(itemToDelete)}
       />
-    </>
+    </div>
   );
 }

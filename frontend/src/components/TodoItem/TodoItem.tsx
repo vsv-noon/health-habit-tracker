@@ -3,7 +3,7 @@ import { fetchGoalById } from '../../services/api/goals.api';
 import { MeasurementInput } from '../MeasurementInput/MeasurementInput';
 import type { TodoItemProps } from './types';
 
-import './style.css';
+import styles from './TodoItme.module.scss';
 
 export function TodoItem({
   todo,
@@ -29,14 +29,14 @@ export function TodoItem({
 
   return (
     <li
-      className="todoItem"
+      className={styles.todoItem}
       draggable
       onDragStart={onDragStart}
       onDragOver={onDragOver}
       onDrop={onDrop}
     >
       <input
-        className="todo-checkbox"
+        className={styles.todoCheckbox}
         style={goalType === 'metric' ? { pointerEvents: 'none' } : { pointerEvents: 'auto' }}
         type="checkbox"
         title="select to complete"
@@ -47,7 +47,7 @@ export function TodoItem({
       />
 
       <span
-        className="title"
+        className={styles.title}
         style={{
           textDecoration: todo.completed ? 'line-through' : 'none',
         }}
@@ -59,7 +59,7 @@ export function TodoItem({
         <MeasurementInput goalId={todo.goal_id} onMeasurement={() => onComplete()} />
       )}
 
-      <div className="actions" onPointerDown={(e) => e.stopPropagation()}>
+      <div className={styles.actions} onPointerDown={(e) => e.stopPropagation()}>
         <button onClick={onEdit}>✏️</button>
 
         <button onClick={onDelete}>🗑</button>

@@ -1,37 +1,37 @@
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import { RootLayout } from '../layouts/RootLayout';
-// import { AppLayout } from '../layouts/AppLayout';
+import RootLayout from '@/layouts/RootLayout';
+// import { AppLayout } from '@/layouts/AppLayout';
 
-import { PublicOnlyRoute } from '../routes/PublicOnlyRoute';
-import { ProtectedRoute } from '../routes/ProtectedRoute';
-import GoalDetailPage from '../pages/GoalDetailPage/GoalDetailPage';
-import ResetPasswordPage from '../pages/ResetPasswordPage/ResetPasswordPage';
-import ForgotPasswordPage from '../pages/ForgotPasswordPage/ForgotPasswordPage';
-import VerifyYourEmail from '../components/VerifyYourEmail/VerifyYourEmail';
-import TaskForm from '../components/TaskForm/TaskForm';
+import { PublicOnlyRoute } from '@/routes/PublicOnlyRoute';
+import { ProtectedRoute } from '@/routes/ProtectedRoute';
+import GoalDetailPage from '@/pages/GoalDetailPage/GoalDetailPage';
+import ResetPasswordPage from '@/pages/ResetPasswordPage/ResetPasswordPage';
+import ForgotPasswordPage from '@/pages/ForgotPasswordPage/ForgotPasswordPage';
+import VerifyYourEmail from '@/components/VerifyYourEmail/VerifyYourEmail';
+import TaskForm from '@/components/TaskForm/TaskForm';
 
-// import { ProtectedRoute } from '../routes/ProtectedRoute/ProtectedRoute';
+// import { ProtectedRoute } from '@/routes/ProtectedRoute/ProtectedRoute';
 
-const LoginPage = lazy(() => import('../pages/Auth/LoginPage'));
-const RegisterPage = lazy(() => import('../pages/Auth/RegisterPage'));
+const LoginPage = lazy(() => import('@/pages/Auth/LoginPage'));
+const RegisterPage = lazy(() => import('@/pages/Auth/RegisterPage'));
 
-const HomePage = lazy(() => import('../pages/HomePage/HomePage'));
-const DashboardPage = lazy(() => import('../Dashboard/DashboardPage'));
-const TrashList = lazy(() => import('../components/TrashList/TrashList'));
-const AboutPage = lazy(() => import('../pages/AboutPage'));
-const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
-const ErrorPage = lazy(() => import('../pages/ErrorPage/ErrorPage'));
-const GoalsPage = lazy(() => import('../pages/GoalsPage/GoalsPage'));
-// const GoalDetailPage = (() => import ('../pages/GoalDetailPage/GoalDetailPage'));
-// const ResetPasswordPage = (() => import ('../pages/ResetPasswordPage/ResetPasswordPage'));
-const TodosPage = lazy(() => import('../pages/TodosPage/TodosPage'));
-const TasksPage = lazy(() => import('../pages/TasksPage/TasksPage'));
-const MeasurementsPage = lazy(() => import('../pages/MeasurementsPage/MeasurementsPage'));
-const MeasurementsForm = lazy(() => import('../components/MeasurementsForm/MeasurementsForm'));
+const HomePage = lazy(() => import('@/pages/HomePage/HomePage'));
+const DashboardPage = lazy(() => import('@/Dashboard/DashboardPage'));
+const TrashList = lazy(() => import('@/components/TrashList/TrashList'));
+const AboutPage = lazy(() => import('@/pages/AboutPage'));
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
+const ErrorPage = lazy(() => import('@/pages/ErrorPage/ErrorPage'));
+const GoalsPage = lazy(() => import('@/pages/GoalsPage'));
+// const GoalDetailPage = (() => import ('@/pages/GoalDetailPage/GoalDetailPage'));
+// const ResetPasswordPage = (() => import ('@/pages/ResetPasswordPage/ResetPasswordPage'));
+const TodosPage = lazy(() => import('@/pages/TodosPage/TodosPage'));
+const TasksPage = lazy(() => import('@/pages/TasksPage/TasksPage'));
+const MeasurementsPage = lazy(() => import('@/pages/MeasurementsPage/MeasurementsPage'));
+const MeasurementsForm = lazy(() => import('@/components/MeasurementsForm/MeasurementsForm'));
 const MeasurementsDetails = lazy(
-  () => import('../components/MeasurementsDetails/MeasurementsDetails'),
+  () => import('@/components/MeasurementsDetails/MeasurementsDetails'),
 );
 
 export const router = createBrowserRouter([

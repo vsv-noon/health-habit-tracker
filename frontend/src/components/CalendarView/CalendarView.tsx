@@ -1,12 +1,12 @@
+import { useState } from 'react';
 import Calendar from 'react-calendar';
 import type { CalendarProps } from 'react-calendar/src/Calendar.js';
-import 'react-calendar/dist/Calendar.css';
 import type { CalendarViewProps } from './types';
-import './style.css';
 
 // import { LAST_INDEX } from './constants';
-import { useState } from 'react';
 import { formattedDate } from '../../utils/date';
+import 'react-calendar/dist/Calendar.css';
+import styles from './CalendarView.module.scss';
 
 export function CalendarView({
   onSelect,
@@ -19,8 +19,8 @@ export function CalendarView({
   const [selectRange, setSelectRange] = useState<boolean>(false);
 
   return (
-    <div className="calendar">
-      <div className="select-range-checkbox">
+    <div className={styles.calendar}>
+      <div className={styles.selectRangeCheckbox}>
         <label htmlFor="range-checkbox">Select Range</label>
         <input
           id="range-checkbox"
@@ -43,7 +43,7 @@ export function CalendarView({
 
           if (!count) return null;
 
-          return <span className="todo-badge">{count}</span>;
+          return <span className={styles.todoBadge}>{count}</span>;
         }}
       />
     </div>

@@ -2,10 +2,10 @@ import { StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 
-import { router } from './router/router.tsx';
-import { AuthProvider } from './context/AuthContext/AuthProvider.tsx';
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx';
-import Loader from './components/Loader/Loader.tsx';
+import { router } from '@/router/router.tsx';
+import { AuthProvider } from '@/context/AuthContext/AuthProvider.tsx';
+import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary.tsx';
+import Loader from '@/components/Loader';
 
 import './index.css';
 

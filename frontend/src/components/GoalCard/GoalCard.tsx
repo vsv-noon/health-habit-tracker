@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import type { Goal } from '../../services/api/goals.api';
 
-import './style.css';
+import styles from './GoalCard.module.scss';
 
 export default function GoalCard({ goal, deleteGoal }: { goal: Goal; deleteGoal: () => void }) {
   const percent = Math.min(100, (goal.current_value / goal.target_value) * 100);
@@ -12,19 +12,19 @@ export default function GoalCard({ goal, deleteGoal }: { goal: Goal; deleteGoal:
   //   }
   // }
   return (
-    <div className="goal-card">
-      <Link to={`/goals/${goal.id}`} className="goal-card-h3">
+    <div className={styles.goalCard}>
+      <Link to={`/goals/${goal.id}`} className={styles.h3}>
         <h3 className="goal-card-h3">{goal.title}</h3>
       </Link>
       <div>{goal.current_value === goal.target_value && <span>Completed 🎉 </span>}</div>
 
-      <div className="goal-card-progress-bar">
-        <p className="goal-card-bar-value">{goal.current_value}</p>
+      <div className={styles.progressBar}>
+        <p className={styles.barValue}>{goal.current_value}</p>
 
-        <div className="goal-card-bar">
-          <div className="goal-card-bar-fill" style={{ width: percent + '%' }} />
+        <div className={styles.bar}>
+          <div className={styles.barFill} style={{ width: percent + '%' }} />
         </div>
-        <p className="goal-card-bar-value">{goal.target_value}</p>
+        <p className={styles.barValue}>{goal.target_value}</p>
       </div>
       <div onPointerDown={(e) => e.stopPropagation()}>
         <button onClick={deleteGoal}>Delete (CASCADE)</button>

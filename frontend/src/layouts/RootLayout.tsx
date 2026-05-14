@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router-dom';
-import { Header } from '@/components/Header/Header';
-import { Footer } from '@/components/Footer/Footer';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import styles from './RootLayout.module.scss';
 
-export function RootLayout() {
+const RootLayout: React.FC = () => {
   return (
     <div className={styles.rootLayout}>
       <Header />
@@ -15,4 +15,6 @@ export function RootLayout() {
       <Footer />
     </div>
   );
-}
+};
+
+export default RootLayout;

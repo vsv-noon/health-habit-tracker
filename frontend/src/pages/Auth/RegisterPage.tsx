@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
 // import { Turnstile } from '@marsidev/react-turnstile';
 
-import './style.css';
+import styles from './Auth.module.scss';
 
 export interface RegisterFormData {
   email: string;
@@ -68,15 +68,16 @@ export default function RegisterPage() {
     }
   };
   return (
-    <div className="register-page">
+    <div className={styles.registerPage}>
       <h1>Create new account</h1>
 
       {error && <div>{error}</div>}
-      <form className="register-page-form" onSubmit={handleSubmit}>
-        <div className="form-inputs-group">
+      <form className={styles.registerPageForm} onSubmit={handleSubmit}>
+        <div className={styles.formInputsGroup}>
           <div>
             <label htmlFor="email">Email</label>
             <input
+              className={styles.formInput}
               id="email"
               type="email"
               name="email"
@@ -88,6 +89,7 @@ export default function RegisterPage() {
           <div>
             <label htmlFor="password">Password</label>
             <input
+              className={styles.formInput}
               id="password"
               type={showPassword ? 'text' : 'password'}
               name="password"
@@ -97,6 +99,7 @@ export default function RegisterPage() {
             />
           </div>
           <button
+            className={styles.button}
             type="button"
             title="Show Password"
             onClick={() => setShowPassword(!showPassword)}
@@ -106,6 +109,7 @@ export default function RegisterPage() {
           <div>
             <label htmlFor="confirmPassword">Confirm Password</label>
             <input
+              className={styles.formInput}
               id="confirmPassword"
               type={showPassword ? 'text' : 'password'}
               name="confirmPassword"
@@ -144,12 +148,14 @@ export default function RegisterPage() {
         /> */}
 
         {/* <button type="submit" disabled={!formData.captchaToken || loading}> */}
-        <button type="submit" disabled={loading}>
+        <button className={styles.button} type="submit" disabled={loading}>
           {loading ? 'Signing up...' : 'Sign up'}
         </button>
         <div className="links-group">
-          <p>Have an account?</p>
-          <Link to="/login">Sign In</Link>
+          <p className={styles.p}>Have an account?</p>
+          <Link className={styles.linksGroup} to="/login">
+            Sign In
+          </Link>
         </div>
       </form>
     </div>

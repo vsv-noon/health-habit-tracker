@@ -1,7 +1,7 @@
 import { Modal } from '../Modal/Modal';
 import useCtrlEnterKey from '../../hooks/useCtrlEnterKey';
-import '../Modal/Modal.css';
 import type { ConfirmationDialogProps } from './types';
+import styles from '@/components/Modal/Modal.module.scss';
 
 export function ConfirmationDialog({
   isOpen,
@@ -21,13 +21,13 @@ export function ConfirmationDialog({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} onConfirm={onConfirm}>
-      <div className="modal-header">
+      <div className={styles.modalHeader}>
         <h3>{title}</h3>
       </div>
-      <div className="modal-body">
+      <div className={styles.modalBody}>
         <p>{message}</p>
       </div>
-      <div className="modal-footer">
+      <div className={styles.modalFooter}>
         <button onClick={onClose}>Cancel</button>
         <button onClick={handleConfirm}>Confirm</button>
       </div>

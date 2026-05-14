@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { Todo } from '../../types/todo';
 import { bulkHardDelete, bulkRestore, fetchDeletedTodos } from '../../services/api/todos.api';
-import './TrashList.css';
 import { ConfirmationDialog } from '../ConfirmationDialog/ConfirmationDialog';
-import Loader from '../Loader/Loader';
+import Loader from '../Loader';
 import { useDebounce } from '../../hooks/useDebounce';
+import styles from './TrashList.module.scss';
 
 export default function TrashList() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -99,14 +99,14 @@ export default function TrashList() {
       {!loading && (
         <ul>
           {todos.map((t) => (
-            <li key={t.id} className="trashItem">
+            <li key={t.id} className={styles.trashItem}>
               <input
                 type="checkbox"
                 title="select"
                 checked={selectedItems.includes(t.id)}
                 onChange={(e) => handleSelectItem(t.id, e)}
               />
-              <span className="title">{t.title}</span>
+              <span className={styles.title}>{t.title}</span>
 
               <span>{t.due_date}</span>
             </li>

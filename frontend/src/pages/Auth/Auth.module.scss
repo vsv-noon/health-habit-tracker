@@ -1,13 +1,25 @@
-.forgot-password {
-  margin: 0 auto;
+.loginPage,
+.registerPage {
   display: flex;
+  /* height: 80vh; */
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 50px;
 }
 
-.forgot-password-form {
+.loginPageFormLink,
+.registerPageFormLink {
+  color: #000;
+}
+
+.loginPageFormLink:hover,
+.registerPageFormLink:hover {
+  color: grey;
+}
+
+.loginPageForm,
+.registerPageForm {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -19,13 +31,13 @@
   box-shadow: 5px 5px 8px grey;
 }
 
-.forgot-password-form .form-inputs-group {
+.formInputsGroup {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.forgot-password-form input {
+.formInput {
   width: 100%;
   font-size: 16px;
   border-radius: 5px;
@@ -34,7 +46,7 @@
   padding: 5px;
 }
 
-.forgot-password-form button {
+.button {
   padding: 5px 10px;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -43,7 +55,16 @@
   font-size: 16px;
 }
 
-.forgot-password-form button:hover {
+.button:hover {
   background: grey;
   color: #fff;
+}
+
+.linksGroup {
+  display: flex;
+  justify-content: space-between;
+}
+
+.p {
+  color: grey;
 }
