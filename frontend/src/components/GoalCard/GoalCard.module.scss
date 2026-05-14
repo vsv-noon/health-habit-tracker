@@ -10,33 +10,33 @@
 
 button {
   border: transparent;
-  padding: 10px;
-  border-radius: 8px;
+  padding: rem(10);
+  border-radius: rem(8);
 }
 
 .progressBar {
   display: flex;
   align-items: center;
   justify-content: start;
-  gap: 5px;
-  margin: 0 10px;
+  gap: rem(5);
+  margin: 0 rem(10);
   /* width: 100%; */
-  width: 150px;
+  width: rem(150);
 }
 
 .bar {
   width: 100%;
   /* flex: 1; */
   background: grey;
-  height: 15px;
+  height: rem(15);
 }
 
 .barFill {
   background: orange;
-  height: 15px;
+  height: rem(15);
 }
 
 .barValue {
-  min-width: 15px;
+  min-width: rem(15);
   text-align: end;
 }

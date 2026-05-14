@@ -3,11 +3,11 @@
 }
 
 .rechartContainer h4 {
-  margin: 0 0 10px 30px;
+  margin: 0 0 rem(10) rem(30);
 }
 .rechartsSelector {
-  margin: 0 0 10px 30px;
-  padding: 5px;
+  margin: 0 0 rem(10) rem(30);
+  padding: rem(5);
   border: none;
   outline: none;
   /* appearance: none; */

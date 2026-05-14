@@ -2,6 +2,6 @@
   /* display: flex; */
   /* border: 1px solid #000; */
   width: 100%; /* or a fixed pixel value */
-  height: 300px; /* the height is critical */
-  min-height: 300px; /* also helpful */
+  height: rem(300); /* the height is critical */
+  min-height: rem(300); /* also helpful */
 }

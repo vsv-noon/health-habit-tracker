@@ -1,11 +1,11 @@
 .taskItem {
   display: flex;
-  gap: 50px;
-  padding: 5px;
-  border-bottom: 1px solid grey;
+  gap: rem(50);
+  padding: rem(5);
+  border-bottom: rem(1) solid grey;
   /* justify-content: space-between; */
 }
 
 .taskItem h5 {
-  width: 100px;
+  width: rem(100);
 }

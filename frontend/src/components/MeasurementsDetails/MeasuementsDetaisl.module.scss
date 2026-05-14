@@ -4,25 +4,25 @@
   overflow-x: hidden;
   justify-content: center;
   align-items: center;
-  width: 400px;
+  width: rem(400);
   top: 50%;
-  right: 50px;
+  right: rem(50);
 }
 
 .measurementsDetails h2 {
   text-align: center;
-  margin: 30px;
+  margin: rem(30);
 }
 
 .measurementsDetails h4 {
-  margin-bottom: 10px;
+  margin-bottom: rem(10);
 }
 
 .measurementsDetailsList {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  column-gap: 30px;
-  row-gap: 5px;
+  column-gap: rem(30);
+  row-gap: rem(5);
 }
 
 .measurementsDetailsList li {

@@ -5,10 +5,10 @@
 .todoItem {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
+  gap: rem(8);
+  padding: rem(6) rem(8);
   /* border-radius: 6px; */
-  border-bottom: solid 1px rgba(0, 0, 0, 0.5);
+  border-bottom: solid rem(1) rgba(0, 0, 0, 0.5);
 }
 
 .todoItem:hover {
@@ -24,7 +24,7 @@
   pointer-events: none;
   transition: opacity 0.15s ease;
   display: flex;
-  gap: 4px;
+  gap: rem(4);
 }
 
 .todoItem:hover .actions,
@@ -37,7 +37,7 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: rem(16);
   z-index: 10;
 }
 

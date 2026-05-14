@@ -1,28 +1,28 @@
 .goalForm {
   display: flex;
   flex-direction: column;
-  max-width: 500px;
-  padding: 6px;
+  max-width: rem(500);
+  padding: rem(6);
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  border-radius: rem(8);
+  box-shadow: 0 rem(12) rem(24) rgba(0, 0, 0, 0.2);
 }
 
 .h2 {
-  margin-bottom: 40px;
+  margin-bottom: rem(40);
   text-align: center;
 }
 
 .titleInput {
-  margin-bottom: 15px;
+  margin-bottom: rem(15);
 }
 
 .inputBlock {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: rem(15);
 }
 
 .button {
-  margin: 15px 0;
+  margin: rem(15) 0;
 }
