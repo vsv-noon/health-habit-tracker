@@ -1,6 +1,8 @@
+import styles from './Footer.module.scss';
+
 export function Footer() {
   return (
-    <footer className="footer">
+    <footer className={styles.footer}>
       <p>&copy; {new Date().getFullYear()}</p>
     </footer>
   );
