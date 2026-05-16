@@ -1,0 +1,43 @@
+.dropdownContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.userBtn {
+  padding: rem(10);
+  border-radius: rem(8);
+  border: transparent;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: rem(10);
+  background-color: #fff;
+  border: rem(1) solid #ddd;
+  border-radius: rem(8);
+  padding: rem(10);
+  min-width: (550);
+  box-shadow: 0 rem(4) rem(10) rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(rem(-10));
+  transition: all 0.3s ease-in-out;
+
+  z-index: 1;
+}
+
+.open {
+  opacity: 1;
+  transform: translateY(0);
+  min-width: rem(90);
+}
+
+.dropdownBtn {
+  border: transparent;
+  background-color: transparent;
+  cursor: pointer;
+}

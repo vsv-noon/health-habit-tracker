@@ -1,5 +1,4 @@
 .header {
-  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,11 +18,4 @@
 .header-user-info {
   display: flex;
   gap: rem(30);
-}
-
-.userBtn {
-  padding: rem(10);
-  border-radius: rem(8);
-  border: transparent;
-  cursor: pointer;
 }

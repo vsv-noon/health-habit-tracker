@@ -1,14 +1,11 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext/useAuth';
-// import { useAuth } from '../../context/AuthContext';
-import { useState } from 'react';
-import HeaderModal from '../HeaderModal';
+import Dropdown from '../Dropdown';
 
 import styles from './Header.module.scss';
 
 const Header: React.FC = () => {
-  const { user, logout } = useAuth();
-  const [isModalOpen, setModalOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <header className={styles.header}>
@@ -97,12 +94,7 @@ const Header: React.FC = () => {
           </NavLink>
         </div>
       )}
-      {user && (
-        <button className={styles.userBtn} onClick={() => setModalOpen(true)}>
-          {user?.email}
-        </button>
-      )}
-      <HeaderModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onConfirm={logout} />
+      {user && <Dropdown />}
     </header>
   );
 };
